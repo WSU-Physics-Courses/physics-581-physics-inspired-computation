@@ -17,12 +17,12 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'Physics 581: Physics Inspired Computational Techniques'
-copyright = '2021, Michael McNeil Forbes'
-author = 'Michael McNeil Forbes'
+project = "Physics 581: Physics Inspired Computational Techniques"
+copyright = "2021, Michael McNeil Forbes"
+author = "Michael McNeil Forbes"
 
 # The full version, including alpha/beta/rc tags
-release = '0.1'
+release = "0.1"
 
 
 # -- General configuration ---------------------------------------------------
@@ -31,15 +31,45 @@ release = '0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "myst_nb",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.doctest",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.coverage",
+    "sphinx.ext.mathjax",
+    "sphinx.ext.ifconfig",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.todo",
+    "sphinxcontrib.zopeext.autointerface",
+    "matplotlib.sphinxext.plot_directive",
+    "sphinxcontrib.bibtex",
+    # From jupyterbook
+    # "jupyter_book",
+    # "sphinx_thebe",
+    # "sphinx_comments",
+    # "sphinx_external_toc",
+    "sphinx_panels",
+    "sphinx_book_theme",
+    # "recommonmark",
 ]
 
+# https://myst-parser.readthedocs.io/en/latest/syntax/optional.html#substitutions-with-jinja2
+myst_enable_extensions = [
+    "substitution",
+]
+
+# https://github.com/mcmtroffaes/sphinxcontrib-bibtex
+# BibTeX files
+bibtex_bibfiles = ["macros.bib", "local.bib"]
+
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -47,9 +77,35 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = "alabaster"  # Default Sphinx theme
+html_theme = "sphinx_book_theme"  # Theme for JupyterBook
+html_logo = "_static/wsu-logo.svg"  # Needed for sidebars
+
+html_theme_options = {
+    "repository_url": "https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation",
+}
+
+# html_sidebars = {}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]
+
+# Example configuration for intersphinx: refer to the Python standard library.
+intersphinx_mapping = {
+    "https://docs.python.org/": None,
+    "matplotlib": ("https://matplotlib.org/stable/", None),
+}
+
+# Napoleon settings
+napoleon_google_docstring = False
+napoleon_numpy_docstring = True
+napoleon_include_private_with_doc = False
+napoleon_include_special_with_doc = True
+napoleon_use_admonition_for_examples = False
+napoleon_use_admonition_for_notes = True
+napoleon_use_admonition_for_references = False
+napoleon_use_ivar = False
+napoleon_use_param = True
+napoleon_use_rtype = True

@@ -1,0 +1,8 @@
+syntax:glob
+.git
+.hg
+.venv/
+_data/
+envs/
+.ipynb_checkpoints/
+*.ipynb

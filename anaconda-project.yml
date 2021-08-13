@@ -1,0 +1,133 @@
+# This is an Anaconda project file.
+#
+# Here you can describe your project and how to run it.
+# Use `anaconda-project run` to run the project.
+# The file is in YAML format, please see http://www.yaml.org/start.html for more.
+#
+
+#
+# Set the 'name' key to name your project
+#
+name: 581_Computation
+
+#
+# Set the 'icon' key to give your project an icon
+#
+icon:
+
+#
+# Set a one-sentence-or-so 'description' key with project details
+#
+description:
+
+#
+# In the commands section, list your runnable scripts, notebooks, and other code.
+# Use `anaconda-project add-command` to add commands.
+#
+commands:
+  AstroPhases/.ipynb_checkpoints/AstroPhases-checkpoint.ipynb:
+    notebook: AstroPhases/.ipynb_checkpoints/AstroPhases-checkpoint.ipynb
+    env_spec: default
+  AstroPhases/AstroPhases.ipynb:
+    notebook: AstroPhases/AstroPhases.ipynb
+    env_spec: default
+  BayesianAnalysis.ipynb:
+    notebook: BayesianAnalysis.ipynb
+    env_spec: default
+  MCMC.ipynb:
+    notebook: MCMC.ipynb
+    env_spec: default
+  MontyHall.ipynb:
+    notebook: MontyHall.ipynb
+    env_spec: default
+  ParametricResonance.ipynb:
+    notebook: ParametricResonance.ipynb
+    env_spec: default
+  PeriodicSignals/.ipynb_checkpoints/PeriodicData-checkpoint.ipynb:
+    notebook: PeriodicSignals/.ipynb_checkpoints/PeriodicData-checkpoint.ipynb
+    env_spec: default
+  PeriodicSignals/.ipynb_checkpoints/PeriodicSignals-checkpoint.ipynb:
+    notebook: PeriodicSignals/.ipynb_checkpoints/PeriodicSignals-checkpoint.ipynb
+    env_spec: default
+  PeriodicSignals/PeriodicData.ipynb:
+    notebook: PeriodicSignals/PeriodicData.ipynb
+    env_spec: default
+  PeriodicSignals/PeriodicSignals.ipynb:
+    notebook: PeriodicSignals/PeriodicSignals.ipynb
+    env_spec: default
+  Plotting.ipynb:
+    notebook: Plotting.ipynb
+    env_spec: default
+
+#
+# In the variables section, list any environment variables your code depends on.
+# Use `anaconda-project add-variable` to add variables.
+#
+variables: {}
+
+#
+# In the services section, list any services that should be
+# available before your code runs.
+# Use `anaconda-project add-service` to add services.
+#
+services: {}
+
+#
+# In the downloads section, list any URLs to download to local files
+# before your code runs.
+# Use `anaconda-project add-download` to add downloads.
+#
+downloads: {}
+
+#
+# In the packages section, list any packages that must be installed
+# before your code runs.
+# Use `anaconda-project add-packages` to add packages.
+#
+packages:
+- python=3.9
+
+#
+# In the channels section, list any Conda channel URLs to be searched
+# for packages.
+#
+# For example,
+#
+# channels:
+#    - mychannel
+#
+- scipy
+- matplotlib
+- sphinx
+- conda-forge::myst-nb
+- conda-forge::uncertainties
+- conda-forge::sphinx-panels
+- conda-forge::sphinx-book-theme
+- pip:
+  - sphinxcontrib-zopeext
+  - sphinxcontrib-bibtex
+channels: []
+
+#
+# In the platforms section, list platforms the project should work on
+# Examples: "linux-64", "osx-64", "win-64"
+# Use `anaconda-project add-platforms` to add platforms.
+#
+platforms:
+- linux-64
+- osx-64
+- win-64
+
+#
+# You can define multiple, named environment specs.
+# Each inherits any global packages or channels,
+# but can have its own unique ones also.
+# Use `anaconda-project add-env-spec` to add environment specs.
+#
+env_specs:
+  default:
+    description: Default environment spec for running commands
+    packages:
+    - notebook
+    channels: []
+    platforms: []
