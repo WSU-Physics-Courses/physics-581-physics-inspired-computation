@@ -3,6 +3,8 @@ syntax:glob
 .hg
 .venv/
 _data/
+_ext/
+_trash/
 envs/
 .ipynb_checkpoints/
 *.ipynb

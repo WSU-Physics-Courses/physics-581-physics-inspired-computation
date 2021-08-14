@@ -40,6 +40,11 @@ following CI's:
 * LGTM.com
 * 
 
+* One course repo.  Students clone their own fork and pull changes.  Assignments
+  distributed as tests.
+* How to grade?  Student's can keep projects private (but probably will not have access
+  to badges.)  Run tests on Student's CoCalc servers or with CI?
+  
 
 Best Practices
 ==============
