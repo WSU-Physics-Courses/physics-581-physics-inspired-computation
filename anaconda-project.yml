@@ -59,6 +59,9 @@ commands:
     notebook: Plotting.ipynb
     env_spec: default
 
+  shell:
+    unix: bash
+    env_spec: default
 #
 # In the variables section, list any environment variables your code depends on.
 # Use `anaconda-project add-variable` to add variables.
@@ -106,6 +109,8 @@ packages:
 - pip:
   - sphinxcontrib-zopeext
   - sphinxcontrib-bibtex
+  - mmf-setup
+- anaconda-project>=0.10.1
 channels: []
 
 #

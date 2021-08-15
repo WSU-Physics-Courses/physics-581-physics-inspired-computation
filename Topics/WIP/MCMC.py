@@ -6,11 +6,14 @@
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
-#       jupytext_version: 1.11.2
+#       jupytext_version: 1.11.4
 #   kernelspec:
-#     display_name: Python [conda env:work]
+#     display_name: Python 3 (PHYS-581-2021)
 #     language: python
-#     name: conda-env-work-py
+#     metadata:
+#       debugger: true
+#     name: phys-581-2021
+#     resource_dir: /home/user/.local/share/jupyter/kernels/phys-581-2021
 # ---
 
 import mmf_setup;mmf_setup.nbinit()

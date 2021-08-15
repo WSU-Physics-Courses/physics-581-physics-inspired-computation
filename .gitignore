@@ -8,3 +8,4 @@ _trash/
 envs/
 .ipynb_checkpoints/
 *.ipynb
+*.sage-jupyter2

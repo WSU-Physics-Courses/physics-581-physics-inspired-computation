@@ -6,18 +6,18 @@
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
-#       jupytext_version: 1.11.2
+#       jupytext_version: 1.11.4
 #   kernelspec:
-#     display_name: Python [conda env:work]
+#     display_name: Python 3 (PHYS-581-2021)
 #     language: python
-#     name: conda-env-work-py
+#     metadata:
+#       debugger: true
+#     name: phys-581-2021
+#     resource_dir: /home/user/.local/share/jupyter/kernels/phys-581-2021
 # ---
 
-import mmf_setup;mmf_setup.nbinit(set_path=False)
-
-# $$
-#   
-# $$
+import mmf_setup;mmf_setup.nbinit()
+import logging; logging.getLogger('matplotlib').setLevel(logging.WARNING)
 
 # Here we consider a parametric harmonic oscillator, where the frequency changed at some rate $\omega_p$ about the natural resonance at $\omega_0$.
 #
@@ -44,32 +44,36 @@ import math
 w0 = 1.0
 h = 0.1
 n = 1
-wp0 = 2*w0/n
-deps = n**(2*n-3)*h**n * w0/(2**(3*(n-1))*math.factorial(n-1)**2)
+wp0 = 2 * w0 / n
+deps = n**(2 * n - 3) * h**n * w0 / (2**(3 *
+                                         (n - 1)) * math.factorial(n - 1)**2)
 wp = wp0
 
+
 def get_w2(t, wp=wp, w0=w0, h=h):
-    return (w0**2 * (1 + h * np.cos(wp*t)))
+    return (w0**2 * (1 + h * np.cos(wp * t)))
+
 
 def get_E(t, y):
     x, dx = y
-    E = dx**2/2 + get_w2(t)*x**2/2
+    E = dx**2 / 2 + get_w2(t) * x**2 / 2
     return E
-    
+
+
 def f(t, y, wp=wp):
     x, dx = y
-    ddx = -get_w2(t, wp=wp)*x
+    ddx = -get_w2(t, wp=wp) * x
     return (dx, ddx)
+
 
 y0 = (0, 1)
 T = 200
-sol = solve_ivp(f, (0,T), y0=y0)#, rtol=1e-8, method='DOP853')
+sol = solve_ivp(f, (0, T), y0=y0)  #, rtol=1e-8, method='DOP853')
 t, y = sol.t, sol.y
 x, dx = y
 plt.semilogy(t, get_E(t, y))
 #plt.figure(figsize=(20,2))
 #plt.plot(t, x)
-
 # -
 
 @np.vectorize
