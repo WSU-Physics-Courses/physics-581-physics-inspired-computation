@@ -1,6 +1,11 @@
 SHELL := /bin/bash
+ANACONDAPROJECT = anaconda-project
 
-all: _ext/Resources
+all: _ext/Resources envs/default
+
+envs/default: anaconda-project.yml
+	$(ANACONDAPROJECT) prepare
+	$(ANACONDAPROJECT) run init
 
 _ext/Resources:
 	git clone git@gitlab.com:wsu-courses/physics-581-physics-inspired-computation_resources.git $@
@@ -14,4 +19,11 @@ sync:
 	       -name "envs" -prune -o \
 	       -name "*.ipynb" -exec jupytext --sync {} \;
 
-.PHONY: clean cocalc-init sync
+clean:
+	$(ANACONDAPROJECT) run clean
+	$(ANACONDAPROJECT) clean
+
+doc-server:
+	sphinx-autobuild Docs Docs/_build/html
+
+.PHONY: clean cocalc-init sync doc-server

@@ -25,9 +25,6 @@ description:
 # Use `anaconda-project add-command` to add commands.
 #
 commands:
-  AstroPhases/.ipynb_checkpoints/AstroPhases-checkpoint.ipynb:
-    notebook: AstroPhases/.ipynb_checkpoints/AstroPhases-checkpoint.ipynb
-    env_spec: default
   AstroPhases/AstroPhases.ipynb:
     notebook: AstroPhases/AstroPhases.ipynb
     env_spec: default
@@ -43,12 +40,6 @@ commands:
   ParametricResonance.ipynb:
     notebook: ParametricResonance.ipynb
     env_spec: default
-  PeriodicSignals/.ipynb_checkpoints/PeriodicData-checkpoint.ipynb:
-    notebook: PeriodicSignals/.ipynb_checkpoints/PeriodicData-checkpoint.ipynb
-    env_spec: default
-  PeriodicSignals/.ipynb_checkpoints/PeriodicSignals-checkpoint.ipynb:
-    notebook: PeriodicSignals/.ipynb_checkpoints/PeriodicSignals-checkpoint.ipynb
-    env_spec: default
   PeriodicSignals/PeriodicData.ipynb:
     notebook: PeriodicSignals/PeriodicData.ipynb
     env_spec: default
@@ -62,6 +53,15 @@ commands:
   shell:
     unix: bash
     env_spec: default
+
+  init:
+    unix: python3 -m ipykernel install --user --name "phys-581-2021" --display-name "Python 3 (phys-581-2021)"
+    env_spec: default
+
+  clean:
+    unix: jupyter kernelspec uninstall -f "phys-581-2021"
+    env_spec: default
+
 #
 # In the variables section, list any environment variables your code depends on.
 # Use `anaconda-project add-variable` to add variables.
@@ -106,11 +106,13 @@ packages:
 - conda-forge::uncertainties
 - conda-forge::sphinx-panels
 - conda-forge::sphinx-book-theme
+- conda-forge::sphinx-autobuild
+- anaconda-project>=0.10.1
 - pip:
   - sphinxcontrib-zopeext
   - sphinxcontrib-bibtex
   - mmf-setup
-- anaconda-project>=0.10.1
+
 channels: []
 
 #

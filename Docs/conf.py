@@ -54,14 +54,32 @@ extensions = [
     # "recommonmark",
 ]
 
+# https://myst-parser.readthedocs.io/en/latest/using/syntax-optional.html
 # https://myst-parser.readthedocs.io/en/latest/syntax/optional.html#substitutions-with-jinja2
 myst_enable_extensions = [
+    "amsmath",
+    "colon_fence",
+    "deflist",
+    "dollarmath",
+    "html_admonition",
+    "html_image",
+    # "linkify",
+    "replacements",
+    "smartquotes",
     "substitution",
+    # "tasklist",
 ]
 
 # https://github.com/mcmtroffaes/sphinxcontrib-bibtex
 # BibTeX files
-bibtex_bibfiles = ["macros.bib", "local.bib"]
+bibtex_bibfiles = [
+    # For now, macros.bib must be included in local.bib.  See:
+    # https://github.com/mcmtroffaes/sphinxcontrib-bibtex/issues/261
+    # "macros.bib",
+    "local.bib"
+]
+
+bibtex_reference_style = "author_year"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
