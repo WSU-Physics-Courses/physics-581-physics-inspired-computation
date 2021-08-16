@@ -4,8 +4,9 @@
    contain the root `toctree` directive.
 -->
 
-Physics 581: Physics Inspired Computational Techniques
-======================================================
+<!-- Literally include the README.md file -->
+```{include} README.md
+```
 
 ```{toctree}
 ---
@@ -14,6 +15,7 @@ caption: "Contents:"
 titlesonly:
 hidden:
 ---
+Syllabus
 Reading
 References
 ```
@@ -26,4 +28,15 @@ titlesonly:
 hidden:
 ---
 Notes
+```
+
+```{toctree}
+---
+maxdepth: 0
+caption: "Includes (for autobuild):"
+titlesonly:
+hidden:
+---
+README
+Prerequisites
 ```

@@ -78,6 +78,14 @@ I then edited the `conf.py`
 hg add local.bib _static/ _templates/
 ```
 
+### Gotchas
+
+* We literally include the top-level `README.md` files as the first page of the
+  documentation in `Docs/index.md`.  This as one side effect that when running `make
+  doc-server` (`sphinx-autobuild`), edits to `README.md` do not trigger rebuilding of
+  the `index.md` file.  While actively editing, I include `README.md` as a separate
+  file, and view that.
+
 ## CoCalc Setup
 
 * [Purchase a license](https://cocalc.com/settings/licenses) with 2 projects to allow
@@ -162,5 +170,43 @@ hg add local.bib _static/ _templates/
 
   This will create a Conda environment as specified in `anaconda-project.yml` in `envs/default`.
 
+## GitHub Mirror
+
+[GitHub] has a different set of tools, so it is useful to mirror the repo there so we
+can take advantage of these:
+
+* [GitLab Main Repo](https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation)
+* [GitHub Mirror](https://github.com/WSU-Physics-Courses/physics-581-physics-inspired-computation)
+
+To do this:
+
+1. Create an empty [GitHub
+   project](https://github.com/forbes-group/physics-581-physics-inspired-computation). 
+2. Get a personal token from [GitHub] as [described
+   here](https://hg.iscimath.org/help/user/project/repository/repository_mirroring#setting-up-a-push-mirror-from-gitlab-to-github).
+   Create a token here [**Settings > Developer settings > Personal access
+tokens**](https://github.com/settings/tokens) with `repo` access, `admin:repo_hook`
+   access, and `delete_repo` access.  Copy the key. 
+3. Go to your [**Settings > Repository > Mirroring
+   respositories**](https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/-/settings/repository)
+   in you GitLab repo and use the URL to your GitHub repo using the following format:
+   `https://<your_github_username>@github.com/<your_github_group>/<your_github_project>.git`.
+   I.e.:
+   
+   ```
+   https://mforbes@github.com/WSU-Physics-Courses/physics-581-physics-inspired-computation.git
+   ```
+   
+   Include your name here (the user associated with the key you just generated) and
+   use the key as the password.  Choose **Mirror direction** to be **Push**.
+   Optionally, you can choose to mirror only protected branches: this would be a good
+   choice if you were mirroring a private development repo and only wanted to public
+   branches to be available on [GitHub].
+
+Now whenever you push changes to GitLab, they will be mirrored on GitHub, allowing you
+to use GitHub features like their CI, Notebook viewer etc.
+
+
 [WSU Courses CoCalc project]: <https://cocalc.com/projects/c31d20a3-b0af-4bf7-a951-aa93a64395f6>
 [Shared CoCalc Project]: (https://cocalc.com/projects/74852aba-2484-4210-9cf0-e7902e5838f4/) "581-2021 Shared CoCalc Project"
+[GitHub]: <https://github.com> "GitHub"
