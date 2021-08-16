@@ -2,6 +2,8 @@
 # https://github.com/simoninireland/introduction-to-epidemics/blob/master/Makefile
 SHELL := /bin/bash
 
+RESOURCES = git@gitlab.com:wsu-courses/physics-581-physics-inspired-computation_resources.git
+
 # ------- Tools -------
 ifdef ANACONDA2020
   # If this is defined, we assume we are on CoCalc
@@ -21,6 +23,10 @@ ACTIVATE_PROJECT := $(ACTIVATE) $(ENV)
 # Default prints a help message
 help:
 	@make usage
+
+
+usage:
+	@echo "$$HELP_MESSAGE"
 
 
 init: _ext/Resources envs/default
@@ -44,7 +50,10 @@ envs/default: anaconda-project.yml
 
 
 _ext/Resources:
-	git clone git@gitlab.com:wsu-courses/physics-581-physics-inspired-computation_resources.git $@
+	-git clone $(RESOURCES) $@
+	@if [ ! -d "$@" ]; then \
+	  echo "$$RESOURCES_ERROR_MESSAGE"; \
+  fi
 
 
 sync:
@@ -112,5 +121,19 @@ endef
 export HELP_MESSAGE
 
 
-usage:
-	@echo "$$HELP_MESSAGE"
+define RESOURCES_ERROR_MESSAGE
+
+*************************************************************
+WARNING: The `_ext/Resources` folder could not be cloned from
+
+  $(RESOURCES)
+
+Likely this is because this repository is private and requires registration in the class.
+If you believe that you should have access, please contact your instructor, and provide
+your GitLab username.
+
+These resources are not crucial for the project, but are important for the course.
+*************************************************************
+
+endef
+export RESOURCES_ERROR_MESSAGE
