@@ -26,9 +26,11 @@ help:
 init: _ext/Resources envs/default
 	$(ANACONDA_PROJECT) prepare
 	$(ANACONDA_PROJECT) run init	# Custom command: see anaconda-project.yml
+ifdef ANACONDA2020
+  @make cocalc-init
+endif
 
-
-cocalc-init: init
+cocalc-init:
 	python3 -m pip install --user mmf-setup
 	mmf_setup cocalc
 	if ! grep -Fq '$(ACTIVATE_PROJECT)' ~/.bash_aliases; then \
@@ -98,8 +100,9 @@ Variables:
 
 Initialization:
    make init         Initialize the environment and kernel.
-   make init_cocalc  Call make init and then do some CoCalc-specific things like install
-                     mmf-setup, and activate the environment in ~/.bash_aliases.
+   make init_cocalc  Do some CoCalc-specific things like install mmf-setup, and activate the
+                     environment in ~/.bash_aliases.  This is called by `make init`
+                     if ANACONDA2020 is defined, so usually does not need to be called explicitly.
 
 Maintenance:
    make clean        Call conda clean --all: saves disk space.
