@@ -42,6 +42,7 @@ cocalc-init:
 	if ! grep -Fq '$(ACTIVATE_PROJECT)' ~/.bash_aliases; then \
 	  echo '$(ACTIVATE_PROJECT)' >> ~/.bash_aliases; \
   fi
+	@make sync
 
 
 envs/default: anaconda-project.yml
@@ -70,6 +71,8 @@ reallyclean:
 
 
 clean:
+	find . -name "__pycache__" -delete
+	$(RM) _htmlcov .coverage .pytest_cache
 	$(ACTIVATE) root && conda clean --all -y
 
 

@@ -145,7 +145,7 @@ This project is structured
    project, but things will probably work out-of-the-box on Linux machines or Mac OS
    X. (No guarantees with Windows or other platforms.)  If you encounter any problems,
    please [file an issue].
-2. *(Optional)* Create an account and repository on [GitLab].   
+2. *(Optional)* Create an account and repository on [GitLab].
 3. Clone this repo:
 
    ```bash

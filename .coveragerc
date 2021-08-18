@@ -1,0 +1,7 @@
+[run]
+source=
+   phys_581_2021
+omit=
+   */tests/*
+[html]
+directory = _htmlcov

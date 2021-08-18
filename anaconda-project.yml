@@ -18,7 +18,7 @@ icon:
 #
 # Set a one-sentence-or-so 'description' key with project details
 #
-description:
+description: 'Physics 581: Physics Inspired Computational Techniques.'
 
 #
 # In the commands section, list your runnable scripts, notebooks, and other code.
@@ -55,7 +55,8 @@ commands:
     env_spec: default
 
   init:
-    unix: python3 -m ipykernel install --user --name "phys-581-2021" --display-name "Python 3 (phys-581-2021)"
+    unix: python3 -m ipykernel install --user --name "phys-581-2021" --display-name
+      "Python 3 (phys-581-2021)"
     env_spec: default
 
   clean:
@@ -113,6 +114,10 @@ packages:
   - sphinxcontrib-bibtex
   - mmf-setup
 
+- pytest-cov
+- pytest-flake8
+- pytest-xdist
+- black
 channels: []
 
 #

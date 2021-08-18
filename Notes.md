@@ -22,6 +22,7 @@ anaconda-project init
 anaconda-project add-packages python=3.9 scipy matplotlib sphinx
 anaconda-project add-lpackages conda-forge::uncertainties
 anaconda-project add-packages conda-forge::sphinx-panels conda-forge::sphinx-book-theme conda-forge::myst-nb
+anaconda-project add-packages pytest-cov pytest-flake8 pytest-xdist 
 anaconda-project add-packages --pip sphinxcontrib-zopeext sphinxcontrib-bibtex mmf-setup
 ```
 
@@ -42,16 +43,45 @@ following CI's:
 * How to grade?  Student's can keep projects private (but probably will not have access
   to badges.)  Run tests on Student's CoCalc servers or with CI?
   
+### Things Students Need to Change
+These are things that each student must change in their repo.  These should be fields in
+the final skeleton project.
+
+* `pyproject.toml`: `descriptsion`, `repository`, `documentation`, and ultimately
+  `version`, `license`.
+* 
 
 ## Best Practices
-
 * Use Jupytext and version control the associated python files.  Only commit the full
   notebooks (with output) when you want to archive documentation.
   * Maybe do this on an "output" branch or something so the main repo does not get
     cluttered?
 
 
+## Tests and Grading
+
+Tests are setup using [`pytest`].  The configuration is in `pyprojects.toml`.  Each
+assignment will have an official test-suite called
+`tests/assignmentX/test_official_assignmentX.py` where `X` is the assignment number.  These
+official tests will be marked with the special marker `assignmentX`, so that the
+official tests can be run with:
+
+```bash
+pytest -k test_official_assignmentX --no-cov  # Disable coverage.
+```
+
+Students should be instructed not to put tests in `tests/assignmentX/test_official_assignmentX.py`
+
+
 ## Docs
+
+We use [MyST] for writing the documentation, which is the compiled into HTML, PDF,
+etc. with [Sphinx] using the ideas of [JupyerBook] but simply using [Sphinx].  The
+documents live in `Docs/` with the exception of `README.md` which lives at the top level
+and provides the landing page for the
+[GitLab](https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation) and
+[GitHub](https://github.com/WSU-Physics-Courses/physics-581-physics-inspired-computation)
+repos.
 
 To build the documents interactively:
 
@@ -80,6 +110,11 @@ hg add local.bib _static/ _templates/
 
 ### Gotchas
 
+* Be careful not to use [MyST] features in the `README.md` file as this forms the
+  landing page on the
+  [GitLab](https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation) and
+  [GitHub](https://github.com/WSU-Physics-Courses/physics-581-physics-inspired-computation)
+  repos, neither of which support [MyST].  Check these to be sure that they look okay.
 * We literally include the top-level `README.md` files as the first page of the
   documentation in `Docs/index.md`.  This as one side effect that when running `make
   doc-server` (`sphinx-autobuild`), edits to `README.md` do not trigger rebuilding of
@@ -181,7 +216,10 @@ can take advantage of these:
 To do this:
 
 1. Create an empty [GitHub
-   project](https://github.com/forbes-group/physics-581-physics-inspired-computation). 
+   project](https://github.com/forbes-group/physics-581-physics-inspired-computation).
+   Disable
+   [Features](https://github.com/WSU-Physics-Courses/physics-581-physics-inspired-computation/settings)
+   like `Wikis`, `Issues`, `Projects`, etc. which are not desired for a mirror.
 2. Get a personal token from [GitHub] as [described
    here](https://hg.iscimath.org/help/user/project/repository/repository_mirroring#setting-up-a-push-mirror-from-gitlab-to-github).
    Create a token here [**Settings > Developer settings > Personal access
@@ -210,3 +248,4 @@ to use GitHub features like their CI, Notebook viewer etc.
 [WSU Courses CoCalc project]: <https://cocalc.com/projects/c31d20a3-b0af-4bf7-a951-aa93a64395f6>
 [Shared CoCalc Project]: (https://cocalc.com/projects/74852aba-2484-4210-9cf0-e7902e5838f4/) "581-2021 Shared CoCalc Project"
 [GitHub]: <https://github.com> "GitHub"
+[`pytest`]: <https://docs.pytest.org> "pytest: helps you write better programs"
