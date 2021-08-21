@@ -6,11 +6,11 @@
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
-#       jupytext_version: 1.11.2
+#       jupytext_version: 1.11.1
 #   kernelspec:
-#     display_name: phys581_periodic_signals
+#     display_name: Python 3 (phys-581-2021)
 #     language: python
-#     name: phys581_periodic_signals
+#     name: phys-581-2021
 # ---
 
 # # Periodic Signals

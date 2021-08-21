@@ -75,8 +75,10 @@ myst_enable_extensions = [
 bibtex_bibfiles = [
     # For now, macros.bib must be included in local.bib.  See:
     # https://github.com/mcmtroffaes/sphinxcontrib-bibtex/issues/261
+    # Separate files can now be used for sphinxcontrib-bibtex>=2.4.0a0 but we will wait
+    # for release before doing this here.
     # "macros.bib",
-    "local.bib"
+    "local.bib",
 ]
 
 bibtex_reference_style = "author_year"
@@ -127,3 +129,20 @@ napoleon_use_admonition_for_references = False
 napoleon_use_ivar = False
 napoleon_use_param = True
 napoleon_use_rtype = True
+
+######################################################################
+# Variables with course information
+course_package = "phys_581_2021"
+
+myst_substitutions = {
+    "instructor": "Michael McNeil Forbes <mailto:m.forbes+581@wsu.edu>",
+    "office": "947F Webster, (509) 335-6125",
+    "office_hours": "By appointment",
+    "class_name": project,
+    "class_homepage": "<https://schedules.wsu.edu/List/Pullman/20213/Phys/581/02>",
+    "class_number": "[Phys. 581.02 Fall 2021, Pullman, Class Number 20213]"
+    + "(https://www.catalog.wsu.edu/Pullman/Courses/ByList/PHYSICS/581)",
+    "class_time": "MWF, 12:12pm - 1pm",
+    "class_room": "Spark 223",
+    "course_package": course_package,
+}

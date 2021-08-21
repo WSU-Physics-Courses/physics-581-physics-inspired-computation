@@ -4,6 +4,13 @@ Instructor Notes
 These are notes about creating and maintaining this repository.  They may be in a state
 of flux.
 
+To Do
+-----
+* Fix `{{ course_package }}` replacement in `Syllabus.md`.
+
+
+
+
 ## Maintainer Notes
 Try to keep this upper-level project as clean as possible, matching the layout expected
 for the students.  This will be turned into a skeleton at some point.
@@ -107,6 +114,11 @@ I then edited the `conf.py`
 ```bash
 hg add local.bib _static/ _templates/
 ```
+
+Substitutions can be used for parameters such as the `{{ class_room }} = ` {{ class_room
+}}.  These can be defined in `cony.py` in the `myst_substitutions` dictionary and follow
+Jinja2 conventions.  I use these to factor common information which will ultimately be
+part of the templates.
 
 ### Gotchas
 

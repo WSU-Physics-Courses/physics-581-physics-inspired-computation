@@ -2,29 +2,40 @@
 Prerequisites
 =============
 
-There are no formal prerequisites to this class, but you should know the following.
-Some of this will be covered at the start of the course, but you may need to seek the
-help of classmates or other resources if you are not comfortable with some of this
-material.  Some resources are provided here, but suggestions are always welcome: please
-[file an issue] with suggestions of resources you find helpful and I will include them.
+There are no formal prerequisites for the course, but I will expect you to be
+comfortable with the material discussed here, which contains links to additional
+resources should you need to refresh your knowledge.  Please work with your classmates
+to try to share knowledge as needed.  Generally, I will expect familiarity with the
+following:
 
-*(probably need to soften)* 
-* **Real and Complex Analysis**: Topology (notions of continuity), Calculus, [Banach
-  spaces](https://en.wikipedia.org/wiki/Banach_space) (e.g. conditions for the existence
-  of extrema), Fourier Analysis, Contour Integration, Conformal Maps.
-* **Linear Algebra:** Properties of Linear Operators (Self-Adjoint, Hermitian, Unitary,
+Domain Specific Preparation: 
+: The most important prerequisite is the ability to communicate about and formulate
+  complex problems in your field of study that would benefit from the techniques covered
+  in this course.  Students will expected to actively engage with the techniques taught
+  in this course, apply them to relevant problems in their domain of expertise, and to
+  communicate about the efficacy to the class.
+
+Linear Algebra
+: Properties of Linear Operators (Self-Adjoint, Hermitian, Unitary,
   etc.), Matrix Factorization including the Singular Value Decomposition, Bases and
   Orthogonalization via
   [Gram-Schmidt](https://en.wikipedia.org/wiki/Gram%E2%80%93Schmidt_process).
-* **Differential Equations:** Formulation of differential equations, existence of
-  solutions and boundary value requirements, [Sturm-Liouville
-  Theory](https://en.wikipedia.org/wiki/Sturm%E2%80%93Liouville_theory).
-* **Domain Specific Preparation**: The ability to communicate about and formulate
-  complex problems in the student's field of study that would benefit from the
-  techniques covered in this course.  Students will expected to actively engage with the
-  techniques taught in this course, apply them to relevant problems in their domain of
-  expertise, and to communicate about the efficacy to the class.
 
+Real and Complex Analysis
+: Topology (notions of continuity), Calculus, [Banach
+  spaces](https://en.wikipedia.org/wiki/Banach_space) (e.g. conditions for the existence
+  of extrema), Fourier Analysis, Contour Integration, Conformal Maps.
+
+Differential Equations
+: Formulation of differential equations, existence of solutions and boundary value
+  requirements, [Sturm-Liouville
+  Theory](https://en.wikipedia.org/wiki/Sturm%E2%80%93Liouville_theory). 
+
+Programming Skills
+: There are some specific skills you will need for this course, including basic
+  programming skills, distributed version control, how to connect remotely to computers
+  etc. with [SSH].  We will use the [CoCalc] platform so you do not need to install any
+  of the software on your computer.
 
 (sec:version-control)=
 ## Version Control

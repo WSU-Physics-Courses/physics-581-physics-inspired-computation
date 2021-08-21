@@ -103,6 +103,7 @@ packages:
 - scipy
 - matplotlib
 - sphinx
+- pandas
 - conda-forge::myst-nb
 - conda-forge::uncertainties
 - conda-forge::sphinx-panels
