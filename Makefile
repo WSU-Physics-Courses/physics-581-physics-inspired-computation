@@ -14,9 +14,9 @@ else
 	ANACONDA_PROJECT := anaconda-project
 endif
 
-ENV := $(abspath envs/default/)
-
-ACTIVATE_PROJECT := $(ACTIVATE) $(ENV)
+ENV := phys-581-2021
+ENV_PATH := $(abspath envs/$(ENV))
+ACTIVATE_PROJECT := $(ACTIVATE) $(ENV_PATH)
 
 # ------- Top-level targets  -------
 
@@ -29,12 +29,13 @@ usage:
 	@echo "$$HELP_MESSAGE"
 
 
-init: _ext/Resources envs/default
+init: _ext/Resources $(ENV_PATH)
 	$(ANACONDA_PROJECT) prepare
-	$(ANACONDA_PROJECT) run init	# Custom command: see anaconda-project.yml
+	$(ANACONDA_PROJECT) run init	# Custom command: see anaconda-project.yaml
 ifdef ANACONDA2020
-  @make cocalc-init
+	@make cocalc-init
 endif
+
 
 cocalc-init:
 	python3 -m pip install --user mmf-setup
@@ -45,7 +46,7 @@ cocalc-init:
 	@make sync
 
 
-envs/default: anaconda-project.yml
+$(ENV_PATH): anaconda-project.yaml
 	$(ANACONDA_PROJECT) prepare
 	$(ANACONDA_PROJECT) run init
 
@@ -57,6 +58,10 @@ _ext/Resources:
   fi
 
 
+Docs/environment.yaml: anaconda-project.yaml Makefile
+	$(ANACONDA_PROJECT) run export 1> $@
+
+
 sync:
 	find . -name ".ipynb_checkpoints" -prune -o \
 	       -name "_ext" -prune -o \
@@ -65,7 +70,7 @@ sync:
 
 
 reallyclean:
-	$(ANACONDA_PROJECT) run clean || true	# Custom command: see anaconda-project.yml
+	$(ANACONDA_PROJECT) run clean || true	# Custom command: see anaconda-project.yaml
 	$(ANACONDA_PROJECT) clean || true
 	$(RM) -r envs
 
@@ -103,16 +108,20 @@ Variables:
                      activate an environment (as on CoCalc), then this should do that.
                      Defaults to `anaconda-project`.
    ENV: (= "$(ENV)")
-                     Name or path to the conda environment user by the project.
+                     Name of the conda environment user by the project.
                      (Customizations have not been tested.)
-                     Defaults to `envs/default` which is the `anaconda-project` default.
+                     Defaults to `phys-581-2021`.
+   ENV_PATH: (= "$(ENV_PATH)")
+                     Path to the conda environment user by the project.
+                     (Customizations have not been tested.)
+                     Defaults to `envs/$$(ENV)`.
    ACTIVATE_PROJECT: (= "$(ACTIVATE_PROJECT)")
                      Command to activate the project environment in the shell.
                      Defaults to `$$(ACTIVATE)  $$(ENV)`.
 
 Initialization:
    make init         Initialize the environment and kernel.
-   make init_cocalc  Do some CoCalc-specific things like install mmf-setup, and activate the
+   make cocalc-init  Do some CoCalc-specific things like install mmf-setup, and activate the
                      environment in ~/.bash_aliases.  This is called by `make init`
                      if ANACONDA2020 is defined, so usually does not need to be called explicitly.
 

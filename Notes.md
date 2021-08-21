@@ -26,18 +26,29 @@ for the students.  This will be turned into a skeleton at some point.
 
 ```bash
 anaconda-project init
-anaconda-project add-packages python=3.9 scipy matplotlib sphinx
+mv anaconda-project.yml anaconda-project.yaml  # https://stackoverflow.com/a/22268973/1088938
+anaconda-project add-packages python=3.9 scipy matplotlib sphinx notebook ipykernel nb_conda
 anaconda-project add-lpackages conda-forge::uncertainties
 anaconda-project add-packages conda-forge::sphinx-panels conda-forge::sphinx-book-theme conda-forge::myst-nb
 anaconda-project add-packages pytest-cov pytest-flake8 pytest-xdist 
 anaconda-project add-packages --pip sphinxcontrib-zopeext sphinxcontrib-bibtex mmf-setup
 ```
 
+Then I changed all occurrences of `default` to `phys-581-2021` in
+`anaconda-project.yaml` so that the environments have a consistent naming convention.
+
+
 To clean:
 
 ```bash
 anaconda-project clean
 ```
+
+[`nbrr`]
+: Maybe look at https://github.com/pyoceans/nbrr as a way of generating dependencies.
+  This is used by [PyVis examples](https://examples.pyviz.org/make_project.html).
+
+[`nbrr`]: <https://github.com/pyoceans/nbrr> "Jupyter Notebook Reproducible Repositories" 
 
 ## Repository Setup
 
@@ -54,7 +65,7 @@ following CI's:
 These are things that each student must change in their repo.  These should be fields in
 the final skeleton project.
 
-* `pyproject.toml`: `descriptsion`, `repository`, `documentation`, and ultimately
+* `pyproject.toml`: `description`, `repository`, `documentation`, and ultimately
   `version`, `license`.
 * 
 
@@ -109,7 +120,7 @@ wget https://brand.wsu.edu/wp-content/themes/brand/images/pages/logos/wsu-signat
 cp -r ../envs/default/lib/python3.9/site-packages/sphinx_book_theme/_templates/* _templates
 ```
 
-I then edited the `conf.py`
+I then edited the `conf.py`.
 
 ```bash
 hg add local.bib _static/ _templates/
@@ -119,6 +130,15 @@ Substitutions can be used for parameters such as the `{{ class_room }} = ` {{ cl
 }}.  These can be defined in `cony.py` in the `myst_substitutions` dictionary and follow
 Jinja2 conventions.  I use these to factor common information which will ultimately be
 part of the templates.
+
+### Read The Docs
+
+The documents are hosted at [Read the
+Docs](https://readthedocs.org/projects/physics-581-physics-inspired-computational-techniques/) (RtD)
+where they should be build automatically whenever the main branch is pushed.  To get
+this working, one needs to tell RtD which packages to install, and they [recommend using
+a configuration file](https://docs.readthedocs.io/en/stable/config-file/v2.html) for
+this called `.readthedocs.yaml`.
 
 ### Gotchas
 
@@ -132,7 +152,34 @@ part of the templates.
   doc-server` (`sphinx-autobuild`), edits to `README.md` do not trigger rebuilding of
   the `index.md` file.  While actively editing, I include `README.md` as a separate
   file, and view that.
+* We are using [`anaconda-project`], but [Read the Docs] does not directly support
+  provisioning from this.  We use a trick from the [PyViz
+  examples](https://examples.pyviz.org) using [repeated nodes in
+  YAML](https://yaml.org/spec/1.2/spec.html#id2760395) to allow conda to simply install
+  this with `conda env --file anaconda-project.yaml`:
+  
+  ```yaml
+  # anaconda-project.yaml
+  ...
+  packages: &pkgs
+  - python=3.9
+    ...
+  dependences: *pkgs   # Repeated node
+  ```
+  
+* Since we are just doing a Conda install on RtD, we don't run `anaconda-project run
+  init` and the kernel used by our notebooks does not get installed.  We can do this in
+  the Sphinx `Docs/conf.py` file:
+  
+  ```python
+  # Docs/conf.py
+  ...
+  def setup(app):
+      import subprocess
 
+      subprocess.check_call(["anaconda-project", "run", "init"])
+  ```
+  
 ## CoCalc Setup
 
 * [Purchase a license](https://cocalc.com/settings/licenses) with 2 projects to allow
@@ -215,7 +262,7 @@ part of the templates.
   python -m ipykernel install --user --name "PHYS-581-2021" --display-name "Python 3 (PHYS-581-2021)"
   ```
 
-  This will create a Conda environment as specified in `anaconda-project.yml` in `envs/default`.
+  This will create a Conda environment as specified in `anaconda-project.yaml` in `envs/default`.
 
 ## GitHub Mirror
 
@@ -261,3 +308,5 @@ to use GitHub features like their CI, Notebook viewer etc.
 [Shared CoCalc Project]: (https://cocalc.com/projects/74852aba-2484-4210-9cf0-e7902e5838f4/) "581-2021 Shared CoCalc Project"
 [GitHub]: <https://github.com> "GitHub"
 [`pytest`]: <https://docs.pytest.org> "pytest: helps you write better programs"
+[Read the Docs]: <https://readthedocs.org> "Read the Docs homepage"
+[`anaconda-project`]: <https://anaconda-project.readthedocs.io> "Anaconda Project: Tool for encapsulating, running, and reproducing data science projects."

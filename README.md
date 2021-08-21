@@ -1,6 +1,8 @@
 Physics 581: Physics Inspired Computational Techniques
 ======================================================
 
+[![Documentation Status](https://readthedocs.org/projects/physics-581-physics-inspired-computational-techniques/badge/?version=latest)](https://physics-581-physics-inspired-computational-techniques.readthedocs.io/en/latest/?badge=latest)
+
 This is the main project for the [WSU Physics] course **Physics 518: Physics Inspired
 Computational Techniques** first offered in [Fall
 2021](https://schedules.wsu.edu/List/Pullman/20213/Phys/581/02).

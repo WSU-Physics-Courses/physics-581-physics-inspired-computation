@@ -146,3 +146,13 @@ myst_substitutions = {
     "class_room": "Spark 223",
     "course_package": course_package,
 }
+
+
+# Allows us to perform initialization before building the docs.  We use this to install
+# the named kernel so we can keep the name in the notebooks.
+
+
+def setup(app):
+    import subprocess
+
+    subprocess.check_call(["anaconda-project", "run", "init"])
