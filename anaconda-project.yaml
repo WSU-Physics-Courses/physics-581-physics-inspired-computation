@@ -94,13 +94,16 @@ downloads: {}
 # before your code runs.
 # Use `anaconda-project add-packages` to add packages.
 #
-# Trick: we use the trick employed at https://examples.pyviz.org here of adding the
-# anchor `&pkgs` here (see https://yaml.org/spec/1.2/spec.html#id2760395) and then
-# repeating this node with `dependencies: *pkg` so that the following also works:
+# Trick: Call this "dependencies:" so this file can be used as an environment.yaml file:
 #
 #     conda env --file anaconda-project.yaml
 #
-packages: &pkgs
+# Requires anaconda-project >= 0.8.4
+#
+# See https://github.com/Anaconda-Platform/anaconda-project/issues/265
+
+# packages: 
+dependencies:
 - python=3.9
 
 #
@@ -131,9 +134,6 @@ packages: &pkgs
 - pytest-flake8
 - pytest-xdist
 - black
-
-# See Trick above of using YAML to repeat the packages node as dependencies.
-dependencies: *pkgs
 
 channels: []
 

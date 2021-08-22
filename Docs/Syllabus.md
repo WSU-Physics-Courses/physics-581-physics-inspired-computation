@@ -174,9 +174,9 @@ Exact topics and techniques will be chosen to match the interests and needs of t
 ## Other Information
 
 ### COVID-19 Statement
-Per the proclamation of Governor Inslee on August 18, 2021, masks that cover both the
+Per the proclamation of Governor Inslee on August 18, 2021, **masks that cover both the
 nose and mouth must be worn by all people over the age of five while indoors in public
-spaces.  This includes all WSU owned and operated facilities. The state-wide mask mandate
+spaces.**  This includes all WSU owned and operated facilities. The state-wide mask mandate
 goes into effect on Monday, August 23, 2021, and will be effective until further
 notice. 
  
@@ -184,9 +184,10 @@ Public health directives may be adjusted throughout the year to respond to the e
 COVID-19 pandemic. Directives may include, but are not limited to, compliance with WSU’s
 COVID-19 vaccination policy, wearing a cloth face covering, physically distancing, and
 sanitizing common-use spaces.  All current COVID-19 related university policies and
-public health directives are located at https://wsu.edu/covid-19/.  Students who choose
-not to comply with these directives may be required to leave the classroom; in egregious
-or repetitive cases, student non-compliance may be referred to the Center for Community
+public health directives are located at
+[https://wsu.edu/covid-19/](https://wsu.edu/covid-19/).  Students who choose not to
+comply with these directives may be required to leave the classroom; in egregious or
+repetitive cases, student non-compliance may be referred to the Center for Community
 Standards for action under the Standards of Conduct for Students.
 
 ### Academic Integrity

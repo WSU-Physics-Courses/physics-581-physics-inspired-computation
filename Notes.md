@@ -153,20 +153,10 @@ this called `.readthedocs.yaml`.
   the `index.md` file.  While actively editing, I include `README.md` as a separate
   file, and view that.
 * We are using [`anaconda-project`], but [Read the Docs] does not directly support
-  provisioning from this.  We use a trick from the [PyViz
-  examples](https://examples.pyviz.org) using [repeated nodes in
-  YAML](https://yaml.org/spec/1.2/spec.html#id2760395) to allow conda to simply install
-  this with `conda env --file anaconda-project.yaml`:
-  
-  ```yaml
-  # anaconda-project.yaml
-  ...
-  packages: &pkgs
-  - python=3.9
-    ...
-  dependences: *pkgs   # Repeated node
-  ```
-  
+  provisioning from this, however, you can make the `anaconda-project.yaml` file look
+  like an `environment.yaml` file if you [change `packages:` to `dependencies:` as long
+  as you can ensure `anaconda-project>=0.8.4`](https://github.com/Anaconda-Platform/anaconda-project/issues/265#issuecomment-903206709).  This allows one to simply install
+  this with `conda env --file anaconda-project.yaml`.  
 * Since we are just doing a Conda install on RtD, we don't run `anaconda-project run
   init` and the kernel used by our notebooks does not get installed.  We can do this in
   the Sphinx `Docs/conf.py` file:
