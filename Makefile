@@ -66,7 +66,7 @@ sync:
 	find . -name ".ipynb_checkpoints" -prune -o \
 	       -name "_ext" -prune -o \
 	       -name "envs" -prune -o \
-	       -name "*.ipynb" -exec jupytext --sync {} \;
+	       -name "*.ipynb" -exec jupytext --sync {} +
 
 
 reallyclean:
@@ -76,7 +76,7 @@ reallyclean:
 
 
 clean:
-	find . -name "__pycache__" -delete
+	find . -name "__pycache__" -exec $(RM) {} +
 	$(RM) _htmlcov .coverage .pytest_cache
 	$(ACTIVATE) root && conda clean --all -y
 
