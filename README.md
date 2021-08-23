@@ -372,8 +372,7 @@ hg add local.bib _static/ _templates/
   This will create a Conda environment as specified in `anaconda-project.yml` in `envs/default`.
 
 [WSU Courses CoCalc project]: <https://cocalc.com/projects/c31d20a3-b0af-4bf7-a951-aa93a64395f6>
-[Shared CoCalc Project]: (https://cocalc.com/projects/74852aba-2484-4210-9cf0-e7902e5838f4/) "581-2021 Shared CoCalc Project"
-
+[Shared CoCalc Project]: <https://cocalc.com/projects/74852aba-2484-4210-9cf0-e7902e5838f4/> "581-2021 Shared CoCalc Project"
 [CoCalc]: <https://cocalc.com> "CoCalc: Collaborative Calculation and Data Science"
 [WSU Physics]: <https://physics.wsu.edu> "WSU Physics Department"
 [GitLab]: <https://gitlab.com> "GitLab"

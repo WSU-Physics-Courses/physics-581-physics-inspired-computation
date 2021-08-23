@@ -110,7 +110,7 @@ letter grade according to the following table:
 | 40% \<= P \< 55% | D, D+     |
 | P \< 40%         | F         |
 
-As discussed in section {ref}`assignments`, there will be two stages of testing for each
+As discussed in section {ref}`sec:assignments`, there will be two stages of testing for each
 assignment.  Completion of the first stage tests will allow you to get up to a grade of
 A-.  Successful completion of sufficient second stages will be required for an overall A
 in the course.  *Currently there is no other mechanism for partial credit, but I will
@@ -292,8 +292,8 @@ Students are expected to:
    concepts, then present remaining areas of difficulty to the instructor for
    personal attention or for discussion in class.
 4. Complete assignments on time, providing well crafted solutions to the posed problems
-   that demonstrate mastery of the material through the [Learning Outcomes][learning
-   outcomes] 1-7. 
+   that demonstrate mastery of the material through the [Learning
+   Outcomes](#learning-outcomes) 1-7.
    
    Student's are encouraged to discuss their intended approach with peers and with the
    instructor, but must ultimately write their own code.
@@ -306,7 +306,7 @@ of two hours of work outside class.
 The following details the content of the course.  It essentially
 follows the main textbook.  Content from the supplement will be
 inserted as appropriate throughout. Details and further resources will
-be included on the lecture pages on the [Blackboard] server.
+be included on the lecture pages on the {{ Canvas }} server.
 
 ### Course Outline
 <!-- 16 Weeks -->
@@ -350,3 +350,9 @@ be included on the lecture pages on the [Blackboard] server.
 [run, hide, fight]: https://oem.wsu.edu/emergency-procedures/active-shooter/
 [the wsu safety portal]: https://oem.wsu.edu/about-us/
 [wac 504-26-010(3)]: https://apps.leg.wa.gov/WAC/default.aspx?cite=504-26
+[SSH]: <https://en.wikipedia.org/wiki/Secure_Shell> "SSH on Wikipedia"
+[CoCalc]: <https://cocalc.com> "CoCalc: Collaborative Calculation and Data Science"
+[GitLab]: <https://gitlab.com> "GitLab"
+[GitHub]: <https://github.com> "GitHub"
+[Git]: <https://git-scm.com> "Git"
+[Official Course Repository]: <https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/> "Official Physics 581 Repository hosted on GitLab"

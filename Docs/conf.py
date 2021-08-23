@@ -105,6 +105,9 @@ html_theme_options = {
     "repository_url": "https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation",
 }
 
+# Override version number in title... not relevant for docs.
+html_title = project
+
 # html_sidebars = {}
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -140,9 +143,9 @@ myst_substitutions = {
     "office_hours": "By appointment",
     "class_name": project,
     "class_homepage": "<https://schedules.wsu.edu/List/Pullman/20213/Phys/581/02>",
-    "class_number": "[Phys. 581.02 Fall 2021, Pullman, Class Number 20213]"
+    "class_number": "[Phys. 581.02 Fall 2021, Pullman, Class Number 01665]"
     + "(https://www.catalog.wsu.edu/Pullman/Courses/ByList/PHYSICS/581)",
-    "class_time": "MWF, 12:12pm - 1pm",
+    "class_time": "MWF, 12:10pm - 1pm",
     "class_room": "Spark 223",
     "course_package": course_package,
 }
