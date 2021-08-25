@@ -138,9 +138,9 @@ napoleon_use_rtype = True
 course_package = "phys_581_2021"
 
 myst_substitutions = {
-    "instructor": "Michael McNeil Forbes <mailto:m.forbes+581@wsu.edu>",
+    "instructor": "Michael McNeil Forbes [`m.forbes+581@wsu.edu`](mailto:m.forbes+581@wsu.edu)",
     "office": "947F Webster, (509) 335-6125",
-    "office_hours": "By appointment",
+    "office_hours": "MWF, 1pm - 2pm, Spark 223 (after class) or by appointment",
     "class_name": project,
     "class_homepage": "<https://schedules.wsu.edu/List/Pullman/20213/Phys/581/02>",
     "class_number": "[Phys. 581.02 Fall 2021, Pullman, Class Number 01665]"

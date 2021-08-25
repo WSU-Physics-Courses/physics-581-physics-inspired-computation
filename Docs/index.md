@@ -16,6 +16,7 @@ titlesonly:
 hidden:
 ---
 Syllabus
+Prerequisites
 Reading
 References
 ```
@@ -38,5 +39,4 @@ titlesonly:
 hidden:
 ---
 README
-Prerequisites
 ```

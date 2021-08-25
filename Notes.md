@@ -190,6 +190,8 @@ this called `.readthedocs.yaml`.
   this project so that it can run.  I then add the SSH key to may `.ssh/config` files so
   I can quickly login.
 
+* Add students, and follow prompt to update the payment option.
+
 * Clone the repos into the shared project and initialize the project.  Optional, but
   highly recommend -- use my [`mmf-setup`] project to provide some useful features
 
@@ -253,6 +255,13 @@ this called `.readthedocs.yaml`.
   ```
 
   This will create a Conda environment as specified in `anaconda-project.yaml` in `envs/default`.
+
+## GitLab Setup
+
+For [GitLab] access to the private repository, I created a group [Physics
+581-2021](https://gitlab.com/phys-581-2021) and invited all the students.  I figure that
+it will be easier to update this each year.  I then added this group to the repos.
+
 
 ## GitHub Mirror
 

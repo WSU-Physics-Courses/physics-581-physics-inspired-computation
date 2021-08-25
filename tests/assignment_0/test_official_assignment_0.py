@@ -3,14 +3,14 @@
 These tests are the official tests for assignment 0.  Run with:
 
 ```bash
-pytest -k test_official_assignment0 --no-cov
+pytest -k test_official_assignment_0 --no-cov
 ```
 """
 import numpy as np
 
 import pytest
 
-from phys_581_2021 import assignment0
+from phys_581_2021 import assignment_0
 
 
 @pytest.fixture(
@@ -32,7 +32,7 @@ def test1(roots):
     b = -(x1 + x2)
     c = x1 * x2
 
-    xs = assignment0.quadratic_equation(a=a, b=b, c=c)
+    xs = assignment_0.quadratic_equation(a=a, b=b, c=c)
 
     # Allow roots to be in either order
     assert any([np.allclose(roots, xs), np.allclose(roots, xs[::-1])])

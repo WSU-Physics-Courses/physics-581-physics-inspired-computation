@@ -69,11 +69,18 @@ Programming Skills
 There is no formal textbook, but the following (available electronically from the WSU
 Library) will be useful: 
 
-* [A. Gezerlis: "Numerical Methods in Physics with Python" (2020)](https://ntserver1.wsulibs.wsu.edu:2532/core/books/numerical-methods-in-physics-with-python/563DF013576DCC535668A100B8F7D2F9)
-
-This covers many useful algorithms with a focus on implementing them from scratch rather than using them as black-box routines.  Another resource more focused on data science is by Jake VanderPlas:
-
-* [J. VanderPlas: "Python Data Science Handbook"](https://ntserver1.wsulibs.wsu.edu:2171/lib/wsu/detail.action?docID=4746657&pq-origsite=primo):
+{cite:p}`Gezerlis:2020`
+: [A. Gezerlis: "Numerical Methods in Physics with Python" (2020)](
+  https://ntserver1.wsulibs.wsu.edu:2532/core/books/numerical-methods-in-physics-with-python/563DF013576DCC535668A100B8F7D2F9). 
+  This covers many useful algorithms with a focus on implementing them from scratch rather
+  than using them as black-box routines.
+  
+{cite:p}`VanderPlas:2016`
+: [J. VanderPlas: "Python Data Science Handbook" (2016)](
+  https://ntserver1.wsulibs.wsu.edu:2171/lib/wsu/detail.action?docID=4746657&pq-origsite=primo).
+  More focused on data analysis, but Jake provides a very good description of techniques
+  like plotting and animation.  I have learned many of my skills from him and his blog
+  [Pythonic Perambulations](https://jakevdp.github.io/).
 
 Readings will be assigned as needed.  See {ref}`sec:References` for details and
 additional resources.
