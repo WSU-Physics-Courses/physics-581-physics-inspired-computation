@@ -382,8 +382,11 @@ hg add local.bib _static/ _templates/
 [Mercurial]: <https://www.mercurial-scm.org> "Mercurial"
 [Official Course Repository]: <https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/> "Official Physics 581 Repository hosted on GitLab"
 [Resources project]: <https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation_resources> "Private course resources repository."
-[Shared CoCalc Project]: (https://cocalc.com/projects/74852aba-2484-4210-9cf0-e7902e5838f4/) "581-2021 Shared CoCalc Project"
+
+[Shared CoCalc Project]: <https://cocalc.com/projects/74852aba-2484-4210-9cf0-e7902e5838f4/> "581-2021 Shared CoCalc Project"
+
 [WSU Courses CoCalc project]: <https://cocalc.com/projects/c31d20a3-b0af-4bf7-a951-aa93a64395f6>
 [WSU Physics]: <https://physics.wsu.edu> "WSU Physics Department"
 [file an issue]: <https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/-/issues> "Issues on the class GitLab project."
 [hg-git]: <https://hg-git.github.io> "The Hg-Git mercurial plugin"
+[`mmf-setup`]: <https://pypi.org/project/mmf-setup/> "PyPI mmf-setup page"

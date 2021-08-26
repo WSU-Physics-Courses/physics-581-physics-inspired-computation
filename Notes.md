@@ -173,9 +173,9 @@ this called `.readthedocs.yaml`.
 ## CoCalc Setup
 
 * [Purchase a license](https://cocalc.com/settings/licenses) with 2 projects to allow
-  the course and [WSU Courses CoCalc project] and [Shared CoCalc Project] to run.  This
-  approach requires the students to pay $14 for access four the term (4 months).  They
-  can optionally use any license they already have instead.
+  the course and [WSU Courses CoCalc project] and [Shared CoCalc Project - Physics 581
+  Fall 2021] to run.  This approach requires the students to pay $14 for access four the
+  term (4 months).  They can optionally use any license they already have instead.
    
   Optionally, one might opt to purchase a license for $n+2$ projects where $n$ is the
   number of students, if there is central funding available.  See [Course Upgrading
@@ -302,10 +302,67 @@ tokens**](https://github.com/settings/tokens) with `repo` access, `admin:repo_ho
 Now whenever you push changes to GitLab, they will be mirrored on GitHub, allowing you
 to use GitHub features like their CI, Notebook viewer etc.
 
+# General Course Preparation
+
+Here are the general steps needed to prepare for the course: see above for further
+details.
+
+1. Purchase $N+1$ CoCalc Licenses for $N$ courses for the duration of the course.
+2. Create the following as needed (some may be reused from previous terms):
+
+   CoCalc Course:
+   : This is the course page where you add students.  It will give each student a
+     private project, and create a shared course project.  E.g.:
+     * [CoCalc Course File - Physics 581 Fall 2021]
+     * [Shared CoCalc Project - Physics 581 Fall 2021]
+   
+   GitLab Course Project (Public)
+   : This is the public repository for the course, with notes, assignments, syllabus,
+     etc.  It will likely be reused, or cloned from a previous course.  E.g.:
+
+     * [GitLab Public Project - Physics 581 Fall 2021]
+
+   GitLab Course Resource Project (Private)
+   : This is a private repository with things that should only be shared with the class,
+     such as textbooks, data, etc.  *(Currently this is doing double duty as it is also
+     used for data that could in principle be shared publicaly.  We may need to add a
+     third repo later.)* E.g.:
+
+     * [GitLab Resources Project - Physics 581 Fall 2021]
+     
+
+   GitLab Group for the course
+   : To give students access to the course, I add them to a [GitLab] group, then I give
+     the group access to the various projects above.  This makes it easy to switch
+     classes, and to add students.  E.g.:
+
+     * [Physics 581-2021 GitLab Group](https://gitlab.com/phys-581-2021)
+     
+   GitHub Mirror (Public)
+   : This is a public mirror of the GitLab course project on [GitHub], allowing us to
+     use their CI tools.  E.g.:
+   
+     * [GitHub Mirror - Physics 581 Fall 2021]
+     
+   
+
+[MyST]: <https://myst-parser.readthedocs.io/en/latest/> "MyST - Markedly Structured Text"
 
 [WSU Courses CoCalc project]: <https://cocalc.com/projects/c31d20a3-b0af-4bf7-a951-aa93a64395f6>
-[Shared CoCalc Project]: (https://cocalc.com/projects/74852aba-2484-4210-9cf0-e7902e5838f4/) "581-2021 Shared CoCalc Project"
+
 [GitHub]: <https://github.com> "GitHub"
 [`pytest`]: <https://docs.pytest.org> "pytest: helps you write better programs"
 [Read the Docs]: <https://readthedocs.org> "Read the Docs homepage"
 [`anaconda-project`]: <https://anaconda-project.readthedocs.io> "Anaconda Project: Tool for encapsulating, running, and reproducing data science projects."
+
+<!-- Fall 2021 links -->
+[CoCalc Course File - Physics 581 Fall 2021]: <https://cocalc.com/projects/c31d20a3-b0af-4bf7-a951-aa93a64395f6/files/PhysicsInspiredComputation/581-2021.course>
+
+[Shared CoCalc Project - Physics 581 Fall 2021]: <https://cocalc.com/projects/74852aba-2484-4210-9cf0-e7902e5838f4/> "581-2021 Shared CoCalc Project"
+
+[GitLab Public Project - Physics 581 Fall 2021]: <https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation> "GitLab public course project for Fall 2021."
+
+[GitLab Resources Project - Physics 581 Fall 2021]: <https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation_resources> "GitLab private resources course project for Fall 2021."
+
+[GitHub Mirror - Physics 581 Fall 2021]: <https://github.com/WSU-Physics-Courses/physics-581-physics-inspired-computation> "GitHub mirror"
+
