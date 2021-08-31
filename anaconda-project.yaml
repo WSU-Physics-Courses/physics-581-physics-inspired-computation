@@ -44,6 +44,10 @@ commands:
     unix: jupyter kernelspec uninstall -f "phys-581-2021"
     env_spec: phys-581-2021
 
+  test:
+    unix: pytest
+    env_spec: phys-581-2021
+
 #
 # In the variables section, list any environment variables your code depends on.
 # Use `anaconda-project add-variable` to add variables.

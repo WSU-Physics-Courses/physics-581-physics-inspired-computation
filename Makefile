@@ -10,7 +10,7 @@ ifdef ANACONDA2020
   ACTIVATE := source $$ANACONDA2020/bin/activate
   ANACONDA_PROJECT := $(ACTIVATE) root && anaconda-project
 else
-  ACTIVATE := conda activate
+  ACTIVATE := eval "$$(conda shell.bash hook)" && conda activate
   ANACONDA_PROJECT := anaconda-project
 endif
 
@@ -68,8 +68,8 @@ sync:
 
 
 clean:
-	find . -name "__pycache__" -exec $(RM) {} +
-	$(RM) _htmlcov .coverage .pytest_cache
+	find . -name "__pycache__" -exec $(RM) -r {} +
+	$(RM) -r _htmlcov .coverage .pytest_cache
 	$(ACTIVATE) root && conda clean --all -y
 
 
@@ -79,11 +79,14 @@ reallyclean:
 	$(RM) -r envs
 
 
+test:
+	$(ANACONDA_PROJECT) run test
+
 doc-server:
 	sphinx-autobuild Docs Docs/_build/html
 
 
-.PHONY: clean realclean init cocalc-init sync doc-server help
+.PHONY: clean realclean init cocalc-init sync doc-server help test
 
 
 # ----- Usage -----
@@ -122,6 +125,9 @@ Initialization:
    make cocalc-init  Do some CoCalc-specific things like install mmf-setup, and activate the
                      environment in ~/.bash_aliases.  This is called by `make init`
                      if ANACONDA2020 is defined, so usually does not need to be called explicitly.
+
+Testing:
+   make test         Runs the general tests.
 
 Maintenance:
    make clean        Call conda clean --all: saves disk space.
