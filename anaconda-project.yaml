@@ -25,31 +25,6 @@ description: 'Physics 581: Physics Inspired Computational Techniques.'
 # Use `anaconda-project add-command` to add commands.
 #
 commands:
-  AstroPhases/AstroPhases.ipynb:
-    notebook: AstroPhases/AstroPhases.ipynb
-    env_spec: phys-581-2021
-  BayesianAnalysis.ipynb:
-    notebook: BayesianAnalysis.ipynb
-    env_spec: phys-581-2021
-  MCMC.ipynb:
-    notebook: MCMC.ipynb
-    env_spec: phys-581-2021
-  MontyHall.ipynb:
-    notebook: MontyHall.ipynb
-    env_spec: phys-581-2021
-  ParametricResonance.ipynb:
-    notebook: ParametricResonance.ipynb
-    env_spec: phys-581-2021
-  PeriodicSignals/PeriodicData.ipynb:
-    notebook: PeriodicSignals/PeriodicData.ipynb
-    env_spec: phys-581-2021
-  PeriodicSignals/PeriodicSignals.ipynb:
-    notebook: PeriodicSignals/PeriodicSignals.ipynb
-    env_spec: phys-581-2021
-  Plotting.ipynb:
-    notebook: Plotting.ipynb
-    env_spec: phys-581-2021
-
   shell:
     unix: bash
     env_spec: phys-581-2021

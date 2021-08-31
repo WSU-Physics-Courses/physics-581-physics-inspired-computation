@@ -8,10 +8,10 @@ RESOURCES = git@gitlab.com:wsu-courses/physics-581-physics-inspired-computation_
 ifdef ANACONDA2020
   # If this is defined, we assume we are on CoCalc
   ACTIVATE := source $$ANACONDA2020/bin/activate
-	ANACONDA_PROJECT := $(ACTIVATE) root && anaconda-project
+  ANACONDA_PROJECT := $(ACTIVATE) root && anaconda-project
 else
   ACTIVATE := conda activate
-	ANACONDA_PROJECT := anaconda-project
+  ANACONDA_PROJECT := anaconda-project
 endif
 
 ENV := phys-581-2021
@@ -30,8 +30,6 @@ usage:
 
 
 init: _ext/Resources $(ENV_PATH)
-	$(ANACONDA_PROJECT) prepare
-	$(ANACONDA_PROJECT) run init	# Custom command: see anaconda-project.yaml
 ifdef ANACONDA2020
 	@make cocalc-init
 endif
@@ -42,20 +40,20 @@ cocalc-init:
 	mmf_setup cocalc
 	if ! grep -Fq '$(ACTIVATE_PROJECT)' ~/.bash_aliases; then \
 	  echo '$(ACTIVATE_PROJECT)' >> ~/.bash_aliases; \
-  fi
+	fi
 	@make sync
 
 
 $(ENV_PATH): anaconda-project.yaml
 	$(ANACONDA_PROJECT) prepare
-	$(ANACONDA_PROJECT) run init
+	$(ANACONDA_PROJECT) run init  # Custom command: see anaconda-project.yaml
 
 
 _ext/Resources:
 	-git clone $(RESOURCES) $@
 	@if [ ! -d "$@" ]; then \
 	  echo "$$RESOURCES_ERROR_MESSAGE"; \
-  fi
+	fi
 
 
 Docs/environment.yaml: anaconda-project.yaml Makefile
@@ -69,16 +67,16 @@ sync:
 	       -name "*.ipynb" -exec jupytext --sync {} +
 
 
-reallyclean:
-	$(ANACONDA_PROJECT) run clean || true	# Custom command: see anaconda-project.yaml
-	$(ANACONDA_PROJECT) clean || true
-	$(RM) -r envs
-
-
 clean:
 	find . -name "__pycache__" -exec $(RM) {} +
 	$(RM) _htmlcov .coverage .pytest_cache
 	$(ACTIVATE) root && conda clean --all -y
+
+
+reallyclean:
+	$(ANACONDA_PROJECT) run clean || true  # Custom command: see anaconda-project.yaml
+	$(ANACONDA_PROJECT) clean || true
+	$(RM) -r envs
 
 
 doc-server:
@@ -129,6 +127,9 @@ Maintenance:
    make clean        Call conda clean --all: saves disk space.
    make reallyclean  delete the environments and kernel as well.
 
+Documentation:
+   make doc-server   Build the html documentation server on http://localhost:8000
+                     Uses Sphinx autobuild
 endef
 export HELP_MESSAGE
 

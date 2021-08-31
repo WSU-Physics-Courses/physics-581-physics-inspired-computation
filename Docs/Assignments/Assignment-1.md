@@ -26,14 +26,38 @@ import mmf_setup;mmf_setup.nbinit(quiet=True)
 
 Write a function {func}`phys_581_2021.assignment1.sample_monty_hall` which returns an array or list of $N$ sample Monty-Hall games which we can analyze with a histogram to find the probability of winning.
 
++++
+
+## Evaluating Functions
+
++++
+
+Write a function {func}`phys_581_2021.assignment_0.quadratic_equation` which returns the roots of the equation
+
+$$
+  ax^2 + bx + c = 0.
+$$
+
+For example:
+
+$$
+  x^2 - 3x + 2 = (x-2)(x-1)
+$$
+
+so we expect
+
 ```{code-cell} ipython3
-from phys_581_2021.assignment0 import quadratic_equation
+from phys_581_2021.assignment_0 import quadratic_equation
 np.allclose(quadratic_equation(a=1, b=-3, c=2), [1, 2])
 ```
 
-Assume the game goes as follows:
+Note: if you attempt to blindly use the quadratic formula, you will encounter errors when $b \approx \pm \sqrt{b^2 - 4ac}$ because the two terms can cancel.  This is the main source of error associated with floating point comptations.
 
-1. 
+1. When will this become a problem?
+2. How can you overcome this issue?
+3. How will you test your code to make sure it works well?
+
+The goal should be for every function to return an answer that has a relative error comparable to the **machine precision** of the computer: sometimes called $\epsilon = $`eps`.  This is not always possible if the problem is ill-conditioned.
 
 +++
 
@@ -128,4 +152,8 @@ err = abs(Df_x - df(x))
 fig, ax = plt.subplots()
 ax.semilogy(h, err)
 ax.set(xlabel="h", ylabel="abs err");
+```
+
+```{code-cell} ipython3
+
 ```
