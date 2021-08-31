@@ -33,5 +33,5 @@ class TestLambertW:
         with pytest.raises(ValueError, match=r"Invalid z = -0.5 < -0.3678794.*"):
             assignment_1.lambertw(-0.5, k=0)
 
-        with pytest.raises(ValueError, match=r"Invalid z = -10 < -0.3678794.*"):
-            assignment_1.lambertw(-10, k=-1)
+        with pytest.raises(ValueError, match=r"Invalid z = 1 > 0 for k == -1"):
+            assignment_1.lambertw(1, k=-1)
