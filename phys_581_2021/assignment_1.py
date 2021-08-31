@@ -14,6 +14,10 @@ def play_monty_hall(switch=False):
        If `True`, then switch doors, otherwise stick with the original door.
     """
 
+    # Use np.random to simulate a game
+    win = True  # Stub
+    return win
+
 
 def lambertw(z, k=-1):
     r"""Return `x` from the k'th branch of the LambertW function.
@@ -48,3 +52,7 @@ def lambertw(z, k=-1):
 
     if k == -1 and np.any(np.asarray(z) > 0):
         raise ValueError(f"Invalid z = {z} > 0 for k == -1.")
+
+    # Compute W(z)
+    w = 0 * z  # Stub
+    return w

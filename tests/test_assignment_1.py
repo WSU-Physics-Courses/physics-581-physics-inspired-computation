@@ -1,5 +1,7 @@
 """Basic Tests for Assignment 1.
 """
+import re
+
 import numpy as np
 
 import pytest
@@ -23,11 +25,13 @@ class TestLambertW:
     def test_invalid(self):
         """Test invalid values."""
 
-        with pytest.raises(ValueError, match="k must be either 0 or -1 (got 1)"):
+        with pytest.raises(
+            ValueError, match=re.escape("k must be either 0 or -1 (got 1)")
+        ):
             assignment_1.lambertw(0.1, k=1)
 
-        with pytest.raises(ValueError, match="Invalid z = -0.5 < {z_min}"):
+        with pytest.raises(ValueError, match=r"Invalid z = -0.5 < -0.3678794.*"):
             assignment_1.lambertw(-0.5, k=0)
 
-        with pytest.raises(ValueError, match="Invalid z = -10 < {z_min}"):
+        with pytest.raises(ValueError, match=r"Invalid z = -10 < -0.3678794.*"):
             assignment_1.lambertw(-10, k=-1)
