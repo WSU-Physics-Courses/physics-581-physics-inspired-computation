@@ -284,12 +284,21 @@ here:
   name](https://stackoverflow.com/questions/55836220/how-to-change-pipeline-badge-name)
   in the badges.
 
-To get coverage working, I needed to:
+To get [coverage working](https://docs.gitlab.com/ee/user/project/merge_requests/test_coverage_visualization.html), I needed to:
 
 1. Generate `_htmlcov/coverage.xml` by adding an `[xml]` section to `.coveragerc`.
 2. Add the `--cov-report=xml` option in `pyproject.toml` in the
    `[tool.pytest.ini_options]` section.
-3.
+3. Make the report an `artifact` in `.gitlab-ci.yml`.
+
+With this enabled, I can get the following badges:
+
+[![pipeline status](https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/badges/main/pipeline.svg)](https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/-/commits/main)
+
+
+[![coverage report](https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/badges/main/coverage.svg)](https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/-/commits/main)
+
+
 
 ## GitHub Mirror
 

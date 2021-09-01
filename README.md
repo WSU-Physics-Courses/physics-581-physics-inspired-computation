@@ -2,6 +2,8 @@ Physics 581: Physics Inspired Computational Techniques
 ======================================================
 
 [![Documentation Status](https://readthedocs.org/projects/physics-581-physics-inspired-computational-techniques/badge/?version=latest)](https://physics-581-physics-inspired-computational-techniques.readthedocs.io/en/latest/?badge=latest)
+[![pipeline status](https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/badges/main/pipeline.svg)](https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/-/commits/main)
+[![coverage report](https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/badges/main/coverage.svg)](https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/-/commits/main)
 
 This is the main project for the [WSU Physics] course **Physics 518: Physics Inspired
 Computational Techniques** first offered in [Fall
