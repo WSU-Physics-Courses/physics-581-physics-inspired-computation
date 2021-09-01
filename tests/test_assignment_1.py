@@ -35,3 +35,22 @@ class TestLambertW:
 
         with pytest.raises(ValueError, match=r"Invalid z = 1 > 0 for k == -1"):
             assignment_1.lambertw(1, k=-1)
+
+
+def test_zeta():
+    """Basic test of zeta function to make sure it works with arrays."""
+    s = np.linspace(2, 3, 10)
+    assert len(assignment_1.zeta(s)) == len(s)
+
+
+def test_derivative():
+    """Basic test of the derivatives."""
+    x = 1.0
+    f = np.sin
+    dfx = np.cos(x)
+    ddfx = -np.sin(x)
+    dddfx = -np.cos(x)
+    assert np.allclose(assignment_1.derivative(f, x=1, d=0), f(x))
+    assert np.allclose(assignment_1.derivative(f, x=1, d=1), dfx)
+    assert np.allclose(assignment_1.derivative(f, x=1, d=2), ddfx)
+    assert np.allclose(assignment_1.derivative(f, x=1, d=3), dddfx, rtol=0.03)

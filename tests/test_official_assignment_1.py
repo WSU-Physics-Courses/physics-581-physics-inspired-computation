@@ -36,3 +36,19 @@ def test_lambertw():
         zs = np.linspace(z_min, z_max, 100)[1:-1]
         ws = assignment_1.lambertw(zs, k=k)
         assert np.allclose(ws * np.exp(ws), zs)
+
+
+def test_derivative():
+    """Test the derivative code."""
+
+    xs = [0, 1.0, 10.0]
+    rtol = 1e-12
+    f = np.sin
+    for x in xs:
+        dfx = np.cos(x)
+        ddfx = -np.sin(x)
+        dddfx = -np.cos(x)
+        assert np.allclose(assignment_1.derivative(f, x=1, d=0), f(x), rtol=rtol)
+        assert np.allclose(assignment_1.derivative(f, x=1, d=1), dfx, rtol=rtol)
+        assert np.allclose(assignment_1.derivative(f, x=1, d=2), ddfx, rtol=rtol)
+        assert np.allclose(assignment_1.derivative(f, x=1, d=3), dddfx, rtol=rtol)
