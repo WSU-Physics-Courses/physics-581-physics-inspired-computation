@@ -270,10 +270,26 @@ The GitLab CI is defined in the file `.gitlab-ci.yml`.  My working strategy is:
 2. Update this with `anaconda-project`.
 3. Use `anaconda-project run test`.
 
-This works, but takes about [7
-minutes](https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/-/pipelines/363094241).
+This works, but takes about [5
+minutes](https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/-/pipelines/363108475).
+In
+principle, it might improve things to cache the virtual environment... Needs testing.
 
-In principle, it might improve things to cache the virtual environment.
+To get the badges, go to **Settings > CI/CD > General pipelines***.  I did the following
+here:
+
+* Set a small Timeout **20min** (important for students to do so they don't run out on
+  private projects).
+* Copy the badges.  Note: it is not easy to [change the "pipline"
+  name](https://stackoverflow.com/questions/55836220/how-to-change-pipeline-badge-name)
+  in the badges.
+
+To get coverage working, I needed to:
+
+1. Generate `_htmlcov/coverage.xml` by adding an `[xml]` section to `.coveragerc`.
+2. Add the `--cov-report=xml` option in `pyproject.toml` in the
+   `[tool.pytest.ini_options]` section.
+3.
 
 ## GitHub Mirror
 

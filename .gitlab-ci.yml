@@ -12,3 +12,6 @@ before_script:
 test:
   script:
     - anaconda-project run test
+  artifacts:
+    reports:
+      cobertura: _htmlcov/coverage.xml

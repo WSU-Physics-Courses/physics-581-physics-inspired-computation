@@ -3,5 +3,9 @@ source=
    phys_581_2021
 omit=
    */tests/*
+
+[xml]
+output = _htmlcov/coverage.xml
+
 [html]
 directory = _htmlcov
