@@ -64,8 +64,9 @@ sync:
 	find . -name ".ipynb_checkpoints" -prune -o \
 	       -name "_ext" -prune -o \
 	       -name "envs" -prune -o \
-	       -name "*.ipynb" -exec jupytext --sync {} +
-
+	       -name "*.ipynb" -o -name "*.md" \
+	       -exec jupytext --sync {} + 2> >(grep -v "is not a paired notebook" 1>&2)
+# See https://stackoverflow.com/a/15936384/1088938 for details
 
 clean:
 	find . -name "__pycache__" -exec $(RM) -r {} +
