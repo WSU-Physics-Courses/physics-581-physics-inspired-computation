@@ -29,24 +29,19 @@ usage:
 	@echo "$$HELP_MESSAGE"
 
 
-init: _ext/Resources $(ENV_PATH)
+init: _ext/Resources anaconda-project.yaml
 ifdef ANACONDA2020
-	@make cocalc-init
-endif
-
-
-cocalc-init:
-	python3 -m pip install --user mmf-setup
+	python3 -m pip install --user --upgrade mmf-setup anaconda-project
 	mmf_setup cocalc
+endif
+	$(ANACONDA_PROJECT) prepare
+	$(ANACONDA_PROJECT) run init  # Custom command: see anaconda-project.yaml
+ifdef ANACONDA2020
 	if ! grep -Fq '$(ACTIVATE_PROJECT)' ~/.bash_aliases; then \
 	  echo '$(ACTIVATE_PROJECT)' >> ~/.bash_aliases; \
 	fi
 	@make sync
-
-
-$(ENV_PATH): anaconda-project.yaml
-	$(ANACONDA_PROJECT) prepare
-	$(ANACONDA_PROJECT) run init  # Custom command: see anaconda-project.yaml
+endif
 
 
 _ext/Resources:
@@ -122,10 +117,9 @@ Variables:
                      Defaults to `$$(ACTIVATE)  $$(ENV)`.
 
 Initialization:
-   make init         Initialize the environment and kernel.
-   make cocalc-init  Do some CoCalc-specific things like install mmf-setup, and activate the
-                     environment in ~/.bash_aliases.  This is called by `make init`
-                     if ANACONDA2020 is defined, so usually does not need to be called explicitly.
+   make init         Initialize the environment and kernel.  On CoCalc we do specific things
+                     like install mmf-setup, and activate the environment in ~/.bash_aliases.
+                     This is done by `make init` if ANACONDA2020 is defined.
 
 Testing:
    make test         Runs the general tests.
