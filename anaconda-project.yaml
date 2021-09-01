@@ -32,7 +32,7 @@ commands:
   export:
     unix: conda env export
     env_spec: phys-581-2021
-    
+
   # Needs to be explicitly called until we can run scripts on prepare
   # https://github.com/Anaconda-Platform/anaconda-project/issues/239
   init:
@@ -105,15 +105,17 @@ dependencies:
 - conda-forge::sphinx-autobuild
 - anaconda-project>=0.10.1
 - pip
-- pip:
-  - sphinxcontrib-zopeext
-  - sphinxcontrib-bibtex
-  - mmf-setup
+- jupytext
 
 - pytest-cov
 - pytest-flake8
 - pytest-xdist
 - black
+
+- pip:
+  - sphinxcontrib-zopeext
+  - sphinxcontrib-bibtex
+  - mmf-setup
 
 channels: []
 
@@ -137,10 +139,10 @@ env_specs:
   phys-581-2021:
     description: Default course environment spec.
     packages:
-      - notebook
+    - notebook
     channels: []
 
 # Silence warnings about about notebooks without run commands
 # See https://github.com/Anaconda-Platform/anaconda-project/issues/263#issuecomment-870004641
 skip_imports:
-  notebooks: True
+  notebooks: true
