@@ -83,7 +83,7 @@ test:
 	$(ANACONDA_PROJECT) run test
 
 doc-server:
-	sphinx-autobuild Docs Docs/_build/html
+	sphinx-autobuild --ignore Docs/_build Docs Docs/_build/html
 
 
 .PHONY: clean realclean init cocalc-init sync doc-server help test

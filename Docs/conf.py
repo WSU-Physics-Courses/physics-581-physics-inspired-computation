@@ -54,6 +54,12 @@ extensions = [
     # "recommonmark",
 ]
 
+source_suffix = {
+    # '.ipynb': 'myst-nb',  # Ignore notebooks.
+    ".myst": "myst-nb",
+    ".md": "myst-nb",
+}
+
 # https://myst-parser.readthedocs.io/en/latest/using/syntax-optional.html
 # https://myst-parser.readthedocs.io/en/latest/syntax/optional.html#substitutions-with-jinja2
 myst_enable_extensions = [
@@ -91,6 +97,9 @@ templates_path = ["_templates"]
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
+# Cache notebook output to speed generation.
+# https://myst-nb.readthedocs.io/en/latest/use/execute.html
+jupyter_execute_notebooks = "cache"
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -103,6 +112,7 @@ html_logo = "_static/wsu-logo.svg"  # Needed for sidebars
 
 html_theme_options = {
     "repository_url": "https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation",
+    "use_repository_button": True,
 }
 
 # Override version number in title... not relevant for docs.
@@ -148,6 +158,8 @@ myst_substitutions = {
     "class_time": "MWF, 12:10pm - 1pm",
     "class_room": "Spark 223",
     "course_package": course_package,
+    "Canvas": "https://wsu.instructure.com/courses/1488567",
+    "mathjax_defines": r'<script id="MathJax-Element-48" type="math/tex">\\newcommand{\\vect}[1]{\\mathbf{#1}}\n\\newcommand{\\uvect}[1]{\\hat{#1}}\n\\newcommand{\\abs}[1]{\\lvert#1\\rvert}\n\\newcommand{\\norm}[1]{\\lVert#1\\rVert}\n\\newcommand{\\I}{\\mathrm{i}}\n\\newcommand{\\ket}[1]{\\left|#1\\right\\rangle}\n\\newcommand{\\bra}[1]{\\left\\langle#1\\right|}\n\\newcommand{\\braket}[1]{\\langle#1\\rangle}\n\\newcommand{\\Braket}[1]{\\left\\langle#1\\right\\rangle}\n\\newcommand{\\op}[1]{\\mathbf{#1}}\n\\newcommand{\\mat}[1]{\\mathbf{#1}}\n\\newcommand{\\d}{\\mathrm{d}}\n\\newcommand{\\D}[1]{\\mathcal{D}[#1]\\;}\n\\newcommand{\\pdiff}[3][]{\\frac{\\partial^{#1} #2}{\\partial {#3}^{#1}}}\n\\newcommand{\\diff}[3][]{\\frac{\\d^{#1} #2}{\\d {#3}^{#1}}}\n\\newcommand{\\ddiff}[3][]{\\frac{\\delta^{#1} #2}{\\delta {#3}^{#1}}}\n\\newcommand{\\floor}[1]{\\left\\lfloor#1\\right\\rfloor}\n\\newcommand{\\ceil}[1]{\\left\\lceil#1\\right\\rceil}\n\\DeclareMathOperator{\\Tr}{Tr}\n\\DeclareMathOperator{\\erf}{erf}\n\\DeclareMathOperator{\\erfi}{erfi}\n\\DeclareMathOperator{\\sech}{sech}\n\\DeclareMathOperator{\\sn}{sn}\n\\DeclareMathOperator{\\cn}{cn}\n\\DeclareMathOperator{\\dn}{dn}\n\\DeclareMathOperator{\\sgn}{sgn}\n\\DeclareMathOperator{\\order}{O}\n\\DeclareMathOperator{\\diag}{diag}\n\n\\newcommand{\\mylabel}[1]{\\label{#1}\\tag{#1}}\n\\newcommand{\\degree}{\\circ}</script>',
 }
 
 
