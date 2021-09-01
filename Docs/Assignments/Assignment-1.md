@@ -16,15 +16,16 @@ kernelspec:
 :cell_style: center
 :hide_input: false
 
-import mmf_setup;mmf_setup.nbinit(quiet=True)
+import mmf_setup;mmf_setup.nbinit()
+import logging;logging.getLogger('matplotlib').setLevel(logging.CRITICAL)
 %pylab inline --no-import-all
 ```
 
-# Assignment 1: Monty Hall
+# Assignment 1: Monty Hall etc.
 
 +++
 
-Write a function {func}`phys_581_2021.assignment1.sample_monty_hall` which returns an array or list of $N$ sample Monty-Hall games which we can analyze with a histogram to find the probability of winning.
+Write a function {func}`phys_581_2021.assignment_1.play_monty_hall` which plays a single round of the standard [Monty Hall problem](https://en.wikipedia.org/wiki/Monty_Hall_problem) game.
 
 +++
 
@@ -32,60 +33,83 @@ Write a function {func}`phys_581_2021.assignment1.sample_monty_hall` which retur
 
 +++
 
-Write a function {func}`phys_581_2021.assignment_0.quadratic_equation` which returns the roots of the equation
+### Lambert W function
+Write a function {func}`phys_581_2021.assignment_1.lambertw` that computes  $w = W_k(x)$, the [Lambert W function](https://en.wikipedia.org/wiki/Lambert_W_function), for the two branches $k=0$ and $k=-1$.
+
+This function satisfies:
 
 $$
-  ax^2 + bx + c = 0.
+  z = we^w
 $$
 
-For example:
-
-$$
-  x^2 - 3x + 2 = (x-2)(x-1)
-$$
-
-so we expect
+and $k$ determines which branch you should compute as shown below:
 
 ```{code-cell} ipython3
-from phys_581_2021.assignment_0 import quadratic_equation
-np.allclose(quadratic_equation(a=1, b=-3, c=2), [1, 2])
+w0 = np.linspace(-1, 1.2, 100)
+w1 = np.linspace(-5, -1, 100)
+fig, ax = plt.subplots()
+for w, k, ls in [(w0, 0, '-'), (w1, -1, '--')]:
+    z = w*np.exp(w)
+    ax.plot(z, w, linestyle=ls, 
+            label=f"Branch $k={k}$: $w=W_{{{k}}}(z)$")
+ax.legend()
+ax.set(xlabel='z', ylabel='w');
 ```
 
-Note: if you attempt to blindly use the quadratic formula, you will encounter errors when $b \approx \pm \sqrt{b^2 - 4ac}$ because the two terms can cancel.  This is the main source of error associated with floating point comptations.
-
-1. When will this become a problem?
-2. How can you overcome this issue?
-3. How will you test your code to make sure it works well?
-
-The goal should be for every function to return an answer that has a relative error comparable to the **machine precision** of the computer: sometimes called $\epsilon = $`eps`.  This is not always possible if the problem is ill-conditioned.
+### Riemann zeta function
 
 +++
 
-## Floating Point Numbers
+Write a function {func}`phys_581_2021.assignment_1.zeta` that computes the [Riemann zeta function](https://en.wikipedia.org/wiki/Riemann_zeta_function) 
+
+$$
+  \zeta(s) = \sum_{n=1}^{\infty} \frac{1}{n^{s}}.
+$$
 
 +++
 
-**Readings:**
-* {cite:p}`Gezerlis:2020` Chapter 2.  Try some of the "experiments" Alex suggests.
-* {cite:p}`Goldberg:1991` "What Every Computer Scientist Should Know About Floating-Point Numbers."  This is a rather technical, but complete account about floating point numbers, and contains a detailed analysis of this assignment.
+## Differentiation
 
-We can use NumPy to see the properties of the floating point numbers.  The defult `float` in python is the IEEE double-precision floating point number which has $64 = 52 + 11 + 1$ bits. 52 of these are used for the **mantissa**, 11 for the **exponent** and 1 for the sign.  Roughly, the relative error in a floating point number is `eps`=$\epsilon = 1/2^{52}\approx 2.22\times 10^{-16}$ (16 digits of precision in decimal), with an exponent that can range from $\pm 2^{10} = \pm 1024$ with a smallest value of `tiny`$\approx 2^{-1024} \approx 5.56\times 10^{-309}$ and largest value of `max`$=2^{1024}\approx 1.798\times 10^{208}$.
++++
 
-*Try to compute these numbers!  In particular, `2**1024.0` causes an overflow... how can you compute $2^{1024}\approx 1.798\times 10^{208}$ using floating point numbers?  Hint:*
-
-$$
-  2^n = a\times 10^m, \qquad
-  n\log_{10}(2) = \log_{10}(a) + m.
-$$
-
-The actual values are a little different as we see below (e.g. `tiny`$=2^{-1022}=2.225\times 10^{-308}$) because of some subtleties in the actual implementation of the IEEE standard. See
-The actual
+Write a function {func}`phys_581_2021.assignment_1.derivative` that numerically computes the derivatives of a function $f(x)$ at a point $x$:
 
 ```{code-cell} ipython3
-import numpy as np
-print(np.finfo(float))
+from phys_581_2021.assignment_1 import derivative
+
+x = 1.0
+for d, exact in [
+    (0, np.sin(x)),
+    (1, np.cos(x)),
+    (2, -np.sin(x)),
+    (3, -np.cos(x)),
+    (4, np.sin(x))
+]:
+    res = derivative(np.sin, x=x, d=d)
+    rel_err = abs(res-exact)/abs(exact)
+    print(f"d={d}: numeric={res:.8g}, exact={exact:.8g}, rel_err={rel_err:.4g}")
 ```
 
+The default code carefully chooses an optimal value of $h$ as discussed below, then uses a recursive approach to compute higher derivatives.  Can you improve the accuracy of this?
+
++++
+
+**Bonus**: Why does the following trick work to machine precision?
+
+```{code-cell} ipython3
+def derivative1(f, x):
+    """Compute the first 1 derivative extremely accurately for *some* functions."""
+    h = 1e-64j
+    return ((f(x+h) - f(x))/h).real
+
+print(f"f=sin(x): err = {abs(derivative1(np.sin, x) - np.cos(x))}")
+print(f"f=exp(x): err = {abs(derivative1(np.exp, x) - np.exp(x))}")
+f = lambda x: np.exp(-x**2)
+df = lambda x: -2*x*np.exp(-x**2)
+print(f"f=exp(-x**2): err = {abs(derivative1(f, x) - df(x))}")
+```
+
+# More Details 
 ## Roundoff vs Truncation Error
 
 +++
@@ -143,7 +167,7 @@ ax.set(xlabel="h", ylabel="abs err", ylim=(1e-16, 1))
 ax.legend()
 ```
 
-Notice that the truncation error is smooth, but the roundoff error appears random.  As Alex discusses {ref}`Gezerlis:2020` (see Fig. 2.3), roundoff errors are not random.  We can see this by zooming in:
+Notice that the truncation error is smooth, but the roundoff error appears random.  As Alex discusses {cite:p}`Gezerlis:2020` (see Fig. 2.3), roundoff errors are not random.  We can see this by zooming in:
 
 ```{code-cell} ipython3
 h = 10 ** np.linspace(-11, -11.0002, 1000)
@@ -152,8 +176,4 @@ err = abs(Df_x - df(x))
 fig, ax = plt.subplots()
 ax.semilogy(h, err)
 ax.set(xlabel="h", ylabel="abs err");
-```
-
-```{code-cell} ipython3
-
 ```

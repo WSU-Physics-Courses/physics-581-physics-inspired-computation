@@ -23,8 +23,8 @@
 ---
 maxdepth: 2
 ---
-Prerequisites
-Assignments
+Syllabus_Prerequisites
+Syllabus_Assignments
 ```
 
 There are no formal prerequisites for the course, but I will expect you to be

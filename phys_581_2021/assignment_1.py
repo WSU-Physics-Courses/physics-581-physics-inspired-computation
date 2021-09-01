@@ -14,7 +14,7 @@ def play_monty_hall(switch=False):
        If `True`, then switch doors, otherwise stick with the original door.
     """
 
-    # Use np.random to simulate a game
+    ### To Do: Use np.random to simulate a game
     win = True  # Stub
     return win
 
@@ -53,6 +53,57 @@ def lambertw(z, k=-1):
     if k == -1 and np.any(np.asarray(z) > 0):
         raise ValueError(f"Invalid z = {z} > 0 for k == -1.")
 
-    # Compute W(z)
+    ### To Do: Compute W(z)
     w = 0 * z  # Stub
     return w
+
+
+def zeta(s):
+    r"""Return the Riemann zeta function at `s`.
+
+    $$
+      \zeta(s) = \sum_{1}^{\infty} \frac{1}{n^{s}}.
+    $$
+
+    Arguments
+    ---------
+    s : float
+       Argument of the zeta function.
+    """
+    ### To Do: Compute zeta(s)
+    return 1.0 * s  # Stub
+
+
+def derivative(f, x, d=0):
+    """Return the `d`th derivative of `f(x)` at `x`.
+
+    Arguments
+    ---------
+    f : function
+        The function to take the derivative of.
+    x : float
+        Where to take the derivative.
+    d : int
+        Which derivative to take.  `d=0` just evaluates the function.
+    """
+    if d == 0:
+        return f(x)
+
+    fx = f(x)
+    eps = np.finfo(np.asarray(fx).dtype).eps
+
+    if d == 1:
+        # Estimate the third derivative so we can estimate the optimal step size
+        xs = np.linspace(x - 0.01, x + 0.01, 5)
+        fs = list(map(f, xs))  #  Don't assume f is vectorized.
+        d3fxs = 6 * np.polyfit(xs, fs, deg=3)[0]
+        h = (3 * eps * abs(fx) / (abs(d3fxs) + 0.01)) ** (1 / 3)
+        x1 = x - h
+        x2 = x + h
+        return (f(x2) - f(x1)) / (x2 - x1)
+
+    # Recursively compute... this is not a good idea!
+    def df(x):
+        return derivative(f, x=x, d=1)
+
+    return derivative(df, x=x, d=d - 1)

@@ -16,9 +16,10 @@ titlesonly:
 hidden:
 ---
 Syllabus
-Prerequisites
+Syllabus_Prerequisites
 Reading
 References
+Assignments
 ```
 
 ```{toctree}
