@@ -104,6 +104,7 @@ dependencies:
 - conda-forge::sphinx-book-theme
 - conda-forge::sphinx-autobuild
 - anaconda-project>=0.10.1
+- pip
 - pip:
   - sphinxcontrib-zopeext
   - sphinxcontrib-bibtex

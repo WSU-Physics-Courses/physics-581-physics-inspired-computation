@@ -262,6 +262,18 @@ For [GitLab] access to the private repository, I created a group [Physics
 581-2021](https://gitlab.com/phys-581-2021) and invited all the students.  I figure that
 it will be easier to update this each year.  I then added this group to the repos.
 
+### CI
+
+The GitLab CI is defined in the file `.gitlab-ci.yml`.  My working strategy is:
+
+1. Use a Docker image for Conda.
+2. Update this with `anaconda-project`.
+3. Use `anaconda-project run test`.
+
+This works, but takes about [7
+minutes](https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/-/pipelines/363094241).
+
+In principle, it might improve things to cache the virtual environment.
 
 ## GitHub Mirror
 
