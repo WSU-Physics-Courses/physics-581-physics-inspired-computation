@@ -31,7 +31,7 @@ usage:
 
 init: _ext/Resources anaconda-project.yaml
 ifdef ANACONDA2020
-	python3 -m pip install --user --upgrade mmf-setup anaconda-project
+	python3 -m pip install --user --upgrade mmf-setup
 	mmf_setup cocalc
 endif
 	$(ANACONDA_PROJECT) prepare

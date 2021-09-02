@@ -7,7 +7,7 @@ of flux.
 To Do
 -----
 * Fix `{{ course_package }}` replacement in `Syllabus.md`.
-
+* Add test for anaconda-package version and issue warning.
 
 
 
