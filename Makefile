@@ -4,14 +4,18 @@ SHELL := /bin/bash
 
 RESOURCES = git@gitlab.com:wsu-courses/physics-581-physics-inspired-computation_resources.git
 
+ifdef ANACONDA2020
+   CONDA_EXE := mamba
+endif
+
 # ------- Tools -------
 ifdef ANACONDA2020
   # If this is defined, we assume we are on CoCalc
   ACTIVATE := source $$ANACONDA2020/bin/activate
-  ANACONDA_PROJECT := $(ACTIVATE) root && anaconda-project
+  ANACONDA_PROJECT := $(ACTIVATE) root && CONDA_EXE=$(CONDA_EXE) anaconda-project
 else
   ACTIVATE := eval "$$(conda shell.bash hook)" && conda activate
-  ANACONDA_PROJECT := anaconda-project
+  ANACONDA_PROJECT := CONDA_EXE=$(CONDA_EXE) anaconda-project
 endif
 
 ENV := phys-581-2021

@@ -104,7 +104,6 @@ dependencies:
 - conda-forge::sphinx-book-theme
 - conda-forge::sphinx-autobuild
 - anaconda-project>=0.10.1
-- pip
 - jupytext
 
 - pytest-cov
@@ -112,6 +111,7 @@ dependencies:
 - pytest-xdist
 - black
 
+- pip
 - pip:
   - sphinxcontrib-zopeext
   - sphinxcontrib-bibtex
