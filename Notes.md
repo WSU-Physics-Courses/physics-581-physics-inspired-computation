@@ -8,8 +8,9 @@ To Do
 -----
 * Fix `{{ course_package }}` replacement in `Syllabus.md`.
 * Add test for anaconda-package version and issue warning.
-
-
+* Clean `~/.bash_aliases` with `make reallyclean`.
+* Try to activate the environment only once on CoCalc in Makefile.
+* Deal with memory issues (`mamba` everywhere, or `--override-channels` on CoCalc).
 
 ## Maintainer Notes
 Try to keep this upper-level project as clean as possible, matching the layout expected
@@ -255,6 +256,26 @@ this called `.readthedocs.yaml`.
   ```
 
   This will create a Conda environment as specified in `anaconda-project.yaml` in `envs/default`.
+
+* For students to be able to use the Linux terminal through their browser, they will
+  need to provide appropriate git or mercurial configuration.  They could do this by
+  defining environmental variables in their individual project settings:
+  
+  ```json
+  {
+    "LC_HG_USERNAME": "Michael McNeil Forbes <michael.forbes+python@gmail.com>",
+    "LC_GIT_USERNAME": "Michael McNeil Forbes",
+    "LC_GIT_USEREMAIL": "michael.forbes+python@gmail.com",
+  }
+  ```
+  
+  If they do not SSH in with a forwarded agent, then they will still need to use their
+  password every time they push.  Note: SSH variable forwarding will override these.
+
+### CoCalc Issues
+
+* `/ext/anaconda2020.02/.condarc` includes so many channels that even a simple `conda
+  search uncertainties` fails.  `mamba` stills works, so we use this for now.
 
 ## GitLab Setup
 
