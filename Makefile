@@ -1,26 +1,32 @@
 # Modelled after
 # https://github.com/simoninireland/introduction-to-epidemics/blob/master/Makefile
-SHELL := /bin/bash
+SHELL = /bin/bash
 
 RESOURCES = git@gitlab.com:wsu-courses/physics-581-physics-inspired-computation_resources.git
 
+
 ifdef ANACONDA2020
-   CONDA_EXE := mamba
+  # Conda was taking too much memory, causing weird errors.  Use mamba instead.
+  # https://github.com/Anaconda-Platform/anaconda-project/issues/334#issuecomment-911918761
+  # Force this as CoCalc defines CONDA_EXE
+  CONDA_EXE = mamba
+  # Something like this would be nice, but does not work
+  # CONDA_EXE = conda --override-channels -c defaults
 endif
 
 # ------- Tools -------
 ifdef ANACONDA2020
   # If this is defined, we assume we are on CoCalc
-  ACTIVATE := source $$ANACONDA2020/bin/activate
-  ANACONDA_PROJECT := $(ACTIVATE) root && CONDA_EXE=$(CONDA_EXE) anaconda-project
+  ACTIVATE ?= source $$ANACONDA2020/bin/activate
+  ANACONDA_PROJECT ?= $(ACTIVATE) root && CONDA_EXE="$(CONDA_EXE)" anaconda-project
 else
-  ACTIVATE := eval "$$(conda shell.bash hook)" && conda activate
-  ANACONDA_PROJECT := CONDA_EXE=$(CONDA_EXE) anaconda-project
+  ACTIVATE ?= eval "$$(conda shell.bash hook)" && conda activate
+  ANACONDA_PROJECT ?= CONDA_EXE=$(CONDA_EXE) anaconda-project
 endif
 
-ENV := phys-581-2021
-ENV_PATH := $(abspath envs/$(ENV))
-ACTIVATE_PROJECT := $(ACTIVATE) $(ENV_PATH)
+ENV ?= phys-581-2021
+ENV_PATH ?= $(abspath envs/$(ENV))
+ACTIVATE_PROJECT ?= $(ACTIVATE) $(ENV_PATH)
 
 # ------- Top-level targets  -------
 
@@ -38,8 +44,7 @@ ifdef ANACONDA2020
 	python3 -m pip install --user --upgrade mmf-setup
 	mmf_setup cocalc
 endif
-	$(ANACONDA_PROJECT) prepare
-	$(ANACONDA_PROJECT) run init  # Custom command: see anaconda-project.yaml
+	@make _init
 ifdef ANACONDA2020
 	if ! grep -Fq '$(ACTIVATE_PROJECT)' ~/.bash_aliases; then \
 	  echo '$(ACTIVATE_PROJECT)' >> ~/.bash_aliases; \
@@ -47,6 +52,11 @@ ifdef ANACONDA2020
 	@make sync
 endif
 
+_init:
+	$(ANACONDA_PROJECT) prepare
+	$(ANACONDA_PROJECT) run init  # Custom command: see anaconda-project.yaml
+
+.PHONY: _init
 
 _ext/Resources:
 	-git clone $(RESOURCES) $@
