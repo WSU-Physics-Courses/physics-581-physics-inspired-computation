@@ -4,21 +4,27 @@ SHELL = /bin/bash
 
 RESOURCES = git@gitlab.com:wsu-courses/physics-581-physics-inspired-computation_resources.git
 
+# Currently, even the new method uses too much memory...
+USE_ANACONDA2020 ?= true
 
-ifdef ANACONDA2020
-  # Conda was taking too much memory, causing weird errors.  Use mamba instead.
-  # https://github.com/Anaconda-Platform/anaconda-project/issues/334#issuecomment-911918761
-  # Force this as CoCalc defines CONDA_EXE
-  CONDA_EXE = mamba
-  # Something like this would be nice, but does not work
-  # CONDA_EXE = conda --override-channels -c defaults
-endif
-
-# ------- Tools -------
 ifdef ANACONDA2020
   # If this is defined, we assume we are on CoCalc
-  ACTIVATE ?= source $$ANACONDA2020/bin/activate
-  ANACONDA_PROJECT ?= $(ACTIVATE) root && CONDA_EXE="$(CONDA_EXE)" anaconda-project
+  ifeq ($(USE_ANACONDA2020), true)
+    # Old approach using anaconda-project in the ANACONDA2020 environment.
+    # Due to the /ext/anaconda2020.02/.condarc issue, we must use mamba in this case
+    # https://github.com/Anaconda-Platform/anaconda-project/issues/334#issuecomment-911918761
+    CONDA_EXE = $$ANACONDA2020/bin/mamba
+    ACTIVATE ?= source $$ANACONDA2020/bin/activate
+  else
+    # New approach - use our on miniconda
+    MINICONDA = ~/.miniconda3
+    CONDA_EXE = $(MINICONDA)/bin/conda
+    ACTIVATE ?= source $(MINICONDA)/bin/activate
+  endif
+
+  #ANACONDA_PROJECT ?= $(ACTIVATE) root && CONDA_EXE=$(CONDA_EXE) anaconda-project
+  ANACONDA_PROJECT ?= CONDA_EXE=$(CONDA_EXE) $$ANACONDA2020/bin/anaconda-project
+
 else
   ACTIVATE ?= eval "$$(conda shell.bash hook)" && conda activate
   ANACONDA_PROJECT ?= CONDA_EXE=$(CONDA_EXE) anaconda-project
@@ -39,11 +45,29 @@ usage:
 	@echo "$$HELP_MESSAGE"
 
 
-init: _ext/Resources anaconda-project.yaml
+MINICONDA_SH = https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+MINICONDA_HASH = 1ea2f885b4dbc3098662845560bc64271eb17085387a70c2ba3f29fff6f8d52f
+
+$(MINICONDA):
+	wget  $(MINICONDA_SH) -qO /tmp/_miniconda.sh
+	echo "$(MINICONDA_HASH)  /tmp/_miniconda.sh" > /tmp/_miniconda.shasum
+	shasum -a 256 -c /tmp/_miniconda.shasum && bash /tmp/_miniconda.sh -b -p $@
+	rm /tmp/_miniconda.sh*
+	$@/bin/conda update -y conda
+	$@/bin/conda install -y anaconda-project
+	# Dropping defaults allows this to work with < 1GB
+	$@/bin/conda install --override-channels --channel conda-forge -y mamba
+	$@/bin/conda clean -y --all
+
+
+# Special target on CoCalc to prevent re-installing mmf_setup.
+~/.local/bin/mmf_setup:
 ifdef ANACONDA2020
 	python3 -m pip install --user --upgrade mmf-setup
 	mmf_setup cocalc
 endif
+
+init: _ext/Resources ~/.local/bin/mmf_setup anaconda-project.yaml $(MINICONDA)
 	@make _init
 ifdef ANACONDA2020
 	if ! grep -Fq '$(ACTIVATE_PROJECT)' ~/.bash_aliases; then \
