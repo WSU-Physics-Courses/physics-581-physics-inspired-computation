@@ -16,3 +16,12 @@ test:
     reports:
       cobertura: _htmlcov/coverage.xml
   coverage: '/Total coverage: (\d+\..*\%)$/'
+
+test-assignment-0:
+  script:
+    - anaconda-project run test -k test_official_assignment_0 --no-cov
+
+test-assignment-1:
+  script:
+    - anaconda-project run test -k test_official_assignment_1 --no-cov
+    
