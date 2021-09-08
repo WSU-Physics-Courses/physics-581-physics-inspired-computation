@@ -59,6 +59,7 @@ test = [
     "pytest",
     "pytest-cov",
     "pytest-flake8",
+    "pytest-html",
     "pytest-xdist",
     "ipyparallel",
     "persist",
@@ -113,6 +114,8 @@ addopts = [
     "--cov-report=xml",
     "--cov-fail-under=85",
     "--no-cov-on-fail",
+    "--html=_artifacts/pytest_report.html",
+    "--junitxml=_artifacts/junit.xml",
     #"-x",
     #"--pdb",
     #"--flake8",  # Disable until https://github.com/tholo/pytest-flake8/issues/8

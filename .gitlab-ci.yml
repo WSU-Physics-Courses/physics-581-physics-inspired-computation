@@ -11,17 +11,29 @@ before_script:
   
 test:
   script:
-    - anaconda-project run test
+    - anaconda-project run test || true   # Make sure job never fails so we get artifacts
   artifacts:
+    when: always
+    paths:
+      - _artifacts
     reports:
-      cobertura: _htmlcov/coverage.xml
+      cobertura: _artifacts/coverage.xml
   coverage: '/Total coverage: (\d+\..*\%)$/'
 
-test-assignment-0:
-  script:
-    - anaconda-project run test -k test_official_assignment_0 --no-cov
 
-test-assignment-1:
+test-0:
   script:
-    - anaconda-project run test -k test_official_assignment_1 --no-cov
+    - anaconda-project run test-0 || true
+  artifacts:
+    when: always
+    paths:
+      - _artifacts
+
+test-1:
+  script:
+    - anaconda-project run test-1 || true
+  artifacts:
+    when: always
+    paths:
+      - _artifacts
     

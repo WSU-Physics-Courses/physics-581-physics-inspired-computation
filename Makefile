@@ -115,6 +115,8 @@ reallyclean:
 
 test:
 	$(ANACONDA_PROJECT) run test
+	$(ANACONDA_PROJECT) run test-0
+	$(ANACONDA_PROJECT) run test-1
 
 doc-server:
 	sphinx-autobuild --ignore Docs/_build Docs Docs/_build/html

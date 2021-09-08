@@ -45,9 +45,24 @@ commands:
     env_spec: phys-581-2021
 
   test:
-    unix: pytest
+    unix: |
+      pytest
+      genbadge tests -i _artifacts/junit.xml -o _artifacts/test-badge.svg
+      genbadge coverage -i _artifacts/coverage.xml -o _artifacts/coverage-badge.svg
     env_spec: phys-581-2021
 
+  test-0:
+    unix: |
+      pytest -k test_official_assignment_0 --no-cov
+      genbadge tests -i _artifacts/junit.xml -o _artifacts/test-0-badge.svg
+    env_spec: phys-581-2021
+
+  test-1:
+    unix: |
+      pytest -k test_official_assignment_1 --no-cov
+      genbadge tests -i _artifacts/junit.xml -o _artifacts/test-1-badge.svg
+    env_spec: phys-581-2021
+    
 #
 # In the variables section, list any environment variables your code depends on.
 # Use `anaconda-project add-variable` to add variables.
@@ -109,6 +124,7 @@ dependencies:
 
 - pytest-cov
 - pytest-flake8
+- pytest-html
 - pytest-xdist
 - black
 
@@ -117,6 +133,7 @@ dependencies:
   - sphinxcontrib-zopeext
   - sphinxcontrib-bibtex
   - mmf-setup
+  - genbadge[all]
 
 channels:
 - defaults
