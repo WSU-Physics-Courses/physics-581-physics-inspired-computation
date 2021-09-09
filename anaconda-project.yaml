@@ -62,7 +62,7 @@ commands:
       pytest -k test_official_assignment_1 --no-cov
       genbadge tests -i _artifacts/junit.xml -o _artifacts/test-1-badge.svg
     env_spec: phys-581-2021
-    
+
 #
 # In the variables section, list any environment variables your code depends on.
 # Use `anaconda-project add-variable` to add variables.
@@ -97,7 +97,7 @@ downloads: {}
 #
 # See https://github.com/Anaconda-Platform/anaconda-project/issues/265
 
-# packages: 
+# packages:
 dependencies:
 - python=3.9
 
@@ -121,6 +121,11 @@ dependencies:
 - conda-forge::sphinx-autobuild
 - anaconda-project>=0.10.1
 - jupytext
+
+# To deal with error in XXXX setup command: use_2to3 is invalid when false
+# https://github.com/pypa/setuptools/issues/2775
+# See ClassLog.md
+- setuptools<58.0.2|>59
 
 - pytest-cov
 - pytest-flake8
