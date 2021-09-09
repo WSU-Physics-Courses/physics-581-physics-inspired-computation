@@ -163,14 +163,14 @@ etc.
    [Conda] environment setup with `anaconda-project >= 0.8.4`.  You can do this easily
    by installing [Miniconda], then either updating the `base` environment:
    
-   ```bash
+   ```console
    (base) $ conda install anaconda-project
    (base) $ anaconda-project ...
    ```
 
    or creating a new environment with `anaconda-project`:
    
-   ```bash
+   ```console
    (base) $ conda create -n myenv anaconda-project
    (base) $ conda activate myenv
    (myenv) $ anaconda-project ...
@@ -178,7 +178,7 @@ etc.
 
    <details><summary>Example session with Mac OS X</summary>
    
-   ```bash
+   ```console
    # Download Miniconda installer
    MacOSX $ curl -O https://repo.anaconda.com/miniconda/Miniconda3-py39_4.10.3-MacOSX-x86_64.sh
       % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
@@ -532,7 +532,7 @@ etc.
    In the following, I have already authenticated to my SSH keys which I have registered
    at [GitLab], so there is no need for passwords.
    
-   ```bash
+   ```console
    (myenv) MacOSX $ git clone git@gitlab.com:wsu-courses/physics-581-physics-inspired-computation.git
    Cloning into 'physics-581-physics-inspired-computation'...
    remote: Enumerating objects: 269, done.
@@ -900,14 +900,14 @@ etc.
    Before continuing, make sure you connect to the project via the web and start it,
    otherwise you will get the following response:
    
-   ```bash
+   ```console
    MacOSX $ ssh smc581private
    f6432a...@ssh.cocalc.com: Permission denied (publickey).
    ```
 
    After starting the project, this works (takes about 5 minutes):
    
-   ```bash
+   ```console
    MacOSX $ ssh smc581private
    ~$ git clone https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation.git
    Cloning into 'physics-581-physics-inspired-computation'...
@@ -1664,7 +1664,7 @@ etc.
    activate the `phys-581-2021` environment due to the line at the end of
    `~/.bash_aliases`:
    
-   ```bash
+   ```console
    MacOSX $ ssh smc581private
    (phys-581-2021) ~$ type python3
    python3 is /home/user/physics-581-physics-inspired-computation/envs/phys-581-2021/bin/python3
@@ -1704,7 +1704,65 @@ There are a few more things you should do if you are registered in the course:
 
 ### GitLab Fork
 
-2. Create an account on [GitLab].
+1. Create an account on [GitLab].
+2. Fork the [Official Course Repository] (I suggest making this private since your grade
+   is associated with the tests, but you are welcome to make it public whenever you are
+   comfortable.)
+3. Add your instructor `@mforbes` as a **Developer** for the project:
+
+   * **Project Information > Members**
+   
+4. Clone this to your [CoCalc] project and/or your computer.  Do your work etc. and push
+   your changes.
+5. Trigger the CI pipeline if it was not triggered by your push.
+
+   * **CI/CD > Pipelines > Run pipeline**
+
+6. Add the badges *(I don't know how to automate this or store this in a file
+   yet... could maybe use [the Badges API](https://docs.gitlab.com/ee/api/project_badges.html))*:
+
+   * **Settings > General > Badges**
+
+    The following list the required fields:
+    
+    ```
+    Name
+    Link
+    Badge image URL
+    ```
+    
+    ```
+    Docs
+    https://physics-581-physics-inspired-computational-techniques.readthedocs.io/en/latest/?badge=latest
+    https://readthedocs.org/projects/physics-581-physics-inspired-computational-techniques/badge/?version=latest
+    ```
+    ```
+    Pipeline
+    https://gitlab.com/%{project_path}
+    https://gitlab.com/%{project_path}/badges/%{default_branch}/pipeline.svg
+    ```
+    ```
+    Tests
+    https://gitlab.com/%{project_path}
+    https://gitlab.com/%{project_path}/-/jobs/artifacts/%{default_branch}/raw/_artifacts/test-badge.svg?job=test
+    ```
+    ```
+    Coverage
+    https://gitlab.com/%{project_path}
+    https://gitlab.com/%{project_path}/-/jobs/artifacts/%{default_branch}/raw/_artifacts/coverage-badge.svg?job=test
+    ```
+    ```
+    Assignment-0
+   https://gitlab.com/%{project_path}
+    https://gitlab.com/%{project_path}/-/jobs/artifacts/%{default_branch}/raw/_artifacts/test-0-badge.svg?job=test-0
+    ```
+    ```
+    Assignment-1
+    https://gitlab.com/%{project_path}
+    https://gitlab.com/%{project_path}/-/jobs/artifacts/%{default_branch}/raw/_artifacts/test-1-badge.svg?job=test-1
+    ```
+
+    etc.
 
 ### Optional: SSH Keys
 

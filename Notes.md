@@ -79,10 +79,10 @@ the final skeleton project.
 
 ## Tests and Grading
 
-Tests are setup using [`pytest`].  The configuration is in `pyprojects.toml`.  Each
-assignment will have an official test-suite called
-`tests/assignmentX/test_official_assignmentX.py` where `X` is the assignment number.  These
-official tests will be marked with the special marker `assignmentX`, so that the
+Tests are setup using [`pytest`].  The configuration is in `pyprojects.toml` and
+`.coveragerc`.  Each assignment will have an official test-suite called
+`tests/assignmentX/test_official_assignmentX.py` where `X` is the assignment number.
+These official tests will be marked with the special marker `assignmentX`, so that the
 official tests can be run with:
 
 ```bash
@@ -91,6 +91,32 @@ pytest -k test_official_assignmentX --no-cov  # Disable coverage.
 
 Students should be instructed not to put tests in `tests/assignmentX/test_official_assignmentX.py`
 
+### Reporting
+
+In order to generate badges, we store reporting information in the `_artifacts/` folder
+including the following:
+
+* [`_artifacts/htmlcov/index.html`](_artifacts/pytest_report.html): Report of tests.
+  (Location specified in `pyproject.toml`.)
+* [`_artifacts/junit.xml`](_artifacts/junit.xml): Test reports in junit-format. (Location specified in `pyproject.toml`.)
+* [`_artifacts/htmlcov/index.html`](file://_artifacts/htmlcov/index.html): Test coverage
+  report. (Location specified in `.coveragerc`.)
+* [`_artifacts/coverage.xml`](_artifacts/coverage.xml): Coverage report in cobertura
+  format that [GitLab] can use to generate reports as discussed in [GitLab test coverage
+  visualization]. (Location specified in `.coveragerc`.)
+
+Note: the "latest artifacts" are [only available if the pipeline
+succeeds](https://forum.gitlab.com/t/is-there-a-way-to-ci-latest-artifact-link-work-also-for-failed-jobs/52262/3).
+This means that we can't get the badges unless the pipelines pass.  To deal with this,
+we make all tests pass artificially by `anaconda-project run test || true` and then use
+the badges:
+
+anaconda-project run test 
+
+* ![Tests Badge](https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/-/jobs/artifacts/main/raw/_artifacts/test-badge.svg?job=test)
+* ![Coverage Badge](https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/-/jobs/artifacts/main/raw/_artifacts/coverage-badge.svg?job=test)
+* ![Assignment 0 Badge](https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/-/jobs/artifacts/main/raw/_artifacts/test-0-badge.svg?job=test-0)
+* ![Assignment 1 Badge](https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/-/jobs/artifacts/main/raw/_artifacts/test-1-badge.svg?job=test-1)
 
 ## Docs
 
@@ -170,6 +196,36 @@ this called `.readthedocs.yaml`.
 
       subprocess.check_call(["anaconda-project", "run", "init"])
   ```
+* Don't use `bash` code-blocks when you include output, use `console` instead.  The
+  reason is that `bash` code highlighting will fail with `WARNING: Could not lex
+  literal_block as "bash". Highlighting skipped.` if your output has an [odd number of
+  single quotes](https://github.com/sphinx-doc/sphinx/issues/4098).  Thus write:
+  
+  ````markdown
+  ```console
+  $ echo "This line's going to cause a problem"
+  This line's going to cause a problem
+  ```
+  ````
+  
+  which renders as
+  
+  ```console
+  $ echo "This line's going to cause a problem"
+  This line's going to cause a problem
+  ```
+  
+  instead of 
+  
+  ````
+  ```bash
+  $ echo "This line's going to cause a problem"
+  This line's going to cause a problem
+  ```
+  ````
+  
+  which will raise the warning.  *(Interestingly, I could not even nest this block
+  without triggering the warning, hence the lack of highlighting in the above block.)*
   
 ## CoCalc Setup
 
@@ -296,6 +352,17 @@ minutes](https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation
 In
 principle, it might improve things to cache the virtual environment... Needs testing.
 
+#### Badges
+
+[GitLab] provides some support for generating badges, but it is not very flexible.
+Instead, I generate badges as artifacts from the test process.  The following packages
+are useful:
+
+* **[`genbadge`]**: Generates badges from `pytest` reports.  Specific for `pytest`,
+  `coverage`, and `flake8`, but very convenient for these.
+* [`anybadge`]: General badge generation, but you need to feed in the appropriate
+  numbers.
+
 To get the badges, go to **Settings > CI/CD > General pipelines***.  I did the following
 here:
 
@@ -316,10 +383,21 @@ With this enabled, I can get the following badges:
 
 [![pipeline status](https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/badges/main/pipeline.svg)](https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/-/commits/main)
 
-
 [![coverage report](https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/badges/main/coverage.svg)](https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/-/commits/main)
 
+Note: by default it does not seem possible to get different badges for different jobs.
+Instead, it seems that one must generate the badges as part of the tests.  I am playing
+with the [`anybadge`] project.
 
+* [Customize pipeline configuration (GitLab
+  Docs)](https://docs.gitlab.com/ee/ci/pipelines/settings.html)
+* [Gitlab - How to add badge based on jobs
+  pipeline](https://stackoverflow.com/questions/52228070/gitlab-how-to-add-badge-based-on-jobs-pipeline)
+* [GitLab covraged badge with
+  pytest](https://www.stddev.tech/gitlab-coverage-badge-with-pytest/): Shows how to
+  generate a coverage badge without any artifacts.  We use artifacts anyway so that
+  [GitLab] will show in the diffs as discussed in [GitLab test coverage
+  visualization].
 
 ## GitHub Mirror
 
@@ -424,3 +502,6 @@ details.
 
 [GitHub Mirror - Physics 581 Fall 2021]: <https://github.com/WSU-Physics-Courses/physics-581-physics-inspired-computation> "GitHub mirror"
 
+[`anybadge`]: <https://github.com/jongracecox/anybadge> "Python project for generating badges for your projects"
+[`genbadge`]: <https://smarie.github.io/python-genbadge/> "Generate badges for tools that do not provide one."
+[GitLab test coverage visualization]: <https://docs.gitlab.com/ee/user/project/merge_requests/test_coverage_visualization.html>
