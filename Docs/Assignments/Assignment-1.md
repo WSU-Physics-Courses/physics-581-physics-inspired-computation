@@ -22,6 +22,7 @@ import logging;logging.getLogger('matplotlib').setLevel(logging.CRITICAL)
 ```
 
 # Assignment 1: Monty Hall etc.
+## Assignment Preparation
 
 +++
 
@@ -29,11 +30,11 @@ Write a function {func}`phys_581_2021.assignment_1.play_monty_hall` which plays 
 
 +++
 
-## Evaluating Functions
+### Evaluating Functions
 
 +++
 
-### Lambert W function
+#### Lambert W function
 Write a function {func}`phys_581_2021.assignment_1.lambertw` that computes  $w = W_k(x)$, the [Lambert W function](https://en.wikipedia.org/wiki/Lambert_W_function), for the two branches $k=0$ and $k=-1$.
 
 This function satisfies:
@@ -56,7 +57,7 @@ ax.legend()
 ax.set(xlabel='z', ylabel='w');
 ```
 
-### Riemann zeta function
+#### Riemann zeta function
 
 +++
 
@@ -68,7 +69,7 @@ $$
 
 +++
 
-## Differentiation
+### Differentiation
 
 +++
 
@@ -109,8 +110,8 @@ df = lambda x: -2*x*np.exp(-x**2)
 print(f"f=exp(-x**2): err = {abs(derivative1(f, x) - df(x))}")
 ```
 
-# More Details 
-## Roundoff vs Truncation Error
+## More Details 
+### Roundoff vs Truncation Error
 
 +++
 

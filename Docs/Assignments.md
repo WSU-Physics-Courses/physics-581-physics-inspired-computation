@@ -2,10 +2,10 @@
 
 ```{toctree}
 ---
-maxdepth: 2
+maxdepth: 3
 caption: "Contents:"
-titlesonly:
 glob:
 ---
+Syllabus_Assignments
 Assignments/Assignment-*
 ```

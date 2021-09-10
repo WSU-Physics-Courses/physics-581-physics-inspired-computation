@@ -7,7 +7,7 @@ syntax:glob
 _data/
 _ext/
 _trash/
-_htmlcov/
+_artifacts/
 __pycache__
 envs/
 .ipynb_checkpoints/

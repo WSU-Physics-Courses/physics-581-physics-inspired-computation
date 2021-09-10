@@ -22,6 +22,7 @@ import logging;logging.getLogger('matplotlib').setLevel(logging.CRITICAL)
 ```
 
 # Assignment 0: Introduction
+## Assignment Preparation
 
 +++
 
@@ -34,7 +35,7 @@ For the second method, please feel free to use any tools in the [NumPy](https://
 
 +++
 
-## Series
+### Series
 
 +++
 
@@ -58,7 +59,7 @@ where $\zeta(s)$ is the [Riemann zeta function](https://en.wikipedia.org/wiki/Ri
 
 ```
 
-## Integrals
+### Integrals
 
 +++
 
@@ -112,7 +113,7 @@ where $G_{mn}^{pq}\bigl(\begin{smallmatrix}\vect{a}_p\\ \vect{b}_q\end{smallmatr
 
 ```
 
-## Roots
+### Roots
 
 +++
 
@@ -120,7 +121,7 @@ Find all solutions $x$ to the following equations:
 
 +++
 
-### Polynomials
+#### Polynomials
 
 +++
 
@@ -144,7 +145,7 @@ $$
 
 ```
 
-### Lambert W function
+#### Lambert W function
 
 +++
 
@@ -160,7 +161,7 @@ The function $w = W_k(x)$ is the [Lambert W function](https://en.wikipedia.org/w
 
 +++
 
-# More Details
+## More Details
 
 +++
 
@@ -202,7 +203,7 @@ for epsilon in [1, 1e-10, 1e-20]:
     print()
 ```
 
-## Floating Point Numbers
+### Floating Point Numbers
 
 +++
 

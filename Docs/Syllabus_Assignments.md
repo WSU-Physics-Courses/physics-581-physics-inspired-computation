@@ -1,8 +1,32 @@
 (sec:assignments)=
-# Assignments
+# Assignment Instructions
 
 Assignments will be distributed in two stages, announced through the course management
 tools.
+
+## TL;DR
+
+1. Implement your solutions in the files:
+
+    * `phys-581-2021/assignments/assignment_X.py`
+
+2. Make sure all tests pass:
+
+    ```bash
+    anaconda-project run shell    # Not needed in your CoCalc project
+    pytest                        # Runs your tests
+    pytest -k test_official_assignment_X --no-cov
+    ```
+
+3. Commit your solution, tag with `assignment_X:v1` and push.
+
+    ```bash
+    git add phys-581-2021/assignments/assignment_X.py
+    git add tests/               # If you have made and new tests.
+    git commit
+    git tag assignment_X:v1
+    git push
+    ```
 
 ## Stage 1
 For the first stage of assignment X, you will fetch the `main` branch of the [Official
