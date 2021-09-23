@@ -7,6 +7,7 @@ RESOURCES = git@gitlab.com:wsu-courses/physics-581-physics-inspired-computation_
 # Currently, even the new method uses too much memory...
 USE_ANACONDA2020 ?= true
 
+# ------- Tools -------
 ifdef ANACONDA2020
   # If this is defined, we assume we are on CoCalc
   ifeq ($(USE_ANACONDA2020), true)
@@ -35,6 +36,9 @@ ENV_PATH ?= $(abspath envs/$(ENV))
 ACTIVATE_PROJECT ?= $(ACTIVATE) $(ENV_PATH)
 
 # ------- Top-level targets  -------
+581-Docs.tgz: Docs/*
+	cd Docs && make html
+	tar -s "|Docs/_build/html|581-Docs|g" -zcvf $@ Docs/_build/html
 
 # Default prints a help message
 help:

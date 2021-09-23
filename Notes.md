@@ -187,6 +187,10 @@ this called `.readthedocs.yaml`.
 * Since we are just doing a Conda install on RtD, we don't run `anaconda-project run
   init` and the kernel used by our notebooks does not get installed.  We can do this in
   the Sphinx `Docs/conf.py` file:
+* Variables defined in `myst_substitutions` do not seem to be available for use in
+  templates.  For this, the definitions must also be added to `html_context`.
+* Note that `{% raw %} ... {% endraw %}`  allows you to literally include things like
+  MathJaX where the braces confuse Jinja.
   
   ```python
   # Docs/conf.py
