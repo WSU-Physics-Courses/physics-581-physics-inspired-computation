@@ -29,6 +29,7 @@ caption: "Other Content:"
 titlesonly:
 hidden:
 ---
+Projects
 Notes
 CoCalc
 ClassLog
