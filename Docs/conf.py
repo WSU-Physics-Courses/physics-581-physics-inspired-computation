@@ -205,3 +205,5 @@ def setup(app):
     import subprocess
 
     subprocess.check_call(["anaconda-project", "run", "init"])
+    # Ignore .ipynb files
+    app.registry.source_suffix.pop(".ipynb", None)

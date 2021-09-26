@@ -123,7 +123,7 @@ test:
 	$(ANACONDA_PROJECT) run test-1
 
 doc-server:
-	sphinx-autobuild --ignore Docs/_build Docs Docs/_build/html
+	$(ANACONDA_PROJECT) run sphinx-autobuild --ignore '*/Docs/_build/*' Docs Docs/_build/html
 
 
 .PHONY: clean realclean init cocalc-init sync doc-server help test
