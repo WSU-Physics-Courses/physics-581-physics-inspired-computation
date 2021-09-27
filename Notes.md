@@ -38,6 +38,14 @@ anaconda-project add-packages --pip sphinxcontrib-zopeext sphinxcontrib-bibtex m
 Then I changed all occurrences of `default` to `phys-581-2021` in
 `anaconda-project.yaml` so that the environments have a consistent naming convention.
 
+To get everything read after modifying `anaconda-project.yaml`, run:
+
+```bash
+anaconda-project prepare --refresh
+```
+
+The `--refresh` flag is needed if packages need to be updated, or removed (see [Issue
+#214](https://github.com/Anaconda-Platform/anaconda-project/issues/214) for example).
 
 To clean:
 
@@ -50,6 +58,20 @@ anaconda-project clean
   This is used by [PyVis examples](https://examples.pyviz.org/make_project.html).
 
 [`nbrr`]: <https://github.com/pyoceans/nbrr> "Jupyter Notebook Reproducible Repositories" 
+
+I add a few commands in `anaconda-project.yaml` to make like easier.  These run after
+the environment is activated, which makes them useful:
+
+* `anaconda-project run shell`: Starts a new shell with the current environment active
+  (like `poetry shell`.)
+* `anaconda-project run init`: Does the full initialization, including setting up the
+  kernel.  Typically called by `make init`.
+* `anaconda-project run test`, `anaconda-project run test-0`, etc.: Runs `pytest` or the
+  corresponding tests for the assignments.  These are used in `.gitlab-ci.yml` to run
+  the tests in CI.
+* `anaconda-project run <commands>`: Note that this can be used to run any commands with
+  the default environment.  For example `anaconda-project run sphinx-autobuild --ignore
+  Docs/_build Docs Docs/_build/html`.
 
 ## Repository Setup
 
