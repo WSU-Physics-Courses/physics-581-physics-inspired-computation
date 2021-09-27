@@ -17,3 +17,17 @@ be to develop some tests to help understand this issue.
 * [Proposal: Update Runge-Kutta step size algorithms for predictable performance
   #9822](https://github.com/scipy/scipy/issues/9822): Proposal to improve the algorithm.
 * [All `solve_ivp` issues](https://github.com/scipy/scipy/search?q=solve_ivp&type=issues).
+
+
+Special Topics
+==============
+
+```{toctree}
+---
+maxdepth: 2
+glob:
+---
+Topics/*
+Topics/*/*
+```
+
