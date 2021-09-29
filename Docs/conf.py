@@ -128,8 +128,10 @@ html_static_path = ["_static"]
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
-    "https://docs.python.org/": None,
-    "matplotlib": ("https://matplotlib.org/stable/", None),
+    "Python 3": ("https://docs.python.org/3", None),
+    "matplotlib [stable]": ("https://matplotlib.org/stable/", None),
+    "numpy [stable]": ("https://numpy.org/doc/stable/", None),
+    "scipy [latest]": ("https://docs.scipy.org/doc/scipy/", None),
 }
 
 # Napoleon settings
