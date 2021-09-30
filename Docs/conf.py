@@ -11,6 +11,7 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os.path
+import subprocess
 
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
@@ -101,6 +102,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # Cache notebook output to speed generation.
 # https://myst-nb.readthedocs.io/en/latest/use/execute.html
 jupyter_execute_notebooks = "cache"
+execution_allow_errors = True
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -195,8 +197,6 @@ def config_inited_handler(app, config):
 # the named kernel so we can keep the name in the notebooks.
 def setup(app):
     app.connect("config-inited", config_inited_handler)
-    import subprocess
-
     subprocess.check_call(["anaconda-project", "run", "init"])
     # Ignore .ipynb files
     app.registry.source_suffix.pop(".ipynb", None)

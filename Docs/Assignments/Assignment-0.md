@@ -13,6 +13,11 @@ kernelspec:
 ---
 
 ```{code-cell} ipython3
+import sys
+print(sys.executable)
+```
+
+```{code-cell} ipython3
 :cell_style: center
 :hide_input: false
 
