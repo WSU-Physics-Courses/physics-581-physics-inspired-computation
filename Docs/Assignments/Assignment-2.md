@@ -68,12 +68,12 @@ We instead compute the difference `dcp` $= 161(c_{n+1}-p_{n+1})/170$ directly:
 \begin{align*}
   m_{n+1} &= p_{n+1} + \overbrace{\frac{161}{170}(c_n - p_n)}^{\texttt{dcp}_n}, \\
   \frac{161}{170}(c_{n+1} - p_{n+1})  &= 
-             \frac{h}{48}\frac{161}{170}\bigl(17m'_{n+1} - 68y'_n + 102y'_{n-1} - 68y'_{n-2} + 17 y'_{n-3}\bigr)\\
+             \frac{h}{48}\frac{161}{170}\bigl(17m'_{n+1} - 68y'_n + 102y'_{n-1} - 68y'_{n-2} + 17 y'rk4_{n-3}\bigr)\\
   y_{n+1} &= p_{n+1} + \underbrace{\frac{161}{170}(c_{n+1} - p_{n+1})}_{\texttt{dcp}_{n+1}} + O(h^6)y^{(6)}(\xi).
 \end{align*}
 
 :::{margin}
-The default version of {func}`phys_581_2021.solve_ivp_rk45` provided with the assignment
+The default version of {func}`phys_581_2021.solve_ivp_rk4` provided with the assignment
 simply returns $y_{n+1} = y_{n} + y'{n}\d{t}$, thus, our implementation will work for problems where
 the solution is initially constant, but won't have very good accuracy. 
 :::
@@ -81,7 +81,7 @@ the solution is initially constant, but won't have very good accuracy.
 A problem with this method is getting it started.  At the initial time, we have only
 $y_{0}$ and then $y'_{0} = f(t_0, y_0)$, thus we need some way of getting the previous
 values.  One common approach is to use another method such as Runge-Kutta to initialize
-the state.  Our sample implementation here will rely on your {func}`phys_581_2021.solve_ivp_rk45` to
+the state.  Our sample implementation here will rely on your {func}`phys_581_2021.solve_ivp_rk4` to
 get started.
 
 ### Testing
@@ -112,7 +112,7 @@ of equations, which have a simple analytic solution:
   \end{pmatrix}.
 \end{gather*}
 
-Since we do not want to rely on a correct implementation of `solve_ivp_rk45` to start
+Since we do not want to rely on a correct implementation of `solve_ivp_rk4` to start
 the algorithm, for testing purposes, we use the exact solution to pre-populate the
 initial four steps.
 
@@ -121,7 +121,7 @@ initial four steps.
 from IPython.display import clear_output
 %load_ext autoreload
 %autoreload
-from phys_581_2021.assignment_2 import solve_ivp_abm, solve_ivp_rk45
+from phys_581_2021.assignment_2 import solve_ivp_abm
 from scipy.integrate import solve_ivp
 
 def fun(t, q):
