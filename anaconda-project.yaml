@@ -110,6 +110,7 @@ dependencies:
   # Core
   - conda-forge::uncertainties
   - scipy
+  - sympy
 
   # Data analysis
   - pandas
