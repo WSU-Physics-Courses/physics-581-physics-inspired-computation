@@ -18,7 +18,6 @@ hidden:
 Syllabus
 Syllabus_Prerequisites
 Reading
-References
 Assignments
 ```
 
