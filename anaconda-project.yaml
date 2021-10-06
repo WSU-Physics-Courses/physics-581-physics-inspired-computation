@@ -138,7 +138,7 @@ dependencies:
   - pip
   - pip:
     - sphinxcontrib-zopeext
-    - sphinxcontrib-bibtex
+    - sphinxcontrib-bibtex>=2.4.0
     - mmf-setup
     - genbadge[all]
 

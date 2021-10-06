@@ -201,3 +201,59 @@ def solve_ivp_rk4(fun, t_span, y0, Nt):
     # Note: we transpose the ys array to match solve_ivp
     res = OdeResult(t=np.asarray(ts), y=np.asarray(ys).T)
     return res
+
+
+def step_rk45(fun, t, y, f, h):
+    """Take one step using the RK45 algorithm.
+    Parameters
+    ----------
+    fun : callable
+        Right-hand side of the system.
+    t : float
+        Current time.
+    y : ndarray, shape (n,)
+        Current state.
+    f : ndarray, shape (n,)
+        Current value of the derivative, i.e., ``fun(x, y)``.
+    h : float
+        Step to use.
+
+    Returns
+    -------
+    y_new : ndarray, shape (n,)
+        Solution at t + h computed with a higher accuracy.
+    f_new : ndarray, shape (n,)
+        Derivative ``fun(t + h, y_new)``.
+
+    References
+    ----------
+    .. [1] E. Hairer, S. P. Norsett G. Wanner, "Solving Ordinary Differential
+           Equations I: Nonstiff Problems", Sec. II.4.
+    """
+    A = np.array(
+        [
+            [0, 0, 0, 0, 0],
+            [1 / 5, 0, 0, 0, 0],
+            [3 / 40, 9 / 40, 0, 0, 0],
+            [44 / 45, -56 / 15, 32 / 9, 0, 0],
+            [19372 / 6561, -25360 / 2187, 64448 / 6561, -212 / 729, 0],
+            [9017 / 3168, -355 / 33, 46732 / 5247, 49 / 176, -5103 / 18656],
+        ]
+    )
+    B = np.array([35 / 384, 0, 500 / 1113, 125 / 192, -2187 / 6784, 11 / 84])
+    C = np.array([0, 1 / 5, 3 / 10, 4 / 5, 8 / 9, 1])
+    E = np.array(
+        [-71 / 57600, 0, 71 / 16695, -71 / 1920, 17253 / 339200, -22 / 525, 1 / 40]
+    )
+    K = [f]
+    K[0] = f
+    for s, (a, c) in enumerate(zip(A[1:], C[1:]), start=1):
+        dy = np.dot(K[:s].T, a[:s]) * h
+        K[s] = fun(t + c * h, y + dy)
+
+    y_new = y + h * np.dot(K[:-1].T, B)
+    f_new = fun(t + h, y_new)
+
+    K[-1] = f_new
+
+    return y_new, f_new
