@@ -97,6 +97,7 @@ Docs/environment.yaml: anaconda-project.yaml Makefile
 	$(ANACONDA_PROJECT) run export 1> $@
 
 
+# Jupytext
 sync:
 	find . -name ".ipynb_checkpoints" -prune -o \
 	       -name "_ext" -prune -o \

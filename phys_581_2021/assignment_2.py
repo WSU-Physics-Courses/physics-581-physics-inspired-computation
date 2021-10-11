@@ -10,11 +10,6 @@ from scipy.optimize import OptimizeResult
 class OdeResult(OptimizeResult):
     """Bunch object for storing results of solve_ivp* methods."""
 
-    def ___init__(self, t, y, **kw):
-        self.t = t
-        self.y = y
-        self.__dict__.update(kw)
-
 
 def solve_ivp_abm(
     fun, t_span, y0, Nt, ys=None, dys=None, dcp=None, save_memory=False, start_factor=2
@@ -28,10 +23,10 @@ def solve_ivp_abm(
     ---------
     Nt : int
         Number of steps.  The time-step will be `np.diff(t_span)/Nt`.
-    ys : [y3, y2, y1, y0] or None
-        Previous four steps to get the process started.  If not provided, then these
+    ys : [y0, y1, y2, y3] or None
+        First four steps to get the process started.  If not provided, then these
         will be computed using `solve_ivp_rk4`.
-    dys : [dy3, dy2, dy1, dy0] or None
+    dys : [dy0, dy1, dy2, dy3] or None
         Derivatives at the corresponding previous steps.  Will be computed if not
         provided.
     dcp : array, None
@@ -58,8 +53,10 @@ def solve_ivp_abm(
         # No initial steps provided.  Use solve_ivp_rk4
         res0 = solve_ivp_rk4(fun=fun, t_span=(0, 4 * dt), y0=y0, Nt=4 * start_factor)
 
-        # Keep only Nt previous values... allows code to work if Nt < 4.
-        ys = res0.y.T[::start_factor][:Nt]
+        ys = res0.y.T[::start_factor]
+
+    # Keep only Nt previous values... allows code to work if Nt < 4.
+    ys = ys[: Nt + 1]
 
     # Compute corresponding ts.
     ts = t0 + np.arange(len(ys)) * dt
@@ -67,14 +64,17 @@ def solve_ivp_abm(
     if dys is None:
         dys = [fun(_t, _y) for (_t, _y) in zip(ts, ys)]
 
-    # Convert ts, ys, and dys to lists so we can append etc.
-    ts, ys, dys = (list(np.asarray(_x)) for _x in (ts, ys, dys))
+    dys = dys[: Nt + 1]
+
+    # Convert ts, ys, and dys to lists so we can append etc.  This is a little
+    # convoluted but does not allocate more memory if the previous values were arrays.
+    ts, ys, dys = ([np.asarray(_y) for _y in _ys] for _ys in (ts, ys, dys))
 
     if dcp is None:
         # If not provided, assume it is zero.
         dcp = 0
 
-    while len(ys) < Nt:
+    for nt in range(Nt - len(ys) + 1):
         # While look allows this code to work if Nt < 4
         t = ts[-1]
 
@@ -103,15 +103,16 @@ def solve_ivp_abm(
         y_new = p_new + dcp
         dy_new = np.asarray(fun(t_new, y_new))
 
-        ts.append(t_new)
-        ys.append(y_new)
-        dys.append(dy_new)
-
         if save_memory:
             ts.pop(0)
             ys.pop(0)
             dys.pop(0)
 
+        ts.append(t_new)
+        ys.append(y_new)
+        dys.append(dy_new)
+
+    assert np.allclose(ts[-1], t1)
     # Note: we transpose the ys array to match solve_ivp
     res = OdeResult(t=np.asarray(ts), y=np.asarray(ys).T)
 
@@ -203,8 +204,9 @@ def solve_ivp_rk4(fun, t_span, y0, Nt):
     return res
 
 
-def step_rk45(fun, t, y, f, h):
+def step_rk45(fun, t, y, f, h):  # pragma: no cover
     """Take one step using the RK45 algorithm.
+
     Parameters
     ----------
     fun : callable
