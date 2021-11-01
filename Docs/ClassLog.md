@@ -18,6 +18,7 @@ metadata:
 Class Log
 =========
 
+<!--
 pi = 11.00100100001111110110
 [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 [3, 5, 5, 6, 7, 8, 8, 9, 9, 10, 10, 11]
@@ -43,6 +44,14 @@ pi = 11.00100100001111110110
 0b1100100100 = 804
 0b11001001000 = 1608
 0b110010010000 = 3216
+-->
+
+Fri 29 Oct 2021
+---------------
+In class we considered the numerical error accumulation in a chaotic system by evolving
+forward and backward in time.  This gives something related to the [Loschmidt
+echo](http://www.scholarpedia.org/article/Loschmidt_echo).
+
 
 Fri 24 Sept 2021
 ----------------

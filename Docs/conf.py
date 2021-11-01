@@ -85,7 +85,7 @@ bibtex_bibfiles = [
     # https://github.com/mcmtroffaes/sphinxcontrib-bibtex/issues/261
     # Separate files can now be used for sphinxcontrib-bibtex>=2.4.0a0 but we will wait
     # for release before doing this here.
-    # "macros.bib",
+    "macros.bib",
     "local.bib",
 ]
 
@@ -173,6 +173,11 @@ math_defs_filename = "_static/math_defs.tex"
 
 html_context = {
     "mathjax_defines": "",
+}
+
+mathjax3_config = {
+    "loader": {"load": ["[tex]/mathtools"]},
+    "tex": {"packages": {"[+]": ["mathtools"]}},
 }
 
 

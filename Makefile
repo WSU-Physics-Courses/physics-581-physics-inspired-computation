@@ -17,7 +17,7 @@ ifdef ANACONDA2020
     CONDA_EXE = $$ANACONDA2020/bin/mamba
     ACTIVATE ?= source $$ANACONDA2020/bin/activate
   else
-    # New approach - use our on miniconda
+    # New approach - use our own miniconda
     MINICONDA = ~/.miniconda3
     CONDA_EXE = $(MINICONDA)/bin/conda
     ACTIVATE ?= source $(MINICONDA)/bin/activate

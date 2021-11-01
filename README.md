@@ -1947,26 +1947,42 @@ hg add local.bib _static/ _templates/
 
   This will create a Conda environment as specified in `anaconda-project.yml` in `envs/default`.
 
+<!-- Links -->
 [CoCalc]: <https://cocalc.com> "CoCalc: Collaborative Calculation and Data Science"
 [Conda]: <https://docs.conda.io/en/latest/> "Conda: Package, dependency and environment management for any language—Python, R, Ruby, Lua, Scala, Java, JavaScript, C/ C++, FORTRAN, and more."
-[Miniconda]: <https://docs.conda.io/en/latest/miniconda.html> "Miniconda is a free minimal installer for conda."
+[GitHub CI]: <https://docs.github.com/en/actions/guides/about-continuous-integration> "GitHub CI"
 [GitHub]: <https://github.com> "GitHub"
 [GitLab]: <https://gitlab.com> "GitLab"
-[GitHub CI]: <https://docs.github.com/en/actions/guides/about-continuous-integration> "GitHub CI"
-[LGTM]: <https://lgtm.com/> "Continuous security analysis: A code analysis platform for finding zero-days and preventing critical vulnerabilities"
 [Git]: <https://git-scm.com> "Git"
 [Heptapod]: <https://heptapod.net> "Heptapod: is a community driven effort to bring Mercurial SCM support to GitLab"
 [Jupyter]: <https://jupyter.org> "Jupyter"
 [Jupytext]: <https://jupytext.readthedocs.io> "Jupyter Notebooks as Markdown Documents, Julia, Python or R Scripts"
+[LGTM]: <https://lgtm.com/> "Continuous security analysis: A code analysis platform for finding zero-days and preventing critical vulnerabilities"
 [Mercurial]: <https://www.mercurial-scm.org> "Mercurial"
-[Official Course Repository]: <https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/> "Official Physics 581 Repository hosted on GitLab"
-[Resources project]: <https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation_resources> "Private course resources repository."
+[Miniconda]: <https://docs.conda.io/en/latest/miniconda.html> "Miniconda is a free minimal installer for conda."
+[MyST]: <https://myst-parser.readthedocs.io/en/latest/> "MyST - Markedly Structured Text"
+[Read the Docs]: <https://readthedocs.org> "Read the Docs homepage"
+[WSU Physics]: <https://physics.wsu.edu> "WSU Physics Department"
+[`anaconda-project`]: <https://anaconda-project.readthedocs.io> "Anaconda Project: Tool for encapsulating, running, and reproducing data science projects."
+[`anybadge`]: <https://github.com/jongracecox/anybadge> "Python project for generating badges for your projects"
+[`conda-forge`]: <https://conda-forge.org/> "A community-led collection of recipes, build infrastructure and distributions for the conda package manager."
+[`genbadge`]: <https://smarie.github.io/python-genbadge/> "Generate badges for tools that do not provide one."
+[`mmf-setup`]: <https://pypi.org/project/mmf-setup/> "PyPI mmf-setup page"
+[`pytest`]: <https://docs.pytest.org> "pytest: helps you write better programs"
+[hg-git]: <https://hg-git.github.io> "The Hg-Git mercurial plugin"
 
-[Shared CoCalc Project]: <https://cocalc.com/projects/74852aba-2484-4210-9cf0-e7902e5838f4/> "581-2021 Shared CoCalc Project"
 
 [WSU Courses CoCalc project]: <https://cocalc.com/projects/c31d20a3-b0af-4bf7-a951-aa93a64395f6>
-[WSU Physics]: <https://physics.wsu.edu> "WSU Physics Department"
+
+<!-- Fall 2021 links -->
+[CoCalc Course File - Physics 581 Fall 2021]: <https://cocalc.com/projects/c31d20a3-b0af-4bf7-a951-aa93a64395f6/files/PhysicsInspiredComputation/581-2021.course>
+[GitHub Mirror - Physics 581 Fall 2021]: <https://github.com/WSU-Physics-Courses/physics-581-physics-inspired-computation> "GitHub mirror"
+[GitLab Public Project - Physics 581 Fall 2021]: <https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation> "GitLab public course project for Fall 2021."
+[GitLab Resources Project - Physics 581 Fall 2021]: <https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation_resources> "GitLab private resources course project for Fall 2021."
+[GitLab test coverage visualization]: <https://docs.gitlab.com/ee/user/project/merge_requests/test_coverage_visualization.html>
+[Official Course Repository]: <https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/> "Official Physics 581 Repository hosted on GitLab"
+[Resources project]: <https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation_resources> "Private course resources repository."
+[Shared CoCalc Project - Physics 581 Fall 2021]: <https://cocalc.com/projects/74852aba-2484-4210-9cf0-e7902e5838f4/> "581-2021 Shared CoCalc Project"
+[Shared CoCalc Project]: <https://cocalc.com/projects/74852aba-2484-4210-9cf0-e7902e5838f4/> "581-2021 Shared CoCalc Project"
 [file an issue]: <https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/-/issues> "Issues on the class GitLab project."
-[hg-git]: <https://hg-git.github.io> "The Hg-Git mercurial plugin"
-[`mmf-setup`]: <https://pypi.org/project/mmf-setup/> "PyPI mmf-setup page"
-[`conda-forge`]: <https://conda-forge.org/> "A community-led collection of recipes, build infrastructure and distributions for the conda package manager."
+<!-- End Links -->

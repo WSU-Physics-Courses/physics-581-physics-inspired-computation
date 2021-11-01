@@ -4,6 +4,15 @@ Instructor Notes
 These are notes about creating and maintaining this repository.  They may be in a state
 of flux.
 
+```{toctree}
+---
+maxdepth: 2
+glob:
+hidden:
+---
+Notes/*
+```
+
 To Do
 -----
 * Fix `{{ course_package }}` replacement in `Syllabus.md`.
@@ -217,7 +226,11 @@ getting errors when trying to execute code.
   this with `conda env --file anaconda-project.yaml`.  
 * Since we are just doing a Conda install on RtD, we don't run `anaconda-project run
   init` and the kernel used by our notebooks does not get installed.  We can do this in
-  the Sphinx `Docs/conf.py` file:
+  the Sphinx `Docs/conf.py` file.  However, note that this creates a whole new
+  environment.  Basically, our previous hack causes RtD to install everything with conda
+  somewhere, then when we run `anaconda-project run init` from `Docs/conf.py`, this
+  creates **a whole new environment!**.  We customize the kernel installation for RtD in
+  `conf.py`. This will have to be kept in sync with `anaconda-project run init`.
 * Variables defined in `myst_substitutions` do not seem to be available for use in
   templates.  For this, the definitions must also be added to `html_context`.
 * Note that `{% raw %} ... {% endraw %}`  allows you to literally include things like
@@ -523,29 +536,54 @@ details.
      use their CI tools.  E.g.:
    
      * [GitHub Mirror - Physics 581 Fall 2021]
-     
-   
 
+
+<!-- Links -->
+[CoCalc]: <https://cocalc.com> "CoCalc: Collaborative Calculation and Data Science"
+[Conda]: <https://docs.conda.io/en/latest/> "Conda: Package, dependency and environment management for any language—Python, R, Ruby, Lua, Scala, Java, JavaScript, C/ C++, FORTRAN, and more."
+[Fil]: <https://pythonspeed.com/products/filmemoryprofiler/> "The Fil memory profiler for Python"
+[GitHub CI]: <https://docs.github.com/en/actions/guides/about-continuous-integration> "GitHub CI"
+[GitHub]: <https://github.com> "GitHub"
+[GitLab]: <https://gitlab.com> "GitLab"
+[Git]: <https://git-scm.com> "Git"
+[Heptapod]: <https://heptapod.net> "Heptapod: is a community driven effort to bring Mercurial SCM support to GitLab"
+[Hypermodern Python]: <https://cjolowicz.github.io/posts/hypermodern-python-01-setup/> "Hypermodern Python"
+[Jupyter]: <https://jupyter.org> "Jupyter"
+[Jupytext]: <https://jupytext.readthedocs.io> "Jupyter Notebooks as Markdown Documents, Julia, Python or R Scripts"
+[LGTM]: <https://lgtm.com/> "Continuous security analysis: A code analysis platform for finding zero-days and preventing critical vulnerabilities"
+[Mercurial]: <https://www.mercurial-scm.org> "Mercurial"
+[Miniconda]: <https://docs.conda.io/en/latest/miniconda.html> "Miniconda is a free minimal installer for conda."
+[MyPI]: <https://alum.mit.edu/www/mforbes/mypi/> "MyPI: My personal package index"
 [MyST]: <https://myst-parser.readthedocs.io/en/latest/> "MyST - Markedly Structured Text"
+[Nox]: <https://nox.thea.codes> "Nox: Flexible test automation"
+[Poetry]: <https://poetry.eustace.io> "Python packaging and dependency management made easy."
+[PyPI]: <https://pypi.org> "PyPI: The Python Package Index"
+[Read the Docs]: <https://readthedocs.org> "Read the Docs homepage"
+[WSU Physics]: <https://physics.wsu.edu> "WSU Physics Department"
+[`anaconda-project`]: <https://anaconda-project.readthedocs.io> "Anaconda Project: Tool for encapsulating, running, and reproducing data science projects."
+[`anybadge`]: <https://github.com/jongracecox/anybadge> "Python project for generating badges for your projects"
+[`conda-forge`]: <https://conda-forge.org/> "A community-led collection of recipes, build infrastructure and distributions for the conda package manager."
+[`conda-pack`]: <https://conda.github.io/conda-pack/> "Command line tool for creating archives of conda environments"
+[`genbadge`]: <https://smarie.github.io/python-genbadge/> "Generate badges for tools that do not provide one."
+[`minconda`]: <https://docs.conda.io/en/latest/miniconda.html> "Miniconda"
+[`mmf-setup`]: <https://pypi.org/project/mmf-setup/> "PyPI mmf-setup page"
+[`pyenv`]: <https://github.com/pyenv/pyenv> "Simple Python Version Management: pyenv"
+[`pytest`]: <https://docs.pytest.org> "pytest: helps you write better programs"
+[hg-git]: <https://hg-git.github.io> "The Hg-Git mercurial plugin"
+[pytest]: <https://docs.pytest.org> "pytest"
+[venv]: <https://docs.python.org/3/library/venv.html> "Creation of virtual environments"
 
 [WSU Courses CoCalc project]: <https://cocalc.com/projects/c31d20a3-b0af-4bf7-a951-aa93a64395f6>
 
-[GitHub]: <https://github.com> "GitHub"
-[`pytest`]: <https://docs.pytest.org> "pytest: helps you write better programs"
-[Read the Docs]: <https://readthedocs.org> "Read the Docs homepage"
-[`anaconda-project`]: <https://anaconda-project.readthedocs.io> "Anaconda Project: Tool for encapsulating, running, and reproducing data science projects."
-
 <!-- Fall 2021 links -->
 [CoCalc Course File - Physics 581 Fall 2021]: <https://cocalc.com/projects/c31d20a3-b0af-4bf7-a951-aa93a64395f6/files/PhysicsInspiredComputation/581-2021.course>
-
-[Shared CoCalc Project - Physics 581 Fall 2021]: <https://cocalc.com/projects/74852aba-2484-4210-9cf0-e7902e5838f4/> "581-2021 Shared CoCalc Project"
-
-[GitLab Public Project - Physics 581 Fall 2021]: <https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation> "GitLab public course project for Fall 2021."
-
-[GitLab Resources Project - Physics 581 Fall 2021]: <https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation_resources> "GitLab private resources course project for Fall 2021."
-
 [GitHub Mirror - Physics 581 Fall 2021]: <https://github.com/WSU-Physics-Courses/physics-581-physics-inspired-computation> "GitHub mirror"
-
-[`anybadge`]: <https://github.com/jongracecox/anybadge> "Python project for generating badges for your projects"
-[`genbadge`]: <https://smarie.github.io/python-genbadge/> "Generate badges for tools that do not provide one."
+[GitLab Public Project - Physics 581 Fall 2021]: <https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation> "GitLab public course project for Fall 2021."
+[GitLab Resources Project - Physics 581 Fall 2021]: <https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation_resources> "GitLab private resources course project for Fall 2021."
 [GitLab test coverage visualization]: <https://docs.gitlab.com/ee/user/project/merge_requests/test_coverage_visualization.html>
+[Official Course Repository]: <https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/> "Official Physics 581 Repository hosted on GitLab"
+[Resources project]: <https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation_resources> "Private course resources repository."
+[Shared CoCalc Project - Physics 581 Fall 2021]: <https://cocalc.com/projects/74852aba-2484-4210-9cf0-e7902e5838f4/> "581-2021 Shared CoCalc Project"
+[Shared CoCalc Project]: <https://cocalc.com/projects/74852aba-2484-4210-9cf0-e7902e5838f4/> "581-2021 Shared CoCalc Project"
+[file an issue]: <https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/-/issues> "Issues on the class GitLab project."
+<!-- End Links -->
