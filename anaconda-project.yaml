@@ -114,7 +114,8 @@ dependencies:
 
   # Data analysis
   - pandas
-
+  - statsmodels
+  
   # Plotting and visualization tools
   - matplotlib
   - ipyvolume
