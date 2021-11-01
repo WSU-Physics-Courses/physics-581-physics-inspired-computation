@@ -130,6 +130,7 @@ dependencies:
 
   # Documentation
   - sphinx
+  - pandoc
   - jupytext
   - conda-forge::myst-nb
   - conda-forge::sphinx-panels

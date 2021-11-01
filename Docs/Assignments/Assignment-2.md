@@ -1,18 +1,19 @@
 ---
 jupytext:
   formats: ipynb,md:myst
+  notebook_metadata_filter: all
   text_representation:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.11.1
+    jupytext_version: 1.13.0
 kernelspec:
   display_name: Python 3 (phys-581-2021)
   language: python
   name: phys-581-2021
 ---
 
-```{code-cell} ipython3
+```{code-cell}
 :cell_style: center
 :hide_input: false
 
@@ -116,7 +117,7 @@ Since we do not want to rely on a correct implementation of `solve_ivp_rk4` to s
 the algorithm, for testing purposes, we use the exact solution to pre-populate the
 initial four steps.
 
-```{code-cell} ipython3
+```{code-cell}
 %pylab inline --no-import-all
 from IPython.display import clear_output
 %load_ext autoreload
@@ -192,7 +193,7 @@ $10^{-16}$ is reasonable.
 
 :::
 
-```{code-cell} ipython3
+```{code-cell}
 T = 10.0
 Nts = 2**np.arange(7, 15)
 dts = T/Nts

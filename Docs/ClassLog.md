@@ -5,14 +5,11 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.11.1
+    jupytext_version: 1.13.0
 kernelspec:
   display_name: Python 3 (phys-581-2021)
   language: python
   name: phys-581-2021
-metadata:
-   execution:
-      timeout: 30
 ---
 
 Class Log
@@ -64,7 +61,7 @@ Fri 24 Sept 2021
     the Lorenz system?
 * Discuss Stiff equations?  Maybe construct an example.
 
-```{code-cell} ipython3
+```{code-cell}
 %pylab inline --no-import-all
 from scipy.integrate import solve_ivp
 
@@ -103,7 +100,6 @@ ax.legend()
 ax.set(xlabel='T', ylabel='max abs err');
 ```
 
-
 Wed 22 Sept 2021
 ----------------
 
@@ -114,8 +110,7 @@ $$
   \dot{y}(t) = -ty(t), \qquad y(0) = 1.
 $$
 
-```{code-cell} ipython3
-
+```{code-cell}
 %pylab inline --no-import-all
 from scipy.integrate import solve_ivp
 
@@ -181,10 +176,9 @@ There are still a few "Gotcha"s here which need to be carefully addressed:
     `min_step` or `t_eval`.  I discussed both.
     
     I mentioned a third option shown below of using `dense_output=True`, but did not
-    show this in class: 
+    show this in class:
 
-      
-```{code-cell} ipython3
+```{code-cell}
 res = solve_ivp(fun, t_span=(t0, tf), y0=[y0], dense_output=True)
 plt.plot(res.t, res.y[0])
 
@@ -202,7 +196,7 @@ $$
     y(t) = y_0 e^{-(t^2-t_0^2)/2}.
 $$
 
-```{code-cell} ipython3
+```{code-cell}
 res = solve_ivp(fun, t_span=(t0, tf), y0=[y0], rtol=1e-5, atol=1e-5)
 
 ts = res.t
@@ -236,8 +230,7 @@ Today we worked on setting up ODE's for use with [`solve_ivp`].  We started with
 problem of solving for the motion of a projectile in a constant downward gravitational
 field, allowing for drag:
 
-```{code-cell} ipython3
-
+```{code-cell}
 %pylab inline --no-import-all
 from scipy.integrate import solve_ivp
 
@@ -514,4 +507,3 @@ were:
 [GitLab]: <https://gitlab.com> "GitLab"
 [Official Course Repository]: <https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/> "Official Physics 581 Repository hosted on GitLab"
 [`solve_ivp`]: <https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html>
-

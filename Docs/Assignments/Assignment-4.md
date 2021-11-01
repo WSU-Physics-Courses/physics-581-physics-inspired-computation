@@ -1,6 +1,9 @@
 ---
+execution:
+  timeout: 240
 jupytext:
   formats: ipynb,md:myst
+  notebook_metadata_filter: all
   text_representation:
     extension: .md
     format_name: myst
@@ -10,6 +13,16 @@ kernelspec:
   display_name: Python 3 (phys-581-2021)
   language: python
   name: phys-581-2021
+language_info:
+  codemirror_mode:
+    name: ipython
+    version: 3
+  file_extension: .py
+  mimetype: text/x-python
+  name: python
+  nbconvert_exporter: python
+  pygments_lexer: ipython3
+  version: 3.9.7
 ---
 
 ```{code-cell} ipython3
@@ -107,7 +120,9 @@ lams, ts, ys, dys = compute_lyapunov(
     dt=dt, 
     Nsamples=Nsamples, 
     debug=True)
-print(np.mean(lams), np.std(lams))
+
+# Here is the mean and the standard error of the mean
+print(np.mean(lams), np.std(lams)/np.sqrt(len(lams)))
 ```
 
 ```{code-cell} ipython3
@@ -146,6 +161,10 @@ from statsmodels.graphics.tsaplots import plot_acf
 plot_acf(lams[:], lags=100);
 ```
 
+*(See [Autocorrelation of Time Series Data in Python](https://www.alpharithms.com/autocorrelation-time-series-python-432909/) for a discussion about how to interpret this plot.)*
+
++++
+
 To deal with this manually, we first evolve the initial state a bit.  Then we generate some samples to analyze statistically.
 
 ```{code-cell} ipython3
@@ -180,24 +199,33 @@ lams = np.asarray(lams)
 
 ```{code-cell} ipython3
 import scipy.stats
+from uncertainties import ufloat
 sp = scipy
-_lams = np.array(sorted(lams))
-dist = sp.stats.norm(loc=_lams.mean(), scale=_lams.std())
-kernel = sp.stats.gaussian_kde(_lams)
+def analyze(lams):
+    _lams = np.array(sorted(lams))
+    dist = sp.stats.norm(loc=_lams.mean(), scale=_lams.std())
+    kernel = sp.stats.gaussian_kde(_lams)
 
-fig, ax = plt.subplots()
-ax.hist(lams, bins=100, density=True, alpha=0.5)
-ax.plot(_lams, dist.pdf(_lams), '-', label='Gaussian')
-ax.plot(_lams, kernel.pdf(_lams), '--', label='kde')
-ax.set(xlabel=r'$\lambda_0$')
-ax.legend();
+    fig, ax = plt.subplots()
+    ax.hist(lams, bins=50, density=True, alpha=0.5)
+    ax.plot(_lams, dist.pdf(_lams), '-', label='Gaussian')
+    ax.plot(_lams, kernel.pdf(_lams), '--', label='kde')
+    lam0 = ufloat(_lams.mean(), _lams.std()/np.sqrt(len(_lams)))
+    ax.axvspan(lam0.n - 2*lam0.s, lam0.n + 2*lam0.s, fc='y', alpha=1)
+    ax.set(xlabel=r'$\lambda_0$', title=rf"$\overline{{\lambda_0}} = {lam0:S}$")
+    ax.legend();
+analyze(lams)
+```
+
+Here we plot a histogram of the data, along with a gausian distribution and a gaussian kernel-density estimate (KDE).  We see that the distribution is **not** gaussian, but this is not a bad approximation. The yellow band shows the mean of the gaussian with a width of twice the [standard error of the mean](https://en.wikipedia.org/wiki/Standard_error) $\delta \lambda_0 = \sigma / \sqrt{n}$ where $\sigma$ is the standard deviation, and $n$ is the number of samples.  Note: the distribution here depends quite sensitively on `dt`, but the mean remains close to $\lambda_0 = 0.87(1)$
+
+```{code-cell} ipython3
+# Randomly choose some values and re-analyze:
+rng = np.random.default_rng(0)
+analyze(rng.choice(lams, 300))
 ```
 
 ```{code-cell} ipython3
 from statsmodels.graphics.tsaplots import plot_acf
 plot_acf(lams, lags=100);
-```
-
-```{code-cell} ipython3
-
 ```

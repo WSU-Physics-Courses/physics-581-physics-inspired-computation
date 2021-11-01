@@ -5,7 +5,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.11.1
+    jupytext_version: 1.13.0
 kernelspec:
   display_name: Python 3 (phys-581-2021)
   language: python
@@ -53,7 +53,7 @@ need an accurate comparison of $x$ and $y$ sizes, such as with an image.  The $y
 here should look like it has unit slope in the right plot.
 ```
 
-```{code-cell} ipython3
+```{code-cell}
 %matplotlib inline
 import numpy as np, matplotlib.pyplot as plt
 
@@ -85,7 +85,7 @@ issues [13431](https://github.com/matplotlib/matplotlib/issues/13431) and
 
 Here is an example of defining a custom preamble and style:
 
-```{code-cell} ipython3
+```{code-cell}
 %matplotlib inline
 import numpy as np, matplotlib.pyplot as plt
 

@@ -65,8 +65,12 @@ class TestLyapunov:
         args["Nsamples"] = 10
         args["dt"] = 10.0
         lams = np.array(assignment_4.compute_lyapunov(**args))
-        assert np.allclose(lams.mean(), 0.86, atol=lams.std())
-        assert lams.std() < 0.2
+
+        # Estimate parameter as a gaussian. It is not, but it is not too far off.
+        lam0 = lams.mean()
+        dlam0 = lams.std() / np.sqrt(len(lams))  # Error in the mean
+        assert np.allclose(lam0, 0.872, atol=max(2 * dlam0, 0.005))
+        assert dlam0 < 0.1
 
     def test_coverage(cls):
         """"Coverage test for NotImplementedError exceptions.

@@ -283,6 +283,22 @@ getting errors when trying to execute code.
   :style: alpha
   ```
   ````
+* If you have a notebook that takes more than 30s to execute a cell, you will need to
+  increase the execution timeout.  This is done by adding metadata, but not that this
+  metadata may be filtered out by [Jupytext].  Start your [MyST] notebooks with least
+  the following to ensure you have this:
+  
+  ```myst
+  ---
+  execution:
+    timeout: 120
+  jupytext:
+    formats: ipynb,md:myst
+    notebook_metadata_filter: all
+  ...
+  ---
+  ...
+  ```
 
 ## CoCalc Setup
 
