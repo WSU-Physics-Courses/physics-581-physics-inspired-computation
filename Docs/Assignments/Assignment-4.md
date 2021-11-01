@@ -1,6 +1,6 @@
 ---
 execution:
-  timeout: 240
+  timeout: 300
 jupytext:
   formats: ipynb,md:myst
   notebook_metadata_filter: all
@@ -33,7 +33,6 @@ import mmf_setup;mmf_setup.nbinit()
 import logging;logging.getLogger('matplotlib').setLevel(logging.CRITICAL)
 %matplotlib inline
 import numpy as np, matplotlib.pyplot as plt
-%load_ext autoreload
 ```
 
 # Assignment 4: Chaos and Lyapunov Exponents
@@ -61,7 +60,6 @@ $$
 This system is chaotic near $\sigma = 10$, $\beta = 8/3$, and $\rho = 28$.
 
 ```{code-cell} ipython3
-%autoreload
 from phys_581_2021.assignment_4 import compute_lyapunov
 from scipy.integrate import solve_ivp
 
@@ -105,8 +103,6 @@ ax.legend()
 Looking at these plots, we see that it seems to have taken the initial state about $T=15$ to get close to the attractor where the generic behaviour begins.  After this, we see that orbits have a period of about $T \approx 1$ while it takes about $T \approx 5$ for the particle to switch between lobes.  We expect the chaotic behaviour to be associated with the later phenomenon, so we choose our `dt=10`.
 
 ```{code-cell} ipython3
-%autoreload
-from phys_581_2021.assignment_4 import compute_lyapunov
 Nsamples = 200
 min_norm = 1e-7
 q0 = (1.0, 1.0, 1.0)
@@ -168,8 +164,6 @@ plot_acf(lams[:], lags=100);
 To deal with this manually, we first evolve the initial state a bit.  Then we generate some samples to analyze statistically.
 
 ```{code-cell} ipython3
-%autoreload
-from phys_581_2021.assignment_4 import compute_lyapunov
 min_norm = 1e-7
 
 # First evolve four times to relax
@@ -192,7 +186,7 @@ lams, ts, ys, dys = compute_lyapunov(
     t0=t0,
     min_norm=min_norm, 
     dt=10.0, 
-    Nsamples=1000, 
+    Nsamples=500, 
     debug=True)
 lams = np.asarray(lams)
 ```
@@ -222,7 +216,7 @@ Here we plot a histogram of the data, along with a gausian distribution and a ga
 ```{code-cell} ipython3
 # Randomly choose some values and re-analyze:
 rng = np.random.default_rng(0)
-analyze(rng.choice(lams, 300))
+analyze(rng.choice(lams, 200))
 ```
 
 ```{code-cell} ipython3

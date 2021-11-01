@@ -106,6 +106,8 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # https://myst-nb.readthedocs.io/en/latest/use/execute.html
 jupyter_execute_notebooks = "cache"
 execution_allow_errors = True
+execution_timeout = 300
+nbsphinx_timeout = 300  # Time in seconds; use -1 for no timeout
 
 # -- Options for HTML output -------------------------------------------------
 
