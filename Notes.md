@@ -4,15 +4,6 @@ Instructor Notes
 These are notes about creating and maintaining this repository.  They may be in a state
 of flux.
 
-```{toctree}
----
-maxdepth: 2
-glob:
-hidden:
----
-Notes/*
-```
-
 To Do
 -----
 * Fix `{{ course_package }}` replacement in `Syllabus.md`.

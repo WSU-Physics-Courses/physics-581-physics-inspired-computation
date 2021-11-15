@@ -27,8 +27,9 @@ maxdepth: 2
 caption: "Other Content:"
 hidden:
 ---
-Projects
 Notes
+Projects
+InstructorNotes
 CoCalc
 ClassLog
 ```
