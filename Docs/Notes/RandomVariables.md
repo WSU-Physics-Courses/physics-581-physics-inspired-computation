@@ -134,7 +134,6 @@ If the mean is zero, then this simplifies:
   P_Z(z) = \Theta(z) \frac{e^{-z/2\sigma^2}}{\sqrt{2\pi z \sigma^2}}.
 \end{gather*}
 
-
 If the spaces are not the same, then the vectors and matrices must be organized
 appropriately so corresponding spaces overlap, with the other spaces add in separate
 dimensions.
@@ -182,8 +181,68 @@ ax.plot(z, P_Z(z), '-', scaley=False)
 ax.set(xlim=(-1, 30), xlabel="$z=x^2$", ylabel="$P_Z(z)$");
 ```
 
+## Chi-Square Distribution
 
+As an extended example, consider the $\chi^2$ distribution for a linear model with normally
+distributed errors $e_n$, each with mean $0$ and variance $\sigma_n^2$.  Then, we have:
 
+\begin{gather*}
+  \chi^2 = \sum_n \left(\frac{f(x_n, \vect{a}) - y_n}{\sigma_n}\right)^2
+         = \sum_n \frac{e_n^2}{\sigma_n^2}.
+         = \sum_n \tilde{e}_n^2.
+\end{gather*}
+
+Let $\tilde{e}_n = e_n/\sigma_n$.  We have the following PDFs:
+
+\begin{align*}
+  P_{e_n}(x) &= \frac{e^{-x^2/2/\sigma_n^2}}{\sqrt{2\pi \sigma_n^2}}\\
+  P_{\tilde{e}_n}(x) &= \frac{P_{e_n}(\sigma_n x)}{\d{\tilde{e}_n}/\d{e_n}}
+                      = \sigma_n P_{e_n}(\sigma_n x) 
+                      = \frac{e^{-x^2/2}}{\sqrt{2\pi}}\\
+  P_{\tilde{e}_n^2}(x) &= \Theta(x) \frac{e^{-x/2}}{\sqrt{2\pi x}}\\
+  P_{\chi^2}(x) &= P_{\text{poisson}}(k;x/2) = \Theta(x) \frac{(x/2)^k e^{-x/2}}{k!}
+                  \qquad k = \frac{\nu}{2} - 1\\
+                &= \Theta(x)\frac{x^{\nu/2-1} e^{-x/2}}{2^{\nu/2-1}\Gamma(\nu/2)}.
+\end{align*}
+
+The last step involves adding independent distributions, which is done with convolution
+and gives the chi-square distribution as described in section 6.14.8 of
+{cite:p}`PTVF:2007`.  This can be computed using {py:data}`scipy.stats.chi2`.  It has
+mean $\nu$ and variance $2\nu$.  From this, we can also compute the distribution for
+$\chi^2_r$:
+
+\begin{align*}
+  P_{\nu}(\chi^2) &= \Theta(\chi^2)\frac{(\chi^2)^{\nu/2-1}
+  e^{-\chi^2/2}}{2^{\nu/2-1}\Gamma(\nu/2)}, 
+  & \mu &= \nu, \sigma &= 2\nu\\
+  P_{\nu}(\chi^2_r) &= \nu P_{\nu}(\chi^2) = \nu P_{\nu}(\nu\chi^2_r),
+  & \mu &= 1, \sigma &= 2\sqrt{\nu}.
+\end{align*}
+
+```{code-cell} ipython3
+from scipy.stats import chi2
+
+chi2_rs = np.linspace(-0.1, 4, 100)
+fig, axs = plt.subplots(1, 2, figsize=(10, 3))
+for nu in [1, 2, 3, 4, 50, 100]:
+    chi2s = chi2_rs * nu
+    axs[0].plot(chi2s, chi2.pdf(chi2s, df=nu), label=rf"$\nu={nu}$")
+    axs[1].plot(chi2_rs, nu*chi2.pdf(nu*chi2_rs, df=nu), label=rf"$\nu={nu}$")
+    mean_chi2, std_chi2 = chi2.stats(df=nu, moments='mv')
+    print(f"nu={nu}, chi^2 mean={mean_chi2}, std={std_chi2}")
+
+axs[0].set(xlabel=r"$\chi^2$", ylabel=r"$P_{\nu}(\chi^2)$", 
+           xlim=(-0.1, 20), ylim=(0, 0.6))
+axs[1].set(xlabel=r"$\chi^2_r$", ylabel=r"$P_{\nu}(\chi^2_r)$")
+for ax in axs:
+    ax.legend();
+
+```
+
+These results indicate why it is important to work out the confidence intervals
+carefully.  If there are many degrees of freedom, then $\chi^2_r$ is tightly peaked
+about the mean value of $1$, but if you have limited data, then the distribution has
+some significant deviations.
 
 
 [sum or normally distributed random variables]: <https://en.wikipedia.org/wiki/Sum_of_normally_distributed_random_variables>
@@ -196,4 +255,4 @@ ax.set(xlim=(-1, 30), xlabel="$z=x^2$", ylabel="$P_Z(z)$");
 [algebra of random varables]: <https://en.wikipedia.org/wiki/Algebra_of_random_variables>
 [principal componant analysis]: <https://en.wikipedia.org/wiki/Principal_component_analysis>
 [reduced chi-square statistic]: <https://en.wikipedia.org/wiki/Reduced_chi-squared_statistic>
-[multvariate normal distribution]: <https://en.wikipedia.org/wiki/Multivariate_normal_distribution>
+[multivariate normal distribution]: <https://en.wikipedia.org/wiki/Multivariate_normal_distribution>

@@ -107,9 +107,9 @@ sync:
 # See https://stackoverflow.com/a/15936384/1088938 for details
 
 clean:
-	find . -name "__pycache__" -exec $(RM) -r {} +
-	$(RM) -r _htmlcov .coverage .pytest_cache
-	$(ACTIVATE) root && conda clean --all -y
+	-find . -name "__pycache__" -exec $(RM) -r {} +
+	-$(RM) -r _htmlcov .coverage .pytest_cache
+	-$(ACTIVATE) root && conda clean --all -y
 
 
 reallyclean:

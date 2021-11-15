@@ -127,8 +127,8 @@ Finally, we shall see that under appropriate conditions -- namely, that the $e_n
 normally distributed and that the model $f(x, \vect{a})$ is approximately linear over
 the region of parameter uncertainties -- then we can characterize the distribution of
 $\chi^2(\vect{a})$ to determine the **confidence region**.  Specifically, in this case,
-the [reduced chi-square statistic] $\chi^2_r \approx 1$ should be close to 1 if the model is good and the
-errors have been appropriately characterized:
+the [reduced chi-square statistic] $\chi^2_r \approx 1$ should be close to 1 if the
+model is good and the errors have been appropriately characterized:
 
 \begin{gather*}
   \chi^2_r(\vect{a}) = \frac{\chi^2(\vect{a})}{\nu}, \qquad
@@ -670,6 +670,7 @@ This code needs some checking to make sure that the scaling is done properly and
 values of $\sigma_i$ are correct.  There are many options: think about what you want to
 show and define a scaling that makes sense to you.
 :::
+
 ```{code-cell} ipython3
 from uncertainties.unumpy import nominal_values
 
@@ -747,15 +748,15 @@ np.sqrt(np.diag(C / a[:, None] / a[None, :]))
 np.sqrt(np.diag(C))
 ```
 
-
 ## Correlated Errors and the Covariance Matrix
 
 The covariance matrix $\mat{C}$ describes the local dependence of $\chi^2$ on the
 deviations $\delta\vect{a} = \vect{a} - \bar{\vect{a}}$ from the best fit values:
 
-\begin{gather*}
+```{math}
+  :label: eq:chi2_C
   \delta\chi^2 \approx \delta\vect{a}^T\cdot\mat{C}^{-1}\cdot\delta\vect{a}
-\end{gather*}
+```
 
 We should check this to be sure.  Note that if we vary a single parameter $a_i$ while
 holding the others fixed, then we should find:
@@ -771,8 +772,8 @@ Note that from this plot it is easy to see that the parameter $\omega$ is the mo
 tightly constrained, followed by $\phi$, $c$, and then $A$, which is most poorly
 constrained.  This is consistent with the PCA.
 :::
-```{code-cell} ipython3
 
+```{code-cell} ipython3
 a, C = curve_fit(
     f=f, xdata=t, ydata=ydata, p0=a_exact, sigma=sigmas, absolute_sigma=True
 )
@@ -789,7 +790,7 @@ fig, ax = plt.subplots()
 chi2 = get_chi2(a=a)
 for i in range(len(a)):
     sigma_i = 1/np.sqrt(Cinv[i,i])
-    dais = np.linspace(-sigma_i, sigma_i, 10)
+    dais = np.linspace(-sigma_i, sigma_i, 30)
     chi2s = [get_chi2(a=a, i=i, dai=dai) - chi2 for dai in dais]
     l, = ax.plot(dais, chi2s, "--", label=f"$a_i$ = {Params._fields[i]}")
     ax.plot(dais, dais**2 / sigma_i**2, ".", c=l.get_c())
@@ -798,7 +799,135 @@ ax.legend();
 ```
 
 Here we see that our interpretation of the diagonals of $\mat{C}^{-1}$ correspond with
-the behavior of $\chi^2$.  If our errors are indeed gaussian and the model is a good
+the behavior of $\chi^2$.  This supports the following interpretation of the diagonal
+elements of $\mat{C}^{-1}$ and $\mat{C}$:
+
+:::{margin}
+Prove the second meaning by using the quadratic model {eq}`eq:chi2_C`.  Vary $a_i$ but
+then find the new minimum for the other parameters with this fixed value of $a_i$.  This
+should allow $\delta\chi^2$ to relax compared to the results shown in the figure,
+resulting in a larger range $\sigma_i > \sigma_i'$.  $\sigma_i$ corresponds to the
+bounds $A-A'$ in figure 15.6.4 of {cite:p}`PTVF:2007, while $\sigma'_i$ corresponds to
+the bounds $Z-Z'$.  As discussed in the text, only the wider bound of $\sigma_i$
+corresponding to the diagonals of the covariance matrix are useful for describing errors.
+:::
+
+1. The diagonal elements $\sigma'_i = 1/\sqrt{[\mat{C}^{-1}]_{ii}}$ tell us how much we can
+   vary the parameter $a_i$ away from the best fit value before $\chi^2$ changes by 1
+   **while holding the other parameters fixed**.  I.e. $a_i \in (\bar{a}_i \pm \sigma'_{i})$.
+
+2. The diagonal elements $\sigma_i = \sqrt{\mat{C}_{ii}}$ tell us how much we can
+   vary the parameter $a_i$ away from the best fit value before $\chi^2$ changes by 1
+   **while re-minimizing over the other parameters fixed**.
+   
+Thus, we can describe the distribution of parameters as ellipsoids of constant $\delta\chi^2$:
+
+\begin{gather*}
+  \delta\chi^2 \approx \delta\vect{a}^T\cdot\mat{C}^{-1}\cdot\delta\vect{a}.
+\end{gather*}
+
+To plot these in 2D, we can factor $\mat{C} = \mat{L}\cdot\mat{L}^T$ using either a
+[Cholesky decomposition] or the same diagonalization as performed above in the PCA:
+$\mat{C} = \mat{V}\cdot\mat{D}\cdot\mat{V}^T$, $\mat{L} =
+\mat{V}\cdot\sqrt{\mat{D}}$.  We then have:
+
+\begin{gather*}
+  \delta\chi^2 \approx \vect{x}^T\cdot\vect{x}, \qquad
+  \delta\vect{a} = \mat{L}\cdot \vect{x}.
+\end{gather*}
+
+Thus, the ellipsoids of constant $\chi^2$ are spheres in the space $\vect{x}$.  We can
+now plot these pairwise in a "corner plot":
+
+```{code-cell} ipython3
+a, C = curve_fit(
+    f=f, xdata=t, ydata=ydata, p0=a_exact, sigma=sigmas, absolute_sigma=True
+)
+a_ = Params(*correlated_values(a, covariance_mat=C))
+
+def corner_plot(a, C, labels=[r"\omega", r"c", r"A", r"\phi"], axs=None, fig=None):
+    if axs is None:
+        fig, axs = plt.subplots(len(a), len(a), sharex=True, sharey=True,
+            gridspec_kw=dict(hspace=0, wspace=0),
+            figsize=(10, 10))
+    for i, ai in enumerate(a):
+        for j, aj in enumerate(a):
+            if i <= j:
+                if fig is not None:
+                    axs[i, j].set(visible=False)
+                continue
+            ax = axs[i, j]
+            inds = np.array([[i, j]])
+            C2 = C[inds.T, inds]
+            sigma_i, sigma_j = np.sqrt([C[i,i], C[j,j]])
+            dai = np.linspace(-3*sigma_i, 3*sigma_i, 100)
+            daj = np.linspace(-3*sigma_j, 3*sigma_j, 102)
+            das = np.meshgrid(dai, daj, indexing='ij', sparse=False)
+            dchi2 = np.einsum('xij,yij,xy->ij', das, das, np.linalg.inv(C2))
+            ax.contour(daj, dai, dchi2,
+                       colors='C0', 
+                       linestyles=['-', '--', '-', '-'],
+                       levels=[1.0, 2.30, 2.71, 6.63]) 
+            
+            if j == 0:
+                ax.set(ylabel=rf"${labels[i]}$")
+            if i == len(a) - 1:
+                ax.set(xlabel=rf"${labels[j]}$")
+    return locals()
+    
+locals().update(corner_plot(a, C))
+dchi2.max()
+```
+
+Here we play with a multi-normal distribution.
+
+```{code-cell} ipython3
+import corner
+from scipy.stats import chi2
+
+rng = np.random.default_rng(seed=2)
+L = rng.random((2, 2))
+C = L @ L.T
+
+X = rng.multivariate_normal(mean=[0, 0], cov=C, size=10000)
+a0, a1 = X.T
+
+dchi2 = np.einsum('ai,aj,ij->a', X, X, np.linalg.inv(C))
+
+fig = plt.figure(figsize=(10,10))
+fig = corner.corner(X, fig=fig);
+axs = np.array([[fig.axes[0], fig.axes[1]],
+                [fig.axes[2], fig.axes[3]]])
+ax = axs[1,1]
+corner_plot([0, 0], C, axs=axs, labels=['a0', 'a1']);
+
+#ax.plot(chi2.ppf(0.683, df=1), 0, 1, color='y')
+```
+
+```{code-cell} ipython3
+chi2s = np.linspace(0, 10, 100)
+plt.hist(dchi2, bins=100, density=True);
+plt.plot(chi2s, chi2.pdf(chi2s, df=2))
+plt.vlines(chi2.ppf([0.683, 0.90, 0.9545, 0.99, 0.9973, 0.9999], df=2), 0, 1, color='y')
+```
+
+```{code-cell} ipython3
+chi2.ppf(0.683, df=2)   # Value of chi^2 with ellipse containing 68.3% of the data
+```
+
+```{code-cell} ipython3
+a
+```
+
+## Confidence Region
+
+To describe the 
+
+
+
+
+
+If our errors are indeed gaussian and the model is a good
 fit, then we can consider the parameters $\vect{a}$ to be distributed with a
 [multivariate normal distribution] about their mean $\bar{\vect{a}}$:
 
@@ -851,30 +980,8 @@ and the corresponding covariance matrix $\mat{C}$.  The procedure in this case i
 
 
 :::{sidebar} Algebra of Random Variables
-Here are a few relevant properties from the [algebra of random varables].  Consider two
-independent random variables $X$ and $Y$ with distributions $P_X(x)$ and $P_Y(y)$
-respectively.  The distribution of the
-sum $Z = X+Y$ is the convolution $P_{X+Y} = P_X * P_Y$ of the distributions:
 
-\begin{gather*}
-  P_{X+Y}(z) = \int_{-\infty}^{\infty}\!\!\!\d{x}\;P_X(x)P_Y(z-x).
-\end{gather*}
-
-The [distribution of the
-product](https://en.wikipedia.org/wiki/Distribution_of_the_product_of_two_random_variables)
- $Z = XY$ is:
-
-\begin{gather*}
-  P_{XY}(z) = \int_{-\infty}^{\infty}\!\!\!\d{x}\frac{P_X(x)P_Y(z/x)}{\abs{x}}.
-\end{gather*}
-
-For gaussian distributions with mean $\bar{\vect{x}}$
-
-\begin{gather*}
-  P(\delta\vect{x}=\vect{x}-\bar{\vect{x}}) \propto \exp\left(
-    \frac{-\delta\vect{x}^T\cdot\mat{\Sigma}^{-1}\cdot\delta\vect{x}}{2}
-  \right).
-\end{gather*}
+See {ref}`random_variables` for details.
 
 :::
 If we treat the errors $e_n$ as independent [random
@@ -948,7 +1055,8 @@ depends on the parameters as:
 [algebra of random varables]: <https://en.wikipedia.org/wiki/Algebra_of_random_variables>
 [principal componant analysis]: <https://en.wikipedia.org/wiki/Principal_component_analysis>
 [reduced chi-square statistic]: <https://en.wikipedia.org/wiki/Reduced_chi-squared_statistic>
-[multvariate normal distribution]: <https://en.wikipedia.org/wiki/Multivariate_normal_distribution>
+[multivariate normal distribution]: <https://en.wikipedia.org/wiki/Multivariate_normal_distribution>
+[Cholesky decomposition]: <https://en.wikipedia.org/wiki/Cholesky_decomposition>
 
 ## Extensions
 

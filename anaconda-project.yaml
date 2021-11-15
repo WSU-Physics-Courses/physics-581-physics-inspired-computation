@@ -119,6 +119,7 @@ dependencies:
   # Plotting and visualization tools
   - matplotlib
   - ipyvolume
+  - conda-forge::corner
 
   # Testing
   - pytest-cov
@@ -142,9 +143,9 @@ dependencies:
   - pip:
     - sphinxcontrib-zopeext
     - sphinxcontrib-bibtex>=2.4.0
+    - sphobjinv  # Helps looking up intersphinx references
     - mmf-setup
     - genbadge[all]
-
 channels:
   - defaults
 
