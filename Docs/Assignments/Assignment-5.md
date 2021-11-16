@@ -93,8 +93,7 @@ and to express this succinctly and accurately.  In particular, you should provid
 
 1. An estimate of the "best fit" values of the parameters $\vect{a}$.
 2. An estimate of the errors/uncertainties in these parameters.
-3. A statistical measure of the goodness-of-fit (often expressed as a [confidence
-region]).
+3. A statistical measure of the goodness-of-fit.
 
 (See the discussion at the end of [section
 15.0.0](https://nr304ob.s3.amazonaws.com/FW4FNZ819A0CL5ON.pdf#page=2) of {cite:p}`PTVF:2007`.)
@@ -583,7 +582,9 @@ squares of the relative errors in $\phi$ and $\omega$:
 \end{gather*}
 
 ```{code-cell} ipython3
-from uncertainties import ufloat, covariance_matrix
+from uncertainties import ufloat, covariance_matrix, correlated_values
+
+a_ = Params(*correlated_values(a, covariance_mat=C))
 
 w = a_.w
 # Make phi lie between -2*np.pi and 0 so t0 is positive
@@ -611,8 +612,16 @@ covariance_matrix([phi, w])
 
 ## Principal Component Analysis (PCA)
 
-By diagonalizing the covariance matrix $\mat{C} = \mat{C}^T$, we can perform a [principal
+By diagonalizing the symmetric covariance matrix $\mat{C} = \mat{C}^T$, we can perform a [principal
 component analysis] (PCA).  We note that about the minimum $\bar{\vect{a}}$, we have the model:
+
+:::{margin}
+Close to any minimum, a function is approximately quadratic without any linear term.
+Thus, we can express it locally in this form.  Since $\delta\vect{a}$ is the same on
+both sides, we can take $\mat{C} = \mat{C}^T$ to be symmetric.  Finally, if we are truly
+at a minimum, then $\mat{C}$ will be positive semi-definite with non-negative
+eigenvalues.
+:::
 
 \begin{gather*}
   \overbrace{\delta\chi^2(\vect{a})}^{\chi^2(\vect{a}) - \chi^2(\bar{\vect{a}})}
@@ -637,16 +646,17 @@ In this new basis, we have the model
 
 \begin{gather*}
   \delta\chi^2(\vect{a}) = (\mat{V}^T\cdot\delta\vect{a})^T
-  \cdot\mat{D}\cdot(\mat{V}^T\cdot \delta\vect{a})
+  \cdot\mat{D}^{-1}\cdot(\mat{V}^T\cdot \delta\vect{a})
   =
   \sum_{i}\frac{\lambda_i^2}{\sigma_i^2},
   \qquad
   \lambda_i = \vect{v}_{i}^T\cdot\delta\vect{a}.
 \end{gather*}
 
-The columns of $\vect{V}$ thus define an orthonormal basis for parameter space such that the
-linear combinations of parameters along these directions $\lambda_i$ are independent,
-and normally distributed with variance $\sigma_i^2$.
+The columns of $\vect{V}$ thus define an orthonormal basis (hence $\mat{V}^T =
+\mat{V}^{-1}$) for parameter space such that the linear combinations of parameters along
+these directions $\lambda_i$ are independent, and normally distributed with variance
+$\sigma_i^2$.
 
 Note that the $\lambda_i$ parameters represent linear combinations of the physical
 parameters $\vect{a}$.  While these are well defined, the eigenvectors themselves

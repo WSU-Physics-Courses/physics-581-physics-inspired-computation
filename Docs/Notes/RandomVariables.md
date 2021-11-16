@@ -108,9 +108,10 @@ For gaussian distributions with mean $\bar{\vect{x}}$
 Let $z=f(x)$ be some function.  The variable $Z=f(X)$ has PDF
 
 \begin{align*}
-  P_Z(z) &= \int \delta\Bigl(z - f(x)\Bigr) P_X(x)\d{x}
-         = \int \delta\Bigl(z - f(x)\Bigr) P_X(x)
-         \overbrace{\left\lvert\diff{z}{x}\right\rvert}^{\abs{1/f'(x)}}\d{z}\\
+  P_Z(z) &= \int \delta\Bigl(z - f(x)\Bigr) P_X(x)\d{x},\\
+         &= \int \delta\Bigl(z - f\Bigr) P_X(x)
+         \overbrace{\left\lvert\diff{x}{f}\right\rvert}^{\abs{1/f'(x)}}\d{f}, 
+         \qquad f = f(x),    \\
          &= \sum_{x | f(x)=z}\frac{P_X(x)}{\abs{f'(x)}},
 \end{align*}
 
@@ -188,7 +189,7 @@ distributed errors $e_n$, each with mean $0$ and variance $\sigma_n^2$.  Then, w
 
 \begin{gather*}
   \chi^2 = \sum_n \left(\frac{f(x_n, \vect{a}) - y_n}{\sigma_n}\right)^2
-         = \sum_n \frac{e_n^2}{\sigma_n^2}.
+         = \sum_n \frac{e_n^2}{\sigma_n^2}
          = \sum_n \tilde{e}_n^2.
 \end{gather*}
 
