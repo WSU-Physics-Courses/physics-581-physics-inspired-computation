@@ -138,7 +138,7 @@ intersphinx_mapping = {
     "Python 3": ("https://docs.python.org/3", None),
     "matplotlib [stable]": ("https://matplotlib.org/stable/", None),
     "numpy [stable]": ("https://numpy.org/doc/stable/", None),
-    "scipy [latest]": ("https://docs.scipy.org/doc/scipy/", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/", None),
 }
 
 # Napoleon settings
