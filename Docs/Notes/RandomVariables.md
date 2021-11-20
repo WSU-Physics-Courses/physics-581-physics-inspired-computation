@@ -54,16 +54,117 @@ covariance matrix $\mat{\Sigma}$ has the following PDF:
 \end{gather*}
 :::
 
-Random variables can be combined using the [algebra of random varables].  Some important
-results are:
+Random variables can be combined using the [algebra of random variables]. The important
+results can be derived from the following important result.
+
+:::{margin}
+This follows trivially from the meaning of $P_Z(z)$.  The probability of finding a value
+between $z$ and $z + \Delta z$ is:
+\begin{gather*}
+    \int_{z}^{\rlap{z+\Delta z}}\d{z}\;P_Z(z) = \\
+    = \int_{\rlap{z < f(\vect{z}) < z + \Delta z}}\d^N\vect{z}\; P_X(\vect{z}).
+\end{gather*}
+
+Inserting our result, the effect of the delta-function is exactly to limit the range of
+$\vect{z}$ as required.
+:::
+
+:::{important}
+The probability distribution function (PDF) of a random variable $Z = f(\vect{X}) =
+f(X_1, X_2, \dots, X_{N})$ that is a function of $N$ random variables $\vect{X}$ with
+PDF $P_X(\vect{z})$ is:
+
+\begin{gather*}
+  P_Z(z) = \int\d^{N}\vect{x}\;\delta\Bigl(f(\vect{x}) - z\Bigr)P_X(\vect{x}).
+\end{gather*}
+:::
+
+## Function of a Random Variable
+
+:::{margin}
+Here do the $x$ integral by changing variables to $f = f(x)$ so that $f$ appears
+directly in $\delta\bigl(f(y) - z\bigr)$.  The change of variables thus gives $\d{x} = \d{f}/\abs{f'(x)}$.
+:::
+Let $z=f(x)$ be some function.  The variable $Z=f(X)$ has PDF
+
+\begin{align*}
+  P_Z(z) &= \int \delta\Bigl(z - f(x)\Bigr) P_X(x)\d{x},\\
+         &= \int \delta\Bigl(z - f\Bigr) P_X(x)
+         \overbrace{\left\lvert\diff{x}{f}\right\rvert}^{\abs{1/f'(x)}}\d{f}, 
+         \qquad f = f(x),    \\
+         &= \sum_{x | f(x)=z}\frac{P_X(x)}{\abs{f'(x)}},
+\end{align*}
+
+where the sum is over all independent solutions to $f(x) = z$.
+
+:::{admonition} Example: Generating a Random Distributions
+
+Suppose you want to generate samples for a variable $Z$ with PDF $P_Z(z)$.  You can use
+this result to transform a variable generated with PDF $P_X(x)$ by choosing $Z = f(X)$
+for an appropriate monotonic function $f(x)$ which satisfies:
+
+\begin{gather*}
+  f'(x) = \frac{P_X(x)}{P_Z(f(x))}, \qquad
+  P_Z(f)\d{f} = P_X(x)\d{x}, \\
+  C_Z\Bigl(f(x)\Bigr) = \int_{-\infty}^{f(x)} P_Z(z) \d z 
+  = \int_{-\infty}^{x} P_X(x)\d{x} = C_X(x),\\
+  f(x) = C_Z^{-1}\Bigl(C_X(x)\Bigr).
+\end{gather*}
+
+Here $C_X(x)$ and $C_Z(z)$ are the [cumulative distribution function]s (CDFs) for $X$
+and $Z$ respectively.  For example, suppose you want to generate a set if points $z \in
+[-1, 1]$ with distribution $P_Z(z) = 3(1-z^2)/4$ from a variable $x \in [0, 1]$ with uniform
+distribution $P_X(x) = 1$.  We have:
+
+\begin{gather*}
+  C_Z(z) = \int_{-1}^z\d{z} P_Z(z) = \frac{-z^3 + 3z + 2}{4}, \\
+  C_X(x) = \int_{0}^{x}\d{x} P_X(x) = x,\\
+  z = f(x) = C_Z^{-1}(C_X(x)) = C_Z^{-1}(x).
+\end{gather*}
+
+This involves finding the roots of a cubic polynomial, but this is easily done
+numerically with a few steps of Newtons's method starting with a good guess.  (See
+{ref}`global_newton` for details.)
+
+:::
+
+```{code-cell} ipython3
+def C_Z_inv(x):
+    """Return z where x = C_Z(z)."""
+    z = 2/np.pi * np.arcsin(2*x-1) # Good initial guess
+    for _n in range(4):            # 4 steps give machine precision
+        z -= ((np.polyval([-1, 0, 3, 2], z) - 4*x) 
+              / (np.polyval([-3, 0, 3], z) + 1e-32))
+    return z
+
+rng = np.random.default_rng(seed=2)
+X = rng.random(size=20000)  # Uniform distribution of X from 0 to 1
+Z = C_Z_inv(X)
+
+x = np.linspace(0, 1)
+z = np.linspace(-1, 1)
+
+
+fig, ax = plt.subplots()
+kw = dict(histtype='step', alpha=0.8, density=True)
+plt.hist(X, bins=100, ec="C0", **kw)
+plt.hist(Z, bins=100, ec="C1", **kw)
+plt.plot(x, 0*x + 1, '--C0', label='X')
+plt.plot(z, 3*(1-z**2)/4, '--C1', label='Z')
+ax.legend();
+```
+
+
 
 ## Sum of Independent Random Variables 
 
 The distribution of the sum $Z = X+Y$ of two independently distributed random variavles
-is the convolution $P_{X+Y} = P_X * P_Y$ of the distributions:
+is thus the convolution $P_{X+Y} = P_X * P_Y$ of the distributions:
 
 \begin{gather*}
-  P_{X+Y}(z) = \int_{-\infty}^{\infty}\!\!\!\d{x}\;P_X(x)P_Y(z-x).
+  P_{X+Y}(z) 
+  = \iint\d{x}\d{y}\;\delta(x + y - z)P_X(x)P_Y(y)
+  = \int_{-\infty}^{\infty}\!\!\!\d{x}\;P_X(x)P_Y(z-x).
 \end{gather*}
 
 :::{admonition} Example: Sum of Independent Normal Distributions
@@ -87,35 +188,19 @@ otherwise the resulting distribution might not be a multivariate normal distribu
 
 ## Product of Independent Random Variables
 
+:::{margin}
+Here do the $y$ integral by changing variables to $f = f(y) = xy$ so that $f$ appears
+directly in $\delta\bigl(f(y) - z\bigr)$.  The change of variables thus gives $\d{y} = \d{f}/\abs{f'(y)} = \d{y}/\abs{x}$.
+:::
 The [distribution of the
 product](https://en.wikipedia.org/wiki/Distribution_of_the_product_of_two_random_variables)
  $Z = XY$ of two independently distributed random variables is:
 
 \begin{gather*}
-  P_{XY}(z) = \int_{-\infty}^{\infty}\!\!\!\d{x}\frac{P_X(x)P_Y(z/x)}{\abs{x}}.
+  P_{XY}(z) 
+  = \iint\d{x}\d{y}\;\delta(xy - z)P_X(x)P_Y(y)
+  = \int_{-\infty}^{\infty}\!\!\!\d{x}\frac{P_X(x)P_Y(z/x)}{\abs{x}}.
 \end{gather*}
-
-For gaussian distributions with mean $\bar{\vect{x}}$
-
-\begin{gather*}
-  P(\delta\vect{x}=\vect{x}-\bar{\vect{x}}) \propto \exp\left(
-    \frac{-\delta\vect{x}^T\cdot\mat{\Sigma}^{-1}\cdot\delta\vect{x}}{2}
-  \right).
-\end{gather*}
-
-## Function of a Random Variable
-
-Let $z=f(x)$ be some function.  The variable $Z=f(X)$ has PDF
-
-\begin{align*}
-  P_Z(z) &= \int \delta\Bigl(z - f(x)\Bigr) P_X(x)\d{x},\\
-         &= \int \delta\Bigl(z - f\Bigr) P_X(x)
-         \overbrace{\left\lvert\diff{x}{f}\right\rvert}^{\abs{1/f'(x)}}\d{f}, 
-         \qquad f = f(x),    \\
-         &= \sum_{x | f(x)=z}\frac{P_X(x)}{\abs{f'(x)}},
-\end{align*}
-
-where the sum is over all independent solutions to $f(x) = z$.
 
 :::{admonition} Example: Square of a Normal Variable
 
@@ -215,22 +300,27 @@ $\chi^2_r$:
 \begin{align*}
   P_{\nu}(\chi^2) &= \Theta(\chi^2)\frac{(\chi^2)^{\nu/2-1}
   e^{-\chi^2/2}}{2^{\nu/2-1}\Gamma(\nu/2)}, 
-  & \mu &= \nu, \sigma &= 2\nu\\
+  & \mu &= \nu, & \sigma &= \sqrt{2\nu}\\
   P_{\nu}(\chi^2_r) &= \nu P_{\nu}(\chi^2) = \nu P_{\nu}(\nu\chi^2_r),
-  & \mu &= 1, \sigma &= 2\sqrt{\nu}.
+  & \mu &= 1, & \sigma &= \sqrt{2/\nu}.
 \end{align*}
 
 ```{code-cell} ipython3
-from scipy.stats import chi2
+from scipy.stats import chi2, norm
 
 chi2_rs = np.linspace(-0.1, 4, 100)
 fig, axs = plt.subplots(1, 2, figsize=(10, 3))
-for nu in [1, 2, 3, 4, 50, 100]:
+for nu in [1, 2, 3, 4, 20, 50, 100]:
     chi2s = chi2_rs * nu
-    axs[0].plot(chi2s, chi2.pdf(chi2s, df=nu), label=rf"$\nu={nu}$")
-    axs[1].plot(chi2_rs, nu*chi2.pdf(nu*chi2_rs, df=nu), label=rf"$\nu={nu}$")
-    mean_chi2, std_chi2 = chi2.stats(df=nu, moments='mv')
-    print(f"nu={nu}, chi^2 mean={mean_chi2}, std={std_chi2}")
+    l0, = axs[0].plot(chi2s, chi2.pdf(chi2s, df=nu), label=rf"$\nu={nu}$")
+    l1, = axs[1].plot(chi2_rs, nu*chi2.pdf(nu*chi2_rs, df=nu), label=rf"$\nu={nu}$")
+    axs[0].plot(chi2s, np.exp(-(chi2s - nu)**2/4/nu)/np.sqrt(4*np.pi*nu),
+                ':', c=l0.get_c())
+    sigma = np.sqrt(2/nu)
+    axs[1].plot(chi2_rs, np.exp(-(chi2_rs - 1)**2/2/sigma**2)/np.sqrt(2*np.pi*sigma**2),
+                ':', c=l1.get_c())
+    mean_chi2, var_chi2 = chi2.stats(df=nu, moments='mv')
+    print(f"nu={nu}, chi^2 mean={mean_chi2}, var={var_chi2}")
 
 axs[0].set(xlabel=r"$\chi^2$", ylabel=r"$P_{\nu}(\chi^2)$", 
            xlim=(-0.1, 20), ylim=(0, 0.6))
@@ -241,9 +331,32 @@ for ax in axs:
 ```
 
 These results indicate why it is important to work out the confidence intervals
-carefully.  If there are many degrees of freedom, then $\chi^2_r$ is tightly peaked
-about the mean value of $1$, but if you have limited data, then the distribution has
-some significant deviations.
+carefully.  If there are many degrees of freedom $\nu > 20$, then $\chi^2_r$ is tightly
+peaked with $\sigma = \sqrt{2/\nu}$ about the mean value of $1$ (dotted lines):
+
+\begin{gather*}
+  \lim_{\nu \rightarrow \infty}
+  P_\nu(\chi^2_r) \rightarrow 
+  \frac{e^{-(\chi^2_r - 1)^2/(4/\nu)}}{\sqrt{4\pi/\nu}}.
+\end{gather*}
+
+But, if you have limited data, then the distribution has some significant deviations and
+you should use the CDF of the actual $\chi^2$ distribution to compute your confidence intervals.
+
+### Why $\nu = N - M$?
+
+When performing an actual maximum likelihood analysis, the distribution of $\chi^2$
+after minimizing is a chi-square distribution with $\nu = N-M$ where there are $N$ data
+points and $M$ parameters in the model.  This comes from the fact that we don't compute
+$f(x_n, \vect{a})$ with $\vect{a}$ being the physical parameters as assumed in the model
+$y_n = f(x_n, \vect{a}) + e_n$, but rather, we compute $f(x_n, \bar{\vect{a}})$ where
+$\bar{\vect{a}}(\vect{e}) \neq \vect{a}$ maximizes the likelihood for a given set of
+data, and therefore, depends on $\vect{e}$.  This additional dependence reduces $\nu$
+from $N$ to $\nu = N-M$ as we now show.
+
+
+
+
 
 
 [sum or normally distributed random variables]: <https://en.wikipedia.org/wiki/Sum_of_normally_distributed_random_variables>
@@ -257,3 +370,4 @@ some significant deviations.
 [principal componant analysis]: <https://en.wikipedia.org/wiki/Principal_component_analysis>
 [reduced chi-square statistic]: <https://en.wikipedia.org/wiki/Reduced_chi-squared_statistic>
 [multivariate normal distribution]: <https://en.wikipedia.org/wiki/Multivariate_normal_distribution>
+[cumulative distribution function]: <https://en.wikipedia.org/wiki/Cumulative_distribution_function>

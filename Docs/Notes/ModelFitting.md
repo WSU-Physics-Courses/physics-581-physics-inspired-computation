@@ -68,7 +68,7 @@ The **model evidence** is also called the **marginal likelihood**.
 :::
 The denominator $p(\vect{y})$ is here is the **[model evidence]** and is generally
 regarded simply as a normalization factor to ensure that $\int p(a|\vect{y}) \d{a} =
-1$.  
+1$.
 
 This is what we can learn about the true value of $a$ from the measurements.  The
 resulting posterior distribution combines our prior knowledge -- what we know about $a$ before the
@@ -92,7 +92,7 @@ The model-fitting goals discussed at the end of [section
 
 ## Curve Fitting
 
-Expanding on this, consider a model $y = f(x, \vect{a})$ depending on several parameters
+Expanding on this, consider a model $y = f(x, \vect{a})$ depending on $M$ parameters
 $\vect{a}$, and a collection of measurements $\vect{y} = f(\vect{x}, \vect{a}) +
 \vect{e}$ where again $e_{n}$ are random variables with overall PDF $p_e(\vect{e})$.
 [Bayes' theorem] says the same thing:
@@ -153,31 +153,96 @@ $\rho(x) = -\ln N(x)$.
 :::
 
 Maximizing the posterior $p(\vect{a}|\vect{y})$ is then equivalent to maximizing the
-likelihood, which we express as minimizing the following **objective function**:
+likelihood, which we express as minimizing the following **objective function** $F(\vect{a})$:
 
 \begin{gather*}
   N(x) = e^{-\rho(x)}, \qquad
   \min_{\vect{a}} \underbrace{\sum_n \rho\Biggl(
     \frac{\overbrace{y_n - f(x_n, \vect{a})}^{e_n}}{\sigma_n}
-  \Biggr)}_{-\ln \mathcal{L}(\vect{a}|\vect{y}) + \sum_n\ln \sigma_n}.
+  \Biggr)}_{F(\vect{a}) = -\ln \mathcal{L}(\vect{a}|\vect{y}) + \sum_n\ln \sigma_n}.
+\end{gather*}
+
+At the minimum $\bar{\vect{a}}$, the objective function has zero gradient, and hence is
+approximately quadratic, described by the [Hessian matrix] $\mat{H}$:
+
+\begin{gather*}
+  F(\vect{a}) \approx \overbrace{F(\bar{\vect{a}})}^{F_0}
+  + \frac{(\vect{a} - \bar{\vect{a}})^T
+    \cdot \mat{H}
+    \cdot(\vect{a} - \bar{\vect{a}})}{2}, 
+  \qquad
+  [\mat{H}]_{ij} = \left.
+  \frac{\partial^2 F(\vect{a})}{\partial a_i \partial
+  a_j}\right|_{\vect{a} = \bar{\vect{a}}}.
 \end{gather*}
 
 If the errors are normal (gaussian), then $\rho(x) = -\ln N(x) = x^2/2$, and we recover
 the familiar approach of minimizing $\chi^2$, the sum of the square of the residuals: 
 
 \begin{gather*}
-  \frac{\chi^2}{2}
+  F(\vect{a}) = \frac{\chi^2(\vect{a})}{2}
   =
   \sum_n \rho\Biggl(
     \frac{y_n - f(x_n, \vect{a})}{\sigma_n}
   \Biggr)
   =
   \frac{1}{2}\sum_n \Biggl(
-    \frac{y_n - f(x_n, \vect{a}}{\sigma_n}
+    \frac{y_n - f(x_n, \vect{a})}{\sigma_n}
   \Biggr)^2. 
 \end{gather*}
 
-### Poisson Distribution (Incomplete)
+:::{margin}
+Note that the
+normalization factors contains the $\chi^2_0$ as a goodness-of-fit measure, but it is not
+completely trivial to extract:
+
+\begin{align*}
+  &\int e^{-F(\vect{a})}\d^{k}{\vect{a}}\\
+  &\approx \frac{e^{-F_0}}{\sqrt{\det(2\pi \mat{C})}}\\
+  &= \frac{e^{-\chi^2_0/2}}{\sqrt{\det(2\pi \mat{C})}},\\
+  &\int \mathcal{L}(\vect{a}|\vect{y}) \d^{k}\vect{a}\\
+  &\approx
+  (\textstyle\prod_n \sigma_n)
+  \int e^{-F(\vect{a})}\d^{k}{\vect{a}}\\
+  &= \frac{(\textstyle\prod_n \sigma_n) e^{-\chi^2_0/2}}{\sqrt{\det(2\pi \mat{C})}}.
+\end{align*}
+:::
+
+In this case, the [Hessian matrix] $\mat{H} = \mat{C}^{-1} = \mat{\Sigma}^{-1}$ is
+exactly the inverse of the [covariance matrix] $\mat{C}$, and the posterior distribution
+is approximately a [multivariate normal distribution] with mean $\bar{\vect{a}}$ and
+covariance matrix $\mat{C} = \mat{\Sigma} = \mat{H}^{-1}$ after normalizing
+
+\begin{align*}
+  p(\vect{a}|\vect{y}) &\propto 
+  \mathcal{L}(\vect{a}|\vect{y})
+  \propto e^{-F(\vect{a})}
+  \propto e^{-(\vect{a} - \bar{\vect{a}})^T \cdot \mat{C}^{-1}
+    \cdot (\vect{a} - \bar{\vect{a}})/2},\\
+  p(\vect{a}|\vect{y}) &=
+  \frac{\mathcal{L}(\vect{a}|\vect{y})}
+       {\int\mathcal{L}(\vect{a}|\vect{y})\d^{k}{\vect{a}}}
+  =
+  \frac{e^{-F(\vect{a})}}{\int e^{-F(\vect{a})}\d^{k}{\vect{a}}}\\
+  &\approx
+  \frac{
+    \exp\Bigl(
+      -\frac{1}{2}
+      (\vect{a} - \bar{\vect{a}})^T
+      \cdot\mat{C}^{-1}
+      \cdot(\vect{a} - \bar{\vect{a}})
+    \Bigr)
+  }{
+    \sqrt{\det{(2\pi\mat{C})}}
+  }
+\end{align*}
+
+where there are $M$ parameters $\vect{a} = (a_0, a_1, \dots, a_{M-1})$.
+
+::::{admonition} Poisson Distribution (Incomplete)
+:class: dropdown
+
+**Poisson Distribution (Incomplete)**
 
 As another example, supposed your data $y_n$ comes from counting (e.g. photons on a
 detector).  In this case, the errors are probably more appropriately described by a
@@ -195,6 +260,86 @@ The probability of measuring $k$ photons in the time $t$ is:
 \begin{gather*}
   p(k) = \frac{\lambda^{k}e^{-\lambda}}{k!}.
 \end{gather*}
+
+::::
+
+## Parameter Uncertainties (Covariance)
+
+A complete characterization of the posterior $p(\vect{a}:\vect{y})$ is usually provided
+through a large set of sample data $\{\vect{a}_n\}$ sampled with the appropriate
+probability from this distribution.  The goal of methods like Markov chain Monte
+Carlo ([MCMC]) is to generate such a distribution.
+
+Alternatively, the posterior might be known analytically.  This is the case if both the
+prior and likelihood are [multivariate normal distribution]s (i.e. if the model is linear
+and the errors are normally distributed):
+
+\begin{gather*}
+  p(\vect{a}|\vect{y}) = \frac{1}{\sqrt{\det{(2\pi\mat{\Sigma})}}}\exp\Bigl(
+    -\frac{1}{2}
+    (\vect{a} - \bar{\vect{a}})^T
+    \cdot\mat{\Sigma^{-1}}
+    \cdot(\vect{a} - \bar{\vect{a}})
+  \Bigr)
+\end{gather*}
+
+
+
+
+:::{sidebar} Warning: [Marginal Distributions}
+
+Even a complete collection of [marginal distributions] do not completely characterize a
+given multivariate distribution.  This idea is demonstrated through the
+[Datasaurus Dozen] or [Anscombosaurus] which demonstrate how different distributions can
+have the same statistics:
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Always visualize your data! (Thanks to <a href="https://twitter.com/AlbertoCairo?ref_src=twsrc%5Etfw">@albertocairo</a> for the artwork 😀) <a href="https://t.co/8D8sgLLqB5">pic.twitter.com/8D8sgLLqB5</a></p>&mdash; Justin Matejka (@JustinMatejka) <a href="https://twitter.com/JustinMatejka/status/770682771656368128?ref_src=twsrc%5Etfw">August 30, 2016</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+Topological data analysis provides an interesting set of tools for discovering patterns
+in data.  If you are interested in this, see [Math 529: Intro. to Computational
+Topology](http://www.math.wsu.edu/faculty/bkrishna/Math529.html) (offered Spring 2022,
+Tue+Thu 10:35-11:50 AM) taught by Bala Krishnamoorthy:
+
+<iframe width="100%" src="https://www.youtube.com/embed/1FLZTIQoVU8"
+title="YouTube video player" frameborder="0" allow="accelerometer; autoplay;
+clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+allowfullscreen></iframe>
+
+[datasaurus dozen]: <https://www.autodesk.com/research/publications/same-stats-different-graphs>
+[Anscombosaurus]: <https://twitter.com/maartenzam/status/770723795518812160>
+:::
+
+### Marginal Distributions
+
+Once one obtains the posterior distribution $p(\vect{a}|\vect{y})$, one needs to
+communicate this.  The first thing one might do is to look at the uniform [probability distribution]
+for each parameter:
+
+\begin{gather*}
+    p_{i}(a_i|\vect{y}) = \int p(\vect{a}|\vect{y}) \prod_{k\neq i} \d{a_k}.
+\end{gather*}
+
+This gives us an idea about how the parameter $a_{i}$ is distributed.  In particular,
+one can plot these distributions using a histogram, or one can present numerical values
+of various statistical features like:
+* the [mean], [median], or [mode], which act as a description of the "best fit"
+  parameter values;
+* the [standard deviation], which acts as a description of the uncertanties; and
+* the [skewness], [kurtosis], etc. which characterize how different the distribution is
+  from a [normal distrbution] (along with the differences between the [mean], [median], and [mode]).
+
+Pairwise distributions
+
+\begin{gather*}
+  p_{ij}(a_i, a_j|\vect{y}) = \int p(\vect{a}|\vect{y}) \prod_{k\neq i,j} \d{a_k}.
+\end{gather*}
+
+can also be easily visualized through a **corner plot** plot.
+
+
+
+https://en.wikipedia.org/wiki/Statistical_significance
+
 
 
 [sum or normally distributed random variables]: <https://en.wikipedia.org/wiki/Sum_of_normally_distributed_random_variables>
@@ -214,3 +359,14 @@ The probability of measuring $k$ photons in the time $t$ is:
 [model evidence]: <https://en.wikipedia.org/wiki/Marginal_likelihood>
 [maximum likelihood estimation]: <https://en.wikipedia.org/wiki/Maximum_likelihood_estimation>
 [Poisson distribution]: <https://en.wikipedia.org/wiki/Poisson_distribution>
+[mean]: <https://en.wikipedia.org/wiki/Expected_value>
+[median]: <https://en.wikipedia.org/wiki/Median>
+[mode]: <https://en.wikipedia.org/wiki/Mode_(statistics)>
+[standard deviation]: <https://en.wikipedia.org/wiki/Standard_deviation>
+[probability distribution]: <https://en.wikipedia.org/wiki/Probability_distribution>
+[skewness]: <https://en.wikipedia.org/wiki/Skewness>
+[kurtosis]: <https://en.wikipedia.org/wiki/Kurtosis>
+[marginal distributions]: <https://en.wikipedia.org/wiki/Marginal_distribution>
+
+[MCMC]: <https://en.wikipedia.org/wiki/Markov_chain_Monte_Carlo>
+[Hessian matrix]: <https://en.wikipedia.org/wiki/Hessian_matrix>
