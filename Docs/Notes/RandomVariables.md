@@ -286,7 +286,7 @@ Let $\tilde{e}_n = e_n/\sigma_n$.  We have the following PDFs:
                       = \sigma_n P_{e_n}(\sigma_n x) 
                       = \frac{e^{-x^2/2}}{\sqrt{2\pi}}\\
   P_{\tilde{e}_n^2}(x) &= \Theta(x) \frac{e^{-x/2}}{\sqrt{2\pi x}}\\
-  P_{\chi^2}(x) &= P_{\text{poisson}}(k;x/2) = \Theta(x) \frac{(x/2)^k e^{-x/2}}{k!}
+  P_{\nu, \chi^2}(x) &= P_{\text{poisson}}(k;x/2) = \Theta(x) \frac{(x/2)^k e^{-x/2}}{k!}
                   \qquad k = \frac{\nu}{2} - 1\\
                 &= \Theta(x)\frac{x^{\nu/2-1} e^{-x/2}}{2^{\nu/2-1}\Gamma(\nu/2)}.
 \end{align*}
@@ -345,6 +345,12 @@ you should use the CDF of the actual $\chi^2$ distribution to compute your confi
 
 ### Why $\nu = N - M$?
 
+:::{margin}
+Try proving this yourself.  The geometry discussed in {ref}`geometry-of-fitting` might
+help.  The basic idea is that, for any realization, $M$ of the errors can be eliminated
+by adjusting the parameters for the best fit, leaving $\nu = N-M$ independent errors
+which must be combined to get $P_{\nu}(\chi^2)$.
+:::
 When performing an actual maximum likelihood analysis, the distribution of $\chi^2$
 after minimizing is a chi-square distribution with $\nu = N-M$ where there are $N$ data
 points and $M$ parameters in the model.  This comes from the fact that we don't compute
@@ -352,11 +358,7 @@ $f(x_n, \vect{a})$ with $\vect{a}$ being the physical parameters as assumed in t
 $y_n = f(x_n, \vect{a}) + e_n$, but rather, we compute $f(x_n, \bar{\vect{a}})$ where
 $\bar{\vect{a}}(\vect{e}) \neq \vect{a}$ maximizes the likelihood for a given set of
 data, and therefore, depends on $\vect{e}$.  This additional dependence reduces $\nu$
-from $N$ to $\nu = N-M$ as we now show.
-
-
-
-
+from $N$ to $\nu = N-M$.
 
 
 [sum or normally distributed random variables]: <https://en.wikipedia.org/wiki/Sum_of_normally_distributed_random_variables>

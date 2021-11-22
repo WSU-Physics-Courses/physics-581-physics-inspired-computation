@@ -286,7 +286,7 @@ and the errors are normally distributed):
 
 
 
-:::{sidebar} Warning: [Marginal Distributions}
+:::{sidebar} Warning: [Marginal Distributions]
 
 Even a complete collection of [marginal distributions] do not completely characterize a
 given multivariate distribution.  This idea is demonstrated through the
@@ -339,6 +339,123 @@ can also be easily visualized through a **corner plot** plot.
 
 
 https://en.wikipedia.org/wiki/Statistical_significance
+
+
+(geometry-of-fitting)=
+# The Geometry of Data Fitting
+
+Data fitting can be visualized geometrically as follows.  Consider $N$ data points
+$\vect{y} = (y_{0}, y_{1}, \dots, y_{N-1})$ as a vector $\vect{y} \in \mathbb{R}^{N}$.
+A model with $M$ parameters $\vect{a}$ can now be though of as an $M$-dimensional
+surface in $\mathbb{R}^{N}$ as defined by the set of points $\vect{f}(\vect{a})$.  In
+the curve-fitting problem, for example:
+
+\begin{gather*}
+  [\vect{f}(\vect{a})]_{n} = f(x_n, \vect{a}).
+\end{gather*}
+
+The geometry of data fitting is 
+
+## Example: Three Points
+
+The geometry of fitting a two-parameter curve $y_n = f(x_n, \vect{a})$ to three data points
+$\vect{y}$ can be visualized in 3D.  Here we demonstrate two models, one linear, and
+another exponential.
+
+\begin{gather*}
+  \vect{y}_{\text{linear}} = a_0 \vect{x} + a_1, \qquad
+  \vect{y}_{\text{exponential}} = a_0 e^{a_1\vect{x}}
+\end{gather*}
+
+The linear model (middle green) gives a plane in the 3D space of points $\vect{y}$,
+while the exponential model (right, red) gives a curved surface with a singular point
+where $a_0=0$.  The data $\vect{y}$ is the orange point.  The best-fit problem reduces
+to finding the point on these surfaces which is closest to the data in terms of of the
+$L_2$ norm $\norm{\vect{y}}_2 \sqrt{\chi^2}$.  These solutions ate noted by black
+crosses.  In this picture, the vector from the best fit point to the data (orange line)
+is normal to the surface.
+
+```{code-cell} ipython3
+:tags: [hide-input, full-width]
+
+from myst_nb import glue
+
+from scipy.optimize import curve_fit
+
+from matplotlib.gridspec import GridSpec
+
+plt.close('all')
+rng = np.random.default_rng(seed=0)
+y = np.asarray([2, 1, 3])
+x = np.asarray([-1, 0, 1])
+
+Na = 10
+Nb = 12
+
+x_, a_, b_ = np.meshgrid(
+    x,
+    np.linspace(-0.3, 3, Na),
+    np.linspace(-0.3, 0.7, Nb),
+    indexing='ij', 
+    sparse=True)
+
+def f1(x, a0, a1):
+    return a0 + a1*x
+
+def f2(x, a0, a1):
+    return a0*np.exp(a1*x)
+    
+f1_ = f1(x_, a_, b_)
+f2_ = f2(x_, a_, b_)
+a1, C1 = curve_fit(f1, x, y)
+a2, C2 = curve_fit(f2, x, y, p0=[0, 3.5])
+
+cs = ['C1', 'C2', 'C3']
+
+fig = plt.figure(figsize=(12, 5))
+gs = GridSpec(1, 3, figure=fig, width_ratios=(1, 2, 2))
+
+axs = [fig.add_subplot(gs[0]), 
+       fig.add_subplot(gs[1], projection='3d'),
+       fig.add_subplot(gs[2], projection='3d')]
+
+_x = np.linspace(-1, 1)
+
+ax = axs[0]
+ax.plot(x, y, 'o', c=cs[0])
+ax.plot(x, f1(x, *a1), 'xk')
+ax.plot(x, f2(x, *a2), 'xk')
+ax.plot(_x, f1(_x, *a1), '-', c=cs[1])
+ax.plot(_x, f2(_x, *a2), '--', c=cs[2])
+
+axs[1].plot_surface(*f1_, color=cs[1])
+axs[2].plot_surface(*f2_, color=cs[2])
+
+axs[1].set(title=r"$\mathbf{y} = a_0 \mathbf{x} + a_1$")
+axs[2].set(title=r"$\mathbf{y} = a_0 e^{a_1\mathbf{x}}$")
+
+ax = axs[0]
+ax.grid(True)
+ax.set(xlabel='$x$', ylabel='$y$', aspect=1)
+
+for f, a, f_, ax in zip((f1, f2), (a1, a2), (f1_, f2_), axs[1:]):
+    y_ = f(x, *a)
+    ax.plot(*y_, 'x', c='k', alpha=1.0, zorder=100)
+    ax.plot(*y, 'o', c=cs[0], alpha=1.0, zorder=100)
+    ax.plot([y_[0], y[0]], [y_[1], y[1]], [y_[2], y[2]], ls='-', c=cs[0], alpha=1.0, zorder=100)
+    ax.set(xlabel='$y_0$', ylabel='$y_1$', zlabel='$y_2$')
+    ax.view_init(elev=2, azim=-80)
+    # Make the aspect ratio 1,1,1: see https://stackoverflow.com/a/64487277/1088938
+    ax.set_box_aspect(np.ptp(f_, axis=(1,2)))
+
+plt.tight_layout()
+```
+
+The geometry is the same with other norms, but the notion of distance and angles can
+change.  This same picture can be used with unequal errors by first scaling the data and
+functions $y_n \rightarrow y_n/\sigma_n$, $f(x, \vect{a}) \rightarrow f(x,\vect{a})/\sigma(x_n)$ where $\sigma(x_n) = \sigma_n$ is an appropriate function.  These
+factors of $\sigma_n$ can also just be absorbed into a redefined metric.
+
 
 
 
