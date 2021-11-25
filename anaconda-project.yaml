@@ -111,6 +111,7 @@ dependencies:
   - conda-forge::uncertainties
   - scipy
   - sympy
+  #- conda-forge::jupyter_console
 
   # Data analysis
   - pandas

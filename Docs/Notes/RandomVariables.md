@@ -42,15 +42,16 @@ A normally distributed variable with mean $\mu$ and variance $\sigma$ has PDF:
 \end{gather*}
 
 A [multivariate normal distribution] of $N$ variables with mean $\vect{\mu}$ and
-covariance matrix $\mat{\Sigma}$ has the following PDF:
+covariance matrix $\mat{C}$ has the following PDF:
 
 \begin{gather*}
   \newcommand{\mat}[1]{\boldsymbol{#1}}
   \newcommand{\vect}[1]{\boldsymbol{#1}}
-  P_X(\vect{x}) = \frac{1}{\sqrt{(2\pi)^N\det\mat{\Sigma}}} 
-  \exp\left(\frac{
-    (\vect{x} - \vect{\mu})^T\cdot\mat{\Sigma}^{-1}\cdot(\vect{x} - \vect{\mu})
-    }{2}\right).
+  P_X(\vect{x}) = \frac{1}{\sqrt{\det(2\pi\mat{C})}} 
+  \exp\Bigl(
+    -\frac{1}{2}
+    (\vect{x} - \vect{\mu})^T\mat{C}^{-1}(\vect{x} - \vect{\mu})
+  \Bigr).
 \end{gather*}
 :::
 
@@ -174,7 +175,7 @@ the following mean and covariance matrix
 
 \begin{gather*}
   \vect{\mu}_Z = \vect{\mu}_X + \vect{\mu}_Y, \qquad
-  \mat{\Sigma}_{Z} = \mat{\Sigma}_X + \mat{\Sigma}_Y.
+  \mat{C}_{Z} = \mat{C}_X + \mat{C}_Y.
 \end{gather*}
 
 If the spaces are not the same, then the vectors and matrices must be organized
@@ -267,6 +268,7 @@ ax.plot(z, P_Z(z), '-', scaley=False)
 ax.set(xlim=(-1, 30), xlabel="$z=x^2$", ylabel="$P_Z(z)$");
 ```
 
+(chi-squared-distribution)=
 ## Chi-Square Distribution
 
 As an extended example, consider the $\chi^2$ distribution for a linear model with normally
@@ -298,10 +300,10 @@ mean $\nu$ and variance $2\nu$.  From this, we can also compute the distribution
 $\chi^2_r$:
 
 \begin{align*}
-  P_{\nu}(\chi^2) &= \Theta(\chi^2)\frac{(\chi^2)^{\nu/2-1}
+  P_{\nu, \chi^2}(\chi^2) &= \Theta(\chi^2)\frac{(\chi^2)^{\nu/2-1}
   e^{-\chi^2/2}}{2^{\nu/2-1}\Gamma(\nu/2)}, 
   & \mu &= \nu, & \sigma &= \sqrt{2\nu}\\
-  P_{\nu}(\chi^2_r) &= \nu P_{\nu}(\chi^2) = \nu P_{\nu}(\nu\chi^2_r),
+  P_{\nu, \chi^2_r}(\chi^2_r) &= \nu P_{\nu}(\chi^2) = \nu P_{\nu, \chi^2}(\nu\chi^2_r),
   & \mu &= 1, & \sigma &= \sqrt{2/\nu}.
 \end{align*}
 
@@ -320,14 +322,13 @@ for nu in [1, 2, 3, 4, 20, 50, 100]:
     axs[1].plot(chi2_rs, np.exp(-(chi2_rs - 1)**2/2/sigma**2)/np.sqrt(2*np.pi*sigma**2),
                 ':', c=l1.get_c())
     mean_chi2, var_chi2 = chi2.stats(df=nu, moments='mv')
-    print(f"nu={nu}, chi^2 mean={mean_chi2}, var={var_chi2}")
+    print(f"𝜈={nu}, χ² mean={mean_chi2}, var={var_chi2}")
 
-axs[0].set(xlabel=r"$\chi^2$", ylabel=r"$P_{\nu}(\chi^2)$", 
+axs[0].set(xlabel=r"$\chi^2$", ylabel=r"$P_{\nu, \chi^2}(\chi^2)$", 
            xlim=(-0.1, 20), ylim=(0, 0.6))
-axs[1].set(xlabel=r"$\chi^2_r$", ylabel=r"$P_{\nu}(\chi^2_r)$")
+axs[1].set(xlabel=r"$\chi^2_r$", ylabel=r"$P_{\nu, \chi^2_r}(\chi^2_r)$")
 for ax in axs:
     ax.legend();
-
 ```
 
 These results indicate why it is important to work out the confidence intervals
@@ -336,7 +337,7 @@ peaked with $\sigma = \sqrt{2/\nu}$ about the mean value of $1$ (dotted lines):
 
 \begin{gather*}
   \lim_{\nu \rightarrow \infty}
-  P_\nu(\chi^2_r) \rightarrow 
+  P_{\nu, \chi^2_r}(\chi^2_r) \rightarrow 
   \frac{e^{-(\chi^2_r - 1)^2/(4/\nu)}}{\sqrt{4\pi/\nu}}.
 \end{gather*}
 
@@ -349,8 +350,9 @@ you should use the CDF of the actual $\chi^2$ distribution to compute your confi
 Try proving this yourself.  The geometry discussed in {ref}`geometry-of-fitting` might
 help.  The basic idea is that, for any realization, $M$ of the errors can be eliminated
 by adjusting the parameters for the best fit, leaving $\nu = N-M$ independent errors
-which must be combined to get $P_{\nu}(\chi^2)$.
+which must be combined to get $P_{\nu, \chi^2}(\chi^2)$.
 :::
+
 When performing an actual maximum likelihood analysis, the distribution of $\chi^2$
 after minimizing is a chi-square distribution with $\nu = N-M$ where there are $N$ data
 points and $M$ parameters in the model.  This comes from the fact that we don't compute
@@ -359,6 +361,103 @@ $y_n = f(x_n, \vect{a}) + e_n$, but rather, we compute $f(x_n, \bar{\vect{a}})$ 
 $\bar{\vect{a}}(\vect{e}) \neq \vect{a}$ maximizes the likelihood for a given set of
 data, and therefore, depends on $\vect{e}$.  This additional dependence reduces $\nu$
 from $N$ to $\nu = N-M$.
+
+(confidence-regions)=
+### Confidence Regions
+
+:::{margin}
+We use here what is sometimes called the "highest density confidence region" or
+[HDR], which is one of the possible credible regions.  Other options include central
+regions, or equal-tailed intervals (in 1D).  For a gaussian these are the same, but
+differ for multi-modal distributions especially where the [HDR] will be disjoint.
+:::
+Another reason that the chi square distribution is useful is to find confidence
+regions.  Give a set of $\nu$ random variables distributed as $P(\vect{a})$.
+The [HDR] confidence region with confidence level $p$ is the region where
+$P(\vect{a}) < P_{p}$ such that $100p\%$ of the results like within this region
+(i.e. $p=0.95$ corresponds to a $95\%$ confidence level):
+
+\begin{gather*}
+  \int_{\rlap{P(\vect{a}) < P_p}}\d^{\nu}\vect{a}\; P(\vect{a}) = p.
+\end{gather*}
+
+If $P(\vect{a})$ is a [multivariate normal distribution] with zero norm, then we can
+transform to $\chi^2$ which is distributed as above, solving the problem:
+
+\begin{gather*}
+  \int_{\rlap{P(\vect{a}) < P_p}}\d^{\nu}\vect{a}\; P(\vect{a}) = 
+  \int_0^{\chi^2_p}\d{\chi^2}P_{\nu, \chi^2}(\chi^2)
+  = p(\chi^2_p).
+\end{gather*}
+
+Hence, $p(\chi^2_p)$ is just the CDF of the chi square distribution with $\nu$ degrees of
+freedom, and the appropriate value of $\chi^2_p$ is the inverse of this, which can be
+computed using the {py:meth}`scipy.stats.rv_continuous.ppf` method of the
+{py:data}`scipy.stats.chi2` distribution:
+
+:::{margin}
+Here we get the $n\sigma$ confidence levels from a gaussian distribution:
+\begin{gather*}
+  p = \int_{-n}^{n}\d{x}\;\frac{e^{-x^2/2}}{\sqrt{2\pi}}.
+\end{gather*}
+:::
+
+```{code-cell} ipython3
+from scipy.stats import chi2, norm
+
+sigmas = [1, 2, 3, 4]
+ps = norm.cdf(np.sqrt(sigmas)) - norm.cdf(-np.sqrt(sigmas))
+print("Confidence levels:")
+print(", ".join([f"{100*_p:.2f}% ({_n}σ)" for _n, _p in zip(sigmas, ps)]))
+for nu in [1, 2, 3, 4]:
+    print(f"χ²ₚ (𝜈={nu}): {chi2.ppf(ps, df=nu).round(2)}")
+```
+
+Note that for $\nu = 1$ degree of freedom, the $n\sigma$ confidence regions correspond
+to $\chi^2_p = n$, but for higher dimensions, this is not the case.
+
+::::{toggle} Click to see details.
+
+To see that the distribution is equivalent to the chi squared distribution, note that
+
+\begin{gather*}
+  P(\vect{a}) = \frac{ 
+  \exp\Bigl(
+  -\frac{1}{2}\overbrace{\vect{a}^T\mat{C}^{-1}\vect{a}}^{\chi^2}
+  \Bigr)}{\sqrt{\det(2\pi \mat{C})}}
+  = 
+  \frac{
+  \exp\Bigl(
+  -\frac{1}{2}\vect{x}^T\vect{x}
+  \Bigr)}{\sqrt{\det(2\pi \mat{C})}}
+  = 
+  \frac{
+  \exp\Bigl(-\frac{\chi^2(\vect{a})}{2}\Bigr)}{\sqrt{\det(2\pi \mat{C})}}.
+\end{gather*}
+
+:::{margin}
+Obtain $\mat{L}$ using either a [Cholesky decomposition] or by diagonalizing $\mat{C} =
+\mat{U}\mat{D}\mat{U}^T$, $\mat{L} = \mat{U}\sqrt{\mat{D}}$.
+:::
+
+where we first transform to a new set of variables $\vect{x}$ such that $\vect{a} =
+\mat{L}\vect{x}$ where $\mat{C} = \mat{L}\mat{L}^T$.  Here each components of
+$\vect{x}$ is independently distributed with a zero-mean, $\sigma=1$ normal
+distribution.  We then transform to $\chi^2$ which is the sum of $\nu$ squares of such
+distributions, giving $P_{\nu, \chi^2}(\chi^2)$ as computed above.
+
+The normalization factor changes with a determinant of the Jacobian $\det\mat{L} =
+\sqrt{\det\mat{C}}$ so we have:
+
+\begin{gather*}
+  P(\vect{x}) = \sqrt{\det\mat{C}} P(\vect{a})
+  =
+  \frac{1}{\sqrt{(2\pi)^\nu}}
+  \exp\Bigl(
+  -\frac{1}{2}\vect{x}^T\vect{x}
+  \Bigr).
+\end{gather*}
+::::
 
 
 [sum or normally distributed random variables]: <https://en.wikipedia.org/wiki/Sum_of_normally_distributed_random_variables>
@@ -373,3 +472,5 @@ from $N$ to $\nu = N-M$.
 [reduced chi-square statistic]: <https://en.wikipedia.org/wiki/Reduced_chi-squared_statistic>
 [multivariate normal distribution]: <https://en.wikipedia.org/wiki/Multivariate_normal_distribution>
 [cumulative distribution function]: <https://en.wikipedia.org/wiki/Cumulative_distribution_function>
+[Cholesky decomposition]: <https://en.wikipedia.org/wiki/Cholesky_decomposition>
+[HDR]: <https://stats.stackexchange.com/questions/148439/what-is-a-highest-density-region-hdr>

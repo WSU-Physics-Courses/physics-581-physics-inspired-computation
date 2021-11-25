@@ -108,12 +108,11 @@ but the likelihood function is *slightly* more complicated
   = p_e\bigr(\vect{y} - f(\vect{x}, \vect{a})\bigr).
 \end{gather*}
 
-## Identically Independently Distributed (idd) Errors
+## Independently Distributed Errors
 
 The most common formulation follows from considering flat priors ($p(\vect{a})$ is
-independent of $\vect{a}$) and errors that are identically and independently
-distributed (iid) with a common probability distribution $N(x)$ where $x =
-e_n/\sigma_n$:
+independent of $\vect{a}$) and errors that are independently
+distributed with a common probability distribution $N(x)$ where $x = e_n/\sigma_n$:
 
 \begin{gather*}
   p_n(e_n) = \frac{N(e_n/\sigma_n)}{\sigma_n}, \qquad
@@ -265,7 +264,7 @@ The probability of measuring $k$ photons in the time $t$ is:
 
 ## Parameter Uncertainties (Covariance)
 
-A complete characterization of the posterior $p(\vect{a}:\vect{y})$ is usually provided
+A complete characterization of the posterior $p(\vect{a}|\vect{y})$ is usually provided
 through a large set of sample data $\{\vect{a}_n\}$ sampled with the appropriate
 probability from this distribution.  The goal of methods like Markov chain Monte
 Carlo ([MCMC]) is to generate such a distribution.
@@ -275,15 +274,13 @@ prior and likelihood are [multivariate normal distribution]s (i.e. if the model 
 and the errors are normally distributed):
 
 \begin{gather*}
-  p(\vect{a}|\vect{y}) = \frac{1}{\sqrt{\det{(2\pi\mat{\Sigma})}}}\exp\Bigl(
+  p(\vect{a}|\vect{y}) = \frac{1}{\sqrt{\det{(2\pi\mat{C})}}}\exp\Bigl(
     -\frac{1}{2}
     (\vect{a} - \bar{\vect{a}})^T
-    \cdot\mat{\Sigma^{-1}}
+    \cdot\mat{C}^{-1}
     \cdot(\vect{a} - \bar{\vect{a}})
-  \Bigr)
+  \Bigr).
 \end{gather*}
-
-
 
 
 :::{sidebar} Warning: [Marginal Distributions]
@@ -336,9 +333,133 @@ Pairwise distributions
 
 can also be easily visualized through a **corner plot** plot.
 
+#### The Gaussian Case
 
+If your posterior is well approximated by a [multivariate normal distribution], then one
+can analytically compute the marginal distributions.  The result is simply obtained by
+taking the appropriate columns and rows of the covariance matrix $\mat{C}$:
 
-https://en.wikipedia.org/wiki/Statistical_significance
+\begin{align*}
+  p_{i}(a_i|\vect{y}) &= 
+  \frac{1}{\sqrt{2\pi C_{ii}}}\exp\Bigl(
+    -\frac{(a_i - \bar{a}_i)^2}{2C_{ii}}
+  \Bigr), \\
+  p_{ij}(a_i, a_j|\vect{y})&=
+  \frac{1}{\sqrt{\det{(2\pi\mat{C}_{ij})}}}\exp\Bigl(
+    -\frac{1}{2}
+    \begin{pmatrix}
+      a_{i}-\bar{a}_{i} & a_{j} - \bar{a}_{j}
+    \end{pmatrix}
+    \cdot\mat{C}_{ij}^{-1}
+    \cdot
+    \begin{pmatrix}
+      a_{i}-\bar{a}_{i}\\
+      a_{j} - \bar{a}_{j}
+    \end{pmatrix}
+  \Bigr), \\
+  &\mat{C}_{ij} = \begin{pmatrix}
+    C_{ii} & C_{ij}\\
+    C_{ji} & C_{jj}
+  \end{pmatrix}.
+\end{align*}
+
+This generalizes to any set of parameters, but see the note below about how to interpret
+these regions.
+
+(confidence-levels)=
+## Confidence Levels
+
+When considering a marginal distribution of $\nu$ variables constructed this way, you
+should determine your confidence region by using the corresponding $\chi^2$ distribution
+with $\nu$ degrees of freedom $P_{\nu, \chi^2}(\chi^2)$.  Specifically, to find the
+confidence regions containing fraction $p$ of the total samples over $\nu$ variables,
+you should consider the region
+
+\begin{gather*}
+  \delta \vect{a}^T\mat{C}^{-1}\delta \vect{a} \leq \chi^2_p, \qquad
+  \int_0^{\chi^2_p}\d{\chi^2}\; P_{\nu,\chi^2}(\chi^2) = p
+\end{gather*}
+
+:::{margin}
+The relationship between $p_{n\sigma}$ and $n\sigma$ comes from the standard gaussian
+distribution of a single variable with zero mean and unit norm:
+
+\begin{gather*}
+  p_{n\sigma} = \int_{-n}^{n}\!\!\d{x}\; \frac{e^{-x^2/2}}{\sqrt{2\pi}} \\
+  = \int_{-n\sigma}^{n\sigma}\!\!\d{x}\; \frac{e^{-x^2/2\sigma^2}}{\sqrt{2\pi\sigma^2}}.
+\end{gather*}
+:::
+
+with $p_{1\sigma}=68.27\%$ for the $1\sigma$ confidence level, $p_{2\sigma}=84.27\%$,
+$p_{3\sigma} = 91.67\%$, $p_{4\sigma} = 95.45\%$, etc.
+
+The value $\chi^2_p$ can be computed with the {py:meth}`scipy.stats.rv_continuous.ppf`
+method of the {py:data}`scipy.stats.chi2` distribution.  For $\nu=1$ we have simply
+$\chi^2_p = n$ for the $n\sigma$ confidence level, but this differs for $\nu > 1$.  See
+{ref}`confidence-regions` for details.
+
+:::{important}
+
+There are several important caveats here:
+
+1. This only makes sense if your model is a good fit (i.e. $Q > 0.001$).  If your model
+   is not good, you can pretend like you do not know the distribution of your errors,
+   and scale the uncertainties by an overall factor to make $\chi^2_r = 1$.  This
+   corresponds to scaling:
+   
+   \begin{gather}
+     \sigma_n \rightarrow \sigma_n \sqrt{\chi^2_r}, \qquad
+     \mat{C} \rightarrow \chi^2_r\mat{C}.
+   \end{gather}
+
+   Another option: if your experimental errors are *independent and identically
+   distributed* (*iid*), you can use the *bootstrap method* discussed in section 15.6.2
+   of {cite:p}`PTVF:2007` to use the data itself to estimate the errors.
+
+2. If your distribution is not gaussian, then the relationship between the contours
+   $\chi^2_p$ and the confidence level $p$ will likely not be given by the chi square
+   distribution $P_{\nu, \chi^2}(\chi^2)$.  If the errors are small, one can still use this
+   approach as the posterior distribution will still be approximately quadratic close to
+   the maximum at $\vect{a} = \bar{\vect{a}}$:
+
+   \begin{gather*}
+     -2\ln \frac{p(\vect{a}|\vect{y})}{p(\bar{\vect{a}}|\vect{y})} 
+     \approx 
+     \delta\vect{a}^T
+     \mat{C}^{-1}
+     \delta\vect{a}, \qquad
+     \delta \vect{a}^T\mat{C}^{-1}\delta \vect{a} \leq \chi^2_p.
+   \end{gather*}
+
+   Hence, one can still approximate the confidence region from the levels of constant
+   $\chi^2_p$, but the relationship between this and $p$ must now be determined by a simple
+   Monte Carlo calculation as discussed in section 15.6.1 of {cite:p}`PTVF:2007`.
+
+3. If you want to explore a smaller set of $\tilde{\nu} < \nu$ parameters, you can
+   integrate the posterior distribution over the $\nu - \tilde{\nu}$ "nuisance"
+   parameters by just keeping the corresponding rows and columns of $\mat{C}$ in a new
+   smaller matrix $\tilde{\mat{C}}$ as discussed above for the cases $\tilde{nu} = 1$
+   and $\tilde{nu} = 2$.  This corresponds to minimizing over the nuisance
+   parameters. Note: do not extract the rows and columns of $\mat{C}^{-1}$ which would
+   correspond to holding the nuisance parameters fixed, which is almost certainly not
+   what you want to do.
+   
+   Once you have done this, you can explore the contour in this marginal
+   distribution corresponding to 
+   
+   \begin{gather*}
+     \Delta \tilde{\chi}^2(\tilde{\vect{a}})
+     \approx 
+     \delta\tilde{\vect{a}}^T
+     \tilde{\mat{C}}^{-1}
+     \delta\tilde{\vect{a}} < \chi^2_{p}
+   \end{gather*}
+   
+   where you must determine $\chi^2_{p}$ from the inverse (CDF) for the chi squared
+   distribution with $\tilde{\nu}$ degrees of freedom if your posterior is gaussian, or
+   using Monte Carlo.
+:::
+
 
 
 (geometry-of-fitting)=
@@ -349,7 +470,7 @@ $\vect{y} = (y_{0}, y_{1}, \dots, y_{N-1})$ as a vector $\vect{y} \in \mathbb{R}
 A model with $M$ parameters $\vect{a}$ can now be though of as an $M$-dimensional
 surface in $\mathbb{R}^{N}$ as defined by the set of points $\vect{f}(\vect{a})$.  In
 the curve-fitting problem, for example:
-
+s
 \begin{gather*}
   [\vect{f}(\vect{a})]_{n} = f(x_n, \vect{a}).
 \end{gather*}
@@ -455,6 +576,63 @@ The geometry is the same with other norms, but the notion of distance and angles
 change.  This same picture can be used with unequal errors by first scaling the data and
 functions $y_n \rightarrow y_n/\sigma_n$, $f(x, \vect{a}) \rightarrow f(x,\vect{a})/\sigma(x_n)$ where $\sigma(x_n) = \sigma_n$ is an appropriate function.  These
 factors of $\sigma_n$ can also just be absorbed into a redefined metric.
+
+
+
+## Complete Example
+Here we work through a complete example of a single parameter model $y_n = a + e_n$ with
+independent gaussian error distributions $p_n(e_n)$ with zero mean (unbiased) and
+variance $\sigma_n^2$.  This simplifies things, because the product of gaussian
+distributions is gaussian:
+
+\begin{gather*}
+  \exp\left(-\frac{(x-\mu_1)^2}{2\sigma_1^2}\right)
+  \exp\left(-\frac{(x-\mu_2)^2}{2\sigma_2^2}\right)
+  \propto
+  \exp\left(-\frac{(x - \mu_{12})^2}{2\sigma_{12}^2}\right)\\
+  \mu_{12} = \frac{\sigma_2^2\mu_1 + \sigma_1^2\mu_2}{\sigma_1^2 + \sigma_2^2}, \qquad
+  \frac{1}{\sigma_{12}^2} = \frac{1}{\sigma_1^2} + \frac{1}{\sigma_2^2}
+\end{gather*}
+
+We start with gaussian prior $p(a)$ with mean $a_p$ and variance $\sigma_p^2$.  After a
+measurement with value $y_0$, our posterior is:
+
+\begin{gather*}
+  p(a|y_0) \propto p_0(y_0 - a)p(a) \propto 
+\end{gather*}
+
+
+
+, after several measurements
+$y_0$, $y_1$, and $y_2$, we have posteriors
+
+\begin{align*}
+  p(a|y_0) &\propto p_0(y_0 - a)p(a),\\
+  p(a|y_0,y_1) &\propto p_1(y_0 - a)p(a|y_0) 
+  \propto p_1(y_1 - a)p_0(y_0 - a)p(a), \\
+  p(a|y_0,y_1,y_2) &\propto p_2(y_2-a)p_1(y_1 - a)p_0(y_0 - a)p(a).
+\end{align*}
+
+Note that the order in which we include the measurements makes no difference, as
+expected from the final form $p(a|\vect{y}) \propto p_e(\vect{y}-\vect{e})p(a)$.
+
+Consider a single measurement, but now with two error estimates $p_0(e_0)$ and an
+underestimated error $\tilde{p}_0(e_0) = \lambda p_0(\lambda e_0)$
+
+\begin{gather*}
+    p(a|y_0) = \frac{p_0(y_0 - a)p(a)}{\int p_0(y_0 - a)p(a)\d{a}}\\
+    \tilde{p}(a|y_0) = \frac{\tilde{p}_0(y_0 - a)p(a)}{\int \tilde{p}_0(y_0 - a)p(a)\d{a}}
+    = \frac{p_0(\lambda y_0 - \lambda a)p(a)}{\int p_0(\lambda y_0 -
+    \lambda a)p(a)\d{a}}.
+\end{gather*}
+
+These are **not** the same.  Consider a flat prior and normally distributed errors with
+correct $\sigma$ and incorrect $\tilde{\sigma} = \sigma / \lambda$:
+
+\begin{gather*}
+  p(a|y_0) = \frac{}{}e^{-(y_0-a)^2/2\sigma^2}
+\end{gather*}
+
 
 
 
