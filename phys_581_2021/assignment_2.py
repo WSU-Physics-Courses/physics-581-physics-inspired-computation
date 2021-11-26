@@ -22,15 +22,15 @@ def solve_ivp_abm(
     Arguments
     ---------
     Nt : int
-        Number of steps.  The time-step will be `np.diff(t_span)/Nt`.
+        Number of steps.  The time-step will be ``np.diff(t_span)/Nt``.
     ys : [y0, y1, y2, y3] or None
         First four steps to get the process started.  If not provided, then these
-        will be computed using `solve_ivp_rk4`.
+        will be computed using :func:`solve_ivp_rk4`.
     dys : [dy0, dy1, dy2, dy3] or None
         Derivatives at the corresponding previous steps.  Will be computed if not
         provided.
     dcp : array, None
-        Previous corrector-predictor difference (with factor pf 161/170).
+        Previous corrector-predictor difference (with a factor 161/170).
     save_memory : bool
         If `True`, then only keep the last four steps.
 
@@ -39,8 +39,8 @@ def solve_ivp_abm(
     res : OdeResult
        Bunch object.
 
-    The remaining arguments should match those of `scipy.integrate.solve_ivp`.  Don't
-    worry about optimizations like allowing `fun` to be `vectorized` etc.
+    The remaining arguments should match those of :py:func:`scipy.integrate.solve_ivp`.
+    Don't worry about optimizations like allowing `fun` to be `vectorized` etc.
 
     Notes
     -----
@@ -127,15 +127,15 @@ def solve_ivp_euler(fun, t_span, y0, Nt):
     Arguments
     ---------
     Nt : int
-       Number of steps.  The time-step will be `(t_span[1] - t_span[0])/Nt`.
+       Number of steps.  The time-step will be ``(t_span[1] - t_span[0])/Nt``.
 
     Returns
     -------
     res : OdeResult
        Bunch object.
 
-    The remaining arguments should match those of `scipy.integrate.solve_ivp`.  Don't
-    worry about optimizations like allowing `fun` to be `vectorized` etc.
+    The remaining arguments should match those of :py:func:`scipy.integrate.solve_ivp`.  
+    Don't worry about optimizations like allowing `fun` to be `vectorized` etc.
     """
     t0, t1 = t_span
     dt = (t1 - t0) / Nt
@@ -175,8 +175,8 @@ def solve_ivp_rk4(fun, t_span, y0, Nt):
     res : OdeResult
        Bunch object.
 
-    The remaining arguments should match those of `scipy.integrate.solve_ivp`.  Don't
-    worry about optimizations like allowing `fun` to be `vectorized` etc.
+    The remaining arguments should match those of :py:func:`scipy.integrate.solve_ivp`.
+    Don't worry about optimizations like allowing `fun` to be `vectorized` etc.
     """
     t0, t1 = t_span
     dt = (t1 - t0) / Nt
@@ -223,14 +223,14 @@ def step_rk45(fun, t, y, f, h):  # pragma: no cover
     Returns
     -------
     y_new : ndarray, shape (n,)
-        Solution at t + h computed with a higher accuracy.
+        Solution at `t + h` computed with a higher accuracy.
     f_new : ndarray, shape (n,)
         Derivative ``fun(t + h, y_new)``.
 
     References
     ----------
-    .. [1] E. Hairer, S. P. Norsett G. Wanner, "Solving Ordinary Differential
-           Equations I: Nonstiff Problems", Sec. II.4.
+    E. Hairer, S. P. Norsett G. Wanner, "Solving Ordinary Differential Equations I:
+    Nonstiff Problems", Sec. II.4. 
     """
     A = np.array(
         [

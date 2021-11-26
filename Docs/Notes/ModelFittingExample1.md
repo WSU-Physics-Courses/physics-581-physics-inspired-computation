@@ -420,87 +420,13 @@ between the central horizontal blue dotted lines.
 In other words, the single-parameter confidence regions include points outside of the
 2-parameter ellipse, hence must be smaller as shown to keep the same probability.
 
-We now show use 
+Here is the full corner plot using {py:func}`phys_581_2021.plotting.corner_plot`:
 
 ```{code-cell} ipython3
+from phys_581_2021.plotting import corner_plot
 
-a, C = curve_fit(
-    f=f, xdata=t, ydata=ydata, p0=a_exact, sigma=sigmas, absolute_sigma=True
-)
-a_ = Params(*correlated_values(a, covariance_mat=C))
-
-def corner_plot(a, C, labels=[r"\omega", r"c", r"A", r"\phi"], axs=None, fig=None):
-    if axs is None:
-        fig, axs = plt.subplots(len(a), len(a), sharex=True, sharey=True,
-            gridspec_kw=dict(hspace=0, wspace=0),
-            figsize=(10, 10))
-    for i, ai in enumerate(a):
-        for j, aj in enumerate(a):
-            if i <= j:
-                if fig is not None:
-                    axs[i, j].set(visible=False)
-                continue
-            ax = axs[i, j]
-            inds = np.array([[i, j]])
-            C2 = C[inds.T, inds]
-            sigma_i, sigma_j = np.sqrt([C[i,i], C[j,j]])
-            dai = np.linspace(-3*sigma_i, 3*sigma_i, 100)
-            daj = np.linspace(-3*sigma_j, 3*sigma_j, 102)
-            das = np.meshgrid(dai, daj, indexing='ij', sparse=False)
-            dchi2 = np.einsum('xij,yij,xy->ij', das, das, np.linalg.inv(C2))
-            ax.contour(daj, dai, dchi2,
-                       colors='C0', 
-                       linestyles=['-', '--', '-', '-'],
-                       levels=[1.0, 2.30, 2.71, 6.63]) 
-            
-            if j == 0:
-                ax.set(ylabel=rf"${labels[i]}$")
-            if i == len(a) - 1:
-                ax.set(xlabel=rf"${labels[j]}$")
-    return locals()
-    
-locals().update(corner_plot(a, C))
-dchi2.max()
-```
-
-Here we play with a multi-normal distribution.
-
-```{code-cell} ipython3
-import corner
-from scipy.stats import chi2
-
-rng = np.random.default_rng(seed=2)
-L = rng.random((2, 2))
-C = L @ L.T
-
-X = rng.multivariate_normal(mean=[0, 0], cov=C, size=10000)
-a0, a1 = X.T
-
-dchi2 = np.einsum('ai,aj,ij->a', X, X, np.linalg.inv(C))
-
-fig = plt.figure(figsize=(10,10))
-fig = corner.corner(X, fig=fig);
-axs = np.array([[fig.axes[0], fig.axes[1]],
-                [fig.axes[2], fig.axes[3]]])
-ax = axs[1,1]
-corner_plot([0, 0], C, axs=axs, labels=['a0', 'a1']);
-
-#ax.plot(chi2.ppf(0.683, df=1), 0, 1, color='y')
-```
-
-```{code-cell} ipython3
-chi2s = np.linspace(0, 10, 100)
-plt.hist(dchi2, bins=100, density=True);
-plt.plot(chi2s, chi2.pdf(chi2s, df=2))
-plt.vlines(chi2.ppf([0.683, 0.90, 0.9545, 0.99, 0.9973, 0.9999], df=2), 0, 1, color='y')
-```
-
-```{code-cell} ipython3
-chi2.ppf(0.683, df=2)   # Value of chi^2 with ellipse containing 68.3% of the data
-```
-
-```{code-cell} ipython3
-a
+fig, axs = corner_plot(
+    p_, labels=[r"$\omega$", r"$c$", r"$A$", r"$\phi$"]);
 ```
 
 ### Change of Variables

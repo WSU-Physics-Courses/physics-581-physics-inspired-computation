@@ -255,6 +255,8 @@ combination of {py:mod}`sphinx.ext.autodoc`, {py:mod}`sphinx.ext.autosummary`, a
        ".md": "myst-nb",
    }
    
+   autosummary_generate_overwrite = True
+
    # Add any paths that contain templates here, relative to this directory.
    templates_path = ['_templates']
    ```
@@ -263,18 +265,29 @@ combination of {py:mod}`sphinx.ext.autodoc`, {py:mod}`sphinx.ext.autosummary`, a
    `Docs/_templates/custom-module-template.rst` as [discussed
    here](https://stackoverflow.com/questions/2701998/sphinx-autodoc-is-not-automatic-enough/62613202#62613202)
    
-4. Insert a summary into your `index.md` file or similar.  We make an `Docs/api/index.rst`
-   file that has:
+   I added a few extra changes to drop the module from the names so that the TOC is
+   cleaner.
+   
+4. Insert a summary into your `index.md` file or similar.  Here I make an `Docs/api/index.rst`
+   file and put the generated docs in `Docs/api/_generated/` (see `:toctree: _generated`
+   below).
+   
+   :::{note}
+   You might want instead to remove `_generated` below and set
+   `autosummary_generate_overwrite = False` above.  This will generate the files in
+   `Docs/api/` but allow you to then modify them.  For real documentation, this is
+   probably a better strategy so you can customize things and make them look good.
+   :::
 
-   ````rest
+   ```rest
    API Reference
    =============
 
-   Documentation of the {py:mod}`phys_581_2021` module.
+   Documentation of the :py:mod:`phys_581_2021` module.
 
-
-   .. autosummary::
-      :toctree: ../_build/autosummary
+   <!-- https://github.com/sphinx-doc/sphinx/issues/7552 -->
+   #.. autosummary::   <!-- Cant do this or this example gets executed!!! -->
+      :toctree: _generated
       :recursive:
 
       phys_581_2021
@@ -287,7 +300,7 @@ See also:
 files](https://myst-parser.readthedocs.io/en/latest/sphinx/use.html#use-sphinx-ext-autodoc-in-markdown-files). 
   Unfortunately, one currently still needs to write docstrings in reStructuredText.  See
   [GitHub issue #228](https://github.com/executablebooks/MyST-Parser/issues/228). 
-  
+* [Unfortunate issues with autosummary in code blocks.](https://github.com/sphinx-doc/sphinx/issues/7552)
   
 ### Read The Docs
 

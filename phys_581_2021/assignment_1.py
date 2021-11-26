@@ -6,7 +6,7 @@ import numpy as np
 
 
 def play_monty_hall(switch=False):
-    """Return `True` if the contestant wins one round of Monty Hall.
+    """Return ``True`` if the contestant wins one round of Monty Hall.
 
     Arguments
     ---------
@@ -20,22 +20,21 @@ def play_monty_hall(switch=False):
 
 
 def lambertw(z, k=-1):
-    r"""Return `x` from the k'th branch of the LambertW function.
+    r"""Return :math:`w` from the `k`'th branch of the LambertW function.
 
-    $$
+    .. math::
       z = we^w, \qquad
       w = W_k(z).
-    $$
 
     Arguments
     ---------
     z : float, array_like
-        Argument.  You can assume that `z >= -exp(-1)` and that `z <= 0` if `k == -1`.
-        Raise `ValueError` otherwise (unless your code correctly extends W(z)
-        to the complex plane).
+        Argument.  You can assume that ``z >= -exp(-1)`` and that ``z <= 0`` if
+        ``k == -1``.  Raise ``ValueError`` otherwise (unless your code correctly extends
+        :math:`W(z)` to the complex plane).
     k : [0, -1]
-        Branch.  If `k == 0`, then return the solution $w>-1$, otherwise if `k == -1`,
-        return the solution $w < -1$
+        Branch.  If ``k == 0``, then return the solution :math:`w>-1`, otherwise if
+        ``k == -1``, return the solution :math:`w < -1`
 
     Notes
     -----
@@ -61,9 +60,8 @@ def lambertw(z, k=-1):
 def zeta(s):
     r"""Return the Riemann zeta function at `s`.
 
-    $$
+    .. math::
       \zeta(s) = \sum_{1}^{\infty} \frac{1}{n^{s}}.
-    $$
 
     Arguments
     ---------
@@ -75,7 +73,7 @@ def zeta(s):
 
 
 def derivative(f, x, d=0):
-    """Return the `d`th derivative of `f(x)` at `x`.
+    """Return the `d`'th derivative of `f(x)` at `x`.
 
     Arguments
     ---------

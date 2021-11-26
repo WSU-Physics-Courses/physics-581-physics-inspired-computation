@@ -104,8 +104,8 @@ bibtex_reference_style = "author_year"
 
 # autosummary settings
 autosummary_generate = True
-autosummary_generate_overwrite = True
-autosummary_imported_members = True
+autosummary_generate_overwrite = False
+autosummary_imported_members = False
 add_module_names = False
 
 # Add any paths that contain templates here, relative to this directory.

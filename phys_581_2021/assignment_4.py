@@ -6,6 +6,8 @@ from scipy.integrate import solve_ivp
 
 _DEFAULT_RNG = np.random.default_rng(0)
 
+__all__ = ["compute_lyapunov"]
+
 
 def compute_lyapunov(
     compute_dy_dt,
@@ -29,7 +31,7 @@ def compute_lyapunov(
     Arguments
     ---------
     compute_dy_dt : function
-        Return `dy_dt = compute_dy_dt(t, y)`.
+        Return ``dy_dt = compute_dy_dt(t, y)``.
     y0 : array-like
         Initial state.
     dy0 : array-like, None
