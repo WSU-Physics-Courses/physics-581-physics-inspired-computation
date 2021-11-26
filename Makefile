@@ -124,7 +124,9 @@ test:
 	$(ANACONDA_PROJECT) run test-1
 
 doc-server:
-	$(ANACONDA_PROJECT) run sphinx-autobuild --ignore '*/Docs/_build/*' Docs Docs/_build/html
+	$(ANACONDA_PROJECT) run sphinx-autobuild --re-ignore '_build|_generated' Docs Docs/_build/html
+
+#$(ANACONDA_PROJECT) run sphinx-autobuild --ignore '*/_build/*' --ignore '*/_generated/*' Docs Docs/_build/html
 
 
 .PHONY: clean realclean init cocalc-init sync doc-server help test

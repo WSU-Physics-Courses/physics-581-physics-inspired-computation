@@ -180,6 +180,115 @@ Substitutions can be used for parameters such as the `{{ class_room }} = ` {{ cl
 Jinja2 conventions.  I use these to factor common information which will ultimately be
 part of the templates.
 
+### [Sphinx]
+
+A couple of notes about using [sphinx] to build to documentation
+
+#### [sphobjinv]
+
+:::{margin}
+E.g. the link {py:mod}`sphinx.ext.intersphinx` here is generated with the code
+``{py:mod}`sphinx.ext.intersphinx` ``
+:::
+
+The  tool is useful for finding {py:mod}`sphinx.ext.intersphinx`
+links.  Install it with [pip] in `anaconda-project.yaml`, then use commands like the
+following to find the appropriate links:
+
+```bash
+sphobjinv suggest -t 90 -u https://www.sphinx-doc.org/objects.inv "intersphinx"
+sphobjinv suggest -t 90 -u https://docs.scipy.org/doc/scipy/reference/objects.inv "least_squares"
+```
+
+Once you find the appropriate links, you should add the site to your
+`conf.py` file along with loading the extension:
+
+```python
+# Docs/conf.py
+...
+extensions = [
+  ...
+  "sphinx.ext.intersphinx",
+  ...
+]
+...
+intersphinx_mapping = {
+    "Python 3": ("https://docs.python.org/3", None),
+    "matplotlib [stable]": ("https://matplotlib.org/stable/", None),
+    "numpy [stable]": ("https://numpy.org/doc/stable/", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/", None),
+    "sphinx": ("https://www.sphinx-doc.org/", None),
+}
+```
+  
+#### API Documentation
+
+API documentation for the {py:mod}`phys_581_2021` package can be generated using a
+combination of {py:mod}`sphinx.ext.autodoc`, {py:mod}`sphinx.ext.autosummary`, and
+{py:mod}`sphinx.ext.napolean`.  Here we follow these approaches:
+
+* https://jupyterbook.org/advanced/developers.html
+* https://stackoverflow.com/questions/2701998
+
+1. Document your code with [reStructureText] using the [NumPy docstring standard].
+2. Prepare your `conf.py` file with at least the following
+
+   ```python
+   # Docs/conf.py
+   import mmf_setup
+
+   mmf_setup.set_path()  # So that we can import phis_581_2021
+
+   extensions = [
+       "sphinx.ext.autodoc",
+       "sphinx.ext.autosummary",
+       "sphinx.ext.viewcode",
+       "sphinx.ext.napoleon",
+       "sphinxcontrib.zopeext.autointerface",
+   ]
+   
+   # Make sure that .rst comes first or autosummary will fail.  See
+   # https://github.com/sphinx-doc/sphinx/issues/9891
+   source_suffix = {  # As of 3.7, dicts are ordered.
+       ".rst": "restructuredtext",  # Make sure this is first!
+       ".myst": "myst-nb",
+       ".md": "myst-nb",
+   }
+   
+   # Add any paths that contain templates here, relative to this directory.
+   templates_path = ['_templates']
+   ```
+   
+3. Update the files `Docs/_templates/custom-class-template.rst` and
+   `Docs/_templates/custom-module-template.rst` as [discussed
+   here](https://stackoverflow.com/questions/2701998/sphinx-autodoc-is-not-automatic-enough/62613202#62613202)
+   
+4. Insert a summary into your `index.md` file or similar.  We make an `Docs/api/index.rst`
+   file that has:
+
+   ````rest
+   API Reference
+   =============
+
+   Documentation of the {py:mod}`phys_581_2021` module.
+
+
+   .. autosummary::
+      :toctree: ../_build/autosummary
+      :recursive:
+
+      phys_581_2021
+   ```
+
+
+See also:
+
+* See: [Use `sphinx.ext.autodoc` in Markdown
+files](https://myst-parser.readthedocs.io/en/latest/sphinx/use.html#use-sphinx-ext-autodoc-in-markdown-files). 
+  Unfortunately, one currently still needs to write docstrings in reStructuredText.  See
+  [GitHub issue #228](https://github.com/executablebooks/MyST-Parser/issues/228). 
+  
+  
 ### Read The Docs
 
 The documents are hosted at [Read the
@@ -269,7 +378,7 @@ getting errors when trying to execute code.
   you will get `WARNING: could not find bibtex key ...` warnings.  This should look
   something like:
   
-  ````myst
+  ````markdown
   ```{bibliography}
   :style: alpha
   ```
@@ -279,7 +388,7 @@ getting errors when trying to execute code.
   metadata may be filtered out by [Jupytext].  Start your [MyST] notebooks with least
   the following to ensure you have this:
   
-  ```myst
+  ```markdown
   ---
   execution:
     timeout: 120
@@ -546,6 +655,9 @@ details.
 
 
 <!-- Links -->
+[sphinx]: <https://www.sphinx-doc.org/>
+[sphinx.ext.autodoc]: <https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html> "Sphinx autodoc extension"
+[sphinx.ext.autosummary]: <https://www.sphinx-doc.org/en/master/usage/extensions/autosummary.html>
 [CoCalc]: <https://cocalc.com> "CoCalc: Collaborative Calculation and Data Science"
 [Conda]: <https://docs.conda.io/en/latest/> "Conda: Package, dependency and environment management for any language—Python, R, Ruby, Lua, Scala, Java, JavaScript, C/ C++, FORTRAN, and more."
 [Fil]: <https://pythonspeed.com/products/filmemoryprofiler/> "The Fil memory profiler for Python"
@@ -579,7 +691,9 @@ details.
 [hg-git]: <https://hg-git.github.io> "The Hg-Git mercurial plugin"
 [pytest]: <https://docs.pytest.org> "pytest"
 [venv]: <https://docs.python.org/3/library/venv.html> "Creation of virtual environments"
-
+[pip]: <https://pip.pypa.io/en/stable/> "the package installer for Python"
+[sphobjinv]: <https://github.com/bskinn/sphobjinv> "Manipulate and inspect Sphinx objects.inv files"
+[NumPy docstring standard]: <https://numpydoc.readthedocs.io/en/latest/format.html#docstring-standard>
 [WSU Courses CoCalc project]: <https://cocalc.com/projects/c31d20a3-b0af-4bf7-a951-aa93a64395f6>
 
 <!-- Fall 2021 links -->

@@ -19,6 +19,7 @@ Syllabus
 Syllabus_Prerequisites
 Reading
 Assignments
+api/index
 ```
 
 ```{toctree}

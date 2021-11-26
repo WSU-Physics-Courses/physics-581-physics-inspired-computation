@@ -148,7 +148,7 @@ There are still a few "Gotcha"s here which need to be carefully addressed:
     The following error is obtained:
     
     ```python
-    res = solve_ivp(fun, t_span=(t0, tf), y0=y0)
+    >>> res = solve_ivp(fun, t_span=(t0, tf), y0=y0)
     ...
     ValueError: `y0` must be 1-dimensional.
     ```
@@ -165,7 +165,7 @@ There are still a few "Gotcha"s here which need to be carefully addressed:
     
     ```python
     ...
-    ax.plot(res.t, res.y)
+    >>> ax.plot(res.t, res.y)
     ...
     ValueError: x and y must have same first dimension, but have shapes (100,) and (1, 100)
     ```

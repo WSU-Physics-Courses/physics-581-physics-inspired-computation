@@ -13,6 +13,10 @@
 import os.path
 import subprocess
 
+import mmf_setup
+
+mmf_setup.set_path()
+
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
@@ -38,13 +42,14 @@ release = "0.1"
 extensions = [
     "myst_nb",
     "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.viewcode",
     "sphinx.ext.doctest",
     "sphinx.ext.intersphinx",
     "sphinx.ext.coverage",
     "sphinx.ext.mathjax",
     "sphinx.ext.ifconfig",
-    "sphinx.ext.viewcode",
-    "sphinx.ext.napoleon",
     "sphinx.ext.todo",
     "sphinxcontrib.zopeext.autointerface",
     "matplotlib.sphinxext.plot_directive",
@@ -59,10 +64,13 @@ extensions = [
     # "recommonmark",
 ]
 
-source_suffix = {
-    # '.ipynb': 'myst-nb',  # Ignore notebooks.
+# Make sure that .rst comes first or autosummary will fail.  See
+# https://github.com/sphinx-doc/sphinx/issues/9891
+source_suffix = {  # As of 3.7, dicts are ordered.
+    ".rst": "restructuredtext",  # Make sure this is first!
     ".myst": "myst-nb",
     ".md": "myst-nb",
+    # '.ipynb': 'myst-nb',  # Ignore notebooks.  Does not work.  See below.
 }
 
 # https://myst-parser.readthedocs.io/en/latest/using/syntax-optional.html
@@ -93,6 +101,12 @@ bibtex_bibfiles = [
 ]
 
 bibtex_reference_style = "author_year"
+
+# autosummary settings
+autosummary_generate = True
+autosummary_generate_overwrite = True
+autosummary_imported_members = True
+add_module_names = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -139,6 +153,7 @@ intersphinx_mapping = {
     "matplotlib [stable]": ("https://matplotlib.org/stable/", None),
     "numpy [stable]": ("https://numpy.org/doc/stable/", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/", None),
+    "sphinx": ("https://www.sphinx-doc.org/", None),
 }
 
 # Napoleon settings

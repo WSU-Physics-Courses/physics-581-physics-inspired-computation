@@ -135,6 +135,7 @@ dependencies:
   - pandoc
   - jupytext
   - conda-forge::myst-nb
+  - conda-forge::myst-parser
   - conda-forge::sphinx-panels
   - conda-forge::sphinx-book-theme
   - conda-forge::sphinx-autobuild
