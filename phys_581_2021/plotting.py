@@ -55,7 +55,7 @@ def corner_plot(
         labels = getattr(a, "_fields", [f"$a_{_n}$" for _n in range(Na)])
 
     sigmas = np.asarray(sigmas)
-    sigma_max = max(sigmas)
+    sigma_max = 1.5 * max(sigmas)
     if levels is None:
         q = sp.stats.norm.cdf(sigmas) - sp.stats.norm.cdf(-sigmas)
         levels = sp.stats.chi2.ppf(q, df=2)
@@ -64,7 +64,11 @@ def corner_plot(
         if fig is None:
             fig = plt.figure(figsize=(10, 10))
         axs = fig.subplots(
-            Na, Na, sharex="col", sharey="row", gridspec_kw=dict(hspace=0, wspace=0),
+            Na,
+            Na,
+            sharex="col",
+            sharey="row",
+            gridspec_kw=dict(hspace=0, wspace=0),
         )
 
     if contour_kw is None:
@@ -85,7 +89,11 @@ def corner_plot(
             das = np.meshgrid(dai, daj, indexing="ij", sparse=False)
             dchi2 = np.einsum("xij,yij,xy->ij", das, das, np.linalg.inv(C2))
             ax.contour(
-                daj, dai, dchi2, levels=levels, **contour_kw,
+                a[j] + daj,
+                a[i] + dai,
+                dchi2,
+                levels=levels,
+                **contour_kw,
             )
 
             if j == 0:

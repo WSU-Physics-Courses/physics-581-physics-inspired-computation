@@ -77,7 +77,8 @@ from uncertainties import correlated_values, unumpy as unp
 from scipy.optimize import least_squares
 from scipy.stats import chi2
 
-Nt = 7
+Nt = 12
+#Nt = 100
 t_max = 10.0
 
 # Exact parameter values
@@ -144,7 +145,7 @@ nu = len(r) - len(p)
 chi2_r = np.sum(abs(r)**2) / nu
 Q = 1 - chi2.cdf(chi2_r*nu, df=nu)
 
-Latex(rf"\chi^2_r = {chi2_r:.2g}, \qquad Q = {Q:.2g}")
+Latex(rf"$\chi^2_r = {chi2_r:.2g}, \qquad Q = {Q:.2g}$")
 ```
 
 Here we have used the {ref}`chi-squared-distribution` $P_{\nu,\chi^2}(\chi^2)$ to calculate the
@@ -193,25 +194,27 @@ from myst_nb import glue
 # Generate actual distribution of chi2_r using MC
 from functools import partial
 
-def sample_chi2_r():
+def get_chi2_r(ydata=None, random=rng.normal):
     """Return chi2_r from a sample experiment and fit."""
     global y, sigmas, a_exact
-    fun = partial(get_residuals, ydata=rng.normal(loc=y, scale=sigmas))
-    res = least_squares(fun=fun, x0=a_exact, **kw)
+    if ydata is None:
+        ydata = random(loc=y, scale=sigmas)
+    fun = partial(get_residuals, ydata=ydata)
+    res = least_squares(fun=fun, x0=a_exact, jac='cs')
     p = Params(*res.x)
     chi2_r = sum(abs(fun(p))**2) / nu
     return chi2_r
 
 
 Ns = 2000  # number of samples
-chi2_rs = [sample_chi2_r() for n in range(Ns)]
+chi2_rs = [get_chi2_r(random=rng.normal) for n in range(Ns)]
 
-_chi2_r = np.linspace(0, 4, 500)
+_chi2_r = np.linspace(0, 3, 500)
 _i = np.where(_chi2_r >= chi2_r)[0][0]
 fig, ax = plt.subplots()
-ax.plot(_chi2_r, nu*chi2.pdf(nu*_chi2_r, df=nu), "-C0", label=fr"PDF ($\nu={nu-1}$)")
-ax.plot(_chi2_r, nu*chi2.pdf(nu*_chi2_r, df=nu-1), ":C0", label=rf"$\nu={nu-1}$")
-ax.plot(_chi2_r, nu*chi2.pdf(nu*_chi2_r, df=nu+1), ":C0", label=rf"$\nu={nu+1}$")
+ax.plot(_chi2_r, nu*chi2.pdf(nu*_chi2_r, df=nu), "-C0", label=rf"PDF ($\nu={nu}$)")
+ax.plot(_chi2_r, nu*chi2.pdf(nu*_chi2_r, df=nu-1), ":C0", label=rf"$\nu={nu}\pm 1$")
+ax.plot(_chi2_r, nu*chi2.pdf(nu*_chi2_r, df=nu+1), ":C0")
 ax.plot(_chi2_r, chi2.cdf(nu*_chi2_r, df=nu), "--C1", label="CDF")
 kw = dict(bins=50, histtype='step', alpha=0.8, density=True)
 ax.hist(chi2_rs, ec="C2", label=f"{Ns} samples", **kw)
@@ -219,7 +222,6 @@ ax.fill_between(_chi2_r[_i:], nu*chi2.pdf(nu*_chi2_r[_i:], df=nu), fc="C0")
 ax.axvline([chi2_r], ls=":", c="y")
 ax.axhline([1-Q], ls=":", c="y")
 ax.set(xlim=(0, 4),
-       ylim=(0, 1.1),
        xlabel=r"$\chi^2_r=\chi^2/\nu$", 
        title=fr"Distribution of $\chi^2_r$ with $\nu={nu} = {Nt}-{len(p)}$ degrees of freedom")
 ax.legend();
@@ -388,19 +390,19 @@ dchi2 = np.einsum('ij,ixy,jxy->xy',
                    np.linalg.inv(Cij), dws_phis, dws_phis)
 
 # Use a normal distribution to compute the confidence levels
-sigmas = np.array([1, 2, 3, 4])
-ps = norm.cdf(sigmas) - norm.cdf(-sigmas)
+sigmas_ = np.array([1, 2, 3, 4])
+ps = norm.cdf(sigmas_) - norm.cdf(-sigmas_)
 
 # Now use chi2 distribution to get the corresponding contours
 levels = chi2.ppf(ps, df=2)
 fig, ax = plt.subplots(figsize=(10, 6))
 _cs = ax.contour(ws, phis, dchi2, levels=levels, cmap="winter")
 fmt = dict([(_l, fr"${_n}\sigma$")
-            for _l, _n, _p in zip(levels, sigmas, ps)])
+            for _l, _n, _p in zip(levels, sigmas_, ps)])
 
 # Draw single-parameter confidence limits to show that
 # they are smaller.
-for _n, _sigma in enumerate(sigmas):
+for _n, _sigma in enumerate(sigmas_):
     kw = dict(c=_cs.collections[_n].get_edgecolor(), 
               alpha=0.5, zorder=-100)
     for _s in [1, -1]:
@@ -444,7 +446,6 @@ of the peak $t_0$:
 \end{gather*}
 
 ```{code-cell} ipython3
-
 # make sure t0_ is positive and small by making phi0_ between -2pi and 0
 phi0_ = phi_ % (2*np.pi) - 2*np.pi
 t0_ = - phi0_ / w_
@@ -465,11 +466,11 @@ dchi2 = np.einsum('ij,ixy,jxy->xy',
 fig, ax = plt.subplots(figsize=(10, 6))
 _cs = ax.contour(ws, t0s, dchi2, levels=levels, cmap="winter")
 fmt = dict([(_l, fr"${_n}\sigma$")
-            for _l, _n, _p in zip(levels, sigmas, ps)])
+            for _l, _n, _p in zip(levels, sigmas_, ps)])
 
 # Draw single-parameter confidence limits to show that
 # they are smaller.
-for _n, _sigma in enumerate(sigmas):
+for _n, _sigma in enumerate(sigmas_):
     kw = dict(c=_cs.collections[_n].get_edgecolor(), 
               alpha=0.5, zorder=-100)
     for _s in [1, -1]:
@@ -479,9 +480,231 @@ ax.clabel(_cs, _cs.levels, inline=True, fmt=fmt, fontsize=10)
 ax.set(xlabel="$\omega$", ylabel="$t_0$");
 ```
 
+## Non-Gaussian Errors
 
+We now repeat the analysis, but with non-gaussian errors.  Instead, we use the [Gumbel
+distribution]:
 
+\begin{gather*}
+  P_n(y_n) = \frac{1}{\sigma_n} e^{-z-e^{-z}}, \qquad
+  z = \frac{y_n - f(x_n, \vect{a})}{\sigma_n}.
+\end{gather*}
 
+If we consider the normalized errors $\tilde{e}_n$, they are distributed as:
+
+\begin{gather*}
+  \tilde{e}_n = \frac{y_n - f(x_n, \bar{\vect{a}})}{\sigma_n}, \qquad
+  P_n(\tilde{e}_n) = e^{-\tilde{e}_n-e^{-\tilde{e}_n}}.
+\end{gather*}
+
+The log-likelihood will be a sum of
+
+We can use this to generate the various simulated $P_{\nu}(\chi^2)$ distributions for
+Gumbel distributed errors.
+
+```{code-cell} ipython3
+en = np.linspace(-3, 10, 100)
+plt.plot(en, en + np.exp(-en))
+```
+
+```{code-cell} ipython3
+from scipy.interpolate import InterpolatedUnivariateSpline, UnivariateSpline
+
+def get_cdf_ppf(samples=None):
+    """Return interpolated cdf and ppf functions.
+
+    Results
+    -------
+    cdf : function
+        Cumulative distribution function `q=cdf(chi2_r)`.
+    ppf : function
+        Percent point function (inverse of `cdf`).
+    """
+    Ns = len(samples)
+    ps = np.linspace(0, 1, Ns)
+    x = sorted(samples)
+    cdf = InterpolatedUnivariateSpline(x, ps, k=1, ext='const')
+    ppf = InterpolatedUnivariateSpline(ps, x, k=1, ext='const')
+    return cdf, ppf
+
+def get_chi2_cdf_ppf(nu=1, random=rng.normal, Ns=10000):
+    """Return `(cdf, pdf, samples)` for the chi2 distribution.
+    
+    Arguments
+    ---------
+    nu : int
+        Degrees of freedom.
+    random : function
+        Random number generator for errors.
+    Ns : int
+        Number of samples.
+    """
+    en = random(size=(Ns, nu))
+    chi2 = (en**2).sum(axis=-1)
+    cdf, ppf = get_cdf_ppf(chi2)
+    return cdf, ppf, chi2
+```
+
+```{code-cell} ipython3
+:tags: [hide-input]
+
+import scipy.stats
+sp = scipy
+
+chi2r_ = np.linspace(0, 4, 100)
+
+hist_kw = dict(bins=np.linspace(0, 4, 100), histtype='step',
+               alpha=0.8, density=True)
+fig, axs = plt.subplots(1, 2, figsize=(10, 4))
+for ax, label, random in zip(axs, 
+                             ["normal", "gumbel"],
+                             [rng.normal, rng.gumbel]):
+    for _n, nu in enumerate([1, 2, 3, 10, 50]):
+        cdf, ppf, chi2r_samples = get_chi2_cdf_ppf(nu=nu, random=random)
+        chi2r_samples /= nu
+        c = f"C{_n}"
+        l, = ax.plot(chi2r_, cdf(nu*chi2r_), 
+                     "--", lw=1, c=c, label=fr"CDF $\nu={nu}$")
+        if label == "normal":
+            ax.plot(chi2r_, nu*sp.stats.chi2.pdf(nu*chi2r_, df=nu), 
+                    ls=":", c=c)
+            ax.plot(chi2r_, sp.stats.chi2.cdf(nu*chi2r_, df=nu), 
+                    ls=":", c=c)
+            ax.set(xlim=(0, 2))
+        else:
+            ax.set(xlim=(0, 4))
+        ax.hist(chi2r_samples, ec=c, **hist_kw)
+    ax.set(title=rf"$\chi^2_r$ distribution for {label} errors")
+    ax.set(ylim=(0, 2), xlabel=r"$\chi^2_r$")
+    ax.legend(loc='upper right')
+    
+plt.tight_layout()
+```
+
+On the left we show the CDF and PDF histogram for $\chi^2_r$ generated from a sample of
+random numbers for a standard normal distribution, comparing with the analytic forms
+(dotted lines).  On the right we use the same method to compute the CDF for the standard
+[Gumbel distribution].
+
+We now generate experimental data and proceed with an analysis:
+
+```{code-cell} ipython3
+# Randomly generated data...
+# An "Experiment" with non-gaussian errors.
+rng = np.random.default_rng(seed=2)
+ydata = rng.gumbel(loc=y, scale=sigmas)
+
+fig, ax = plt.subplots(figsize=(10, 5))
+ax.errorbar(t, ydata, yerr=sigmas, fmt="C0.", ecolor="C1", label="data")
+ax.plot(ts, f(ts, *a_exact), "-C2", label="exact")
+ax.set(xlabel="$t$", ylabel="$f(t)$")
+ax.legend();
+```
+
+### Chi Square Fit
+
+```{code-cell} ipython3
+res = least_squares(fun=partial(get_residuals, ydata=ydata),
+                    x0=a_exact, jac='cs')
+p = Params(*res.x)
+C = np.linalg.inv(res.jac.T @ res.jac)
+r = get_residuals(p)
+nu = len(r) - len(p)
+chi2_r = np.sum(abs(r)**2) / nu
+Q_wrong = 1 - sp.stats.chi2.cdf(chi2_r*nu, df=nu)
+
+cdf_gumbel, pdf_gumbel, chi2s_gumbel = get_chi2_cdf_ppf(nu=nu, random=rng.gumbel)
+Q = 1 - cdf_gumbel(chi2_r*nu)
+
+Latex(r", \qquad ".join([
+    rf"$\chi^2_r = {chi2_r:.2g}",
+    rf"Q = {Q:.2g}",
+    rf"Q_{{\mathrm{{wrong}}}} = {Q_wrong:.2g}$"]))
+```
+
+With the non-gaussian errors, estimating the $Q$ value with the chi squared distribution
+gives a very wrong interpretation about the quality of the fit.  Instead, we must use
+the corresponding CDF for our Gumbel-distributed errors.  To obtain the confidence
+region with confidence level $p$, we must find the value of $\chi^2_p$ where:
+
+\begin{gather*}
+  \int_0^{\chi^2_p}P(\chi^2)\d{\chi^2} = p.
+\end{gather*}
+
+This is just the inverse CDF.  We can check our method (slowly) by actually fitting the
+data repeatedly to generate the distribution of $\chi^2$:
+
+```{code-cell} ipython3
+:tags: [hide-input]
+
+# Generate actual distribution of chi2_r using MC
+from functools import partial
+
+Ns = 2000  # number of samples
+chi2s_data = np.array([nu*get_chi2_r(random=rng.gumbel) for n in range(Ns)])
+chi2s_normal = np.array([nu*get_chi2_r(random=rng.normal) for n in range(Ns)])
+
+cdf_data, ppf_data = get_cdf_ppf(chi2s_data)
+
+_chi2_r = np.linspace(0, np.max(chi2s_gumbel)/nu, 500)
+fig, ax = plt.subplots()
+ax.plot(_chi2_r, cdf_data(nu*_chi2_r), '-C0', label="data")
+ax.plot(_chi2_r, cdf_gumbel(nu*_chi2_r), ':C1', label="gumbel")
+ax.plot(_chi2_r, sp.stats.chi2.cdf(nu*_chi2_r, df=nu), '--C2', label="normal")
+ax.set(xlabel="$\chi^2_r$", ylabel="CDF", 
+       title=fr"CDF for $P(\chi^2_r)$ for $\nu={nu}$ Gumbel-distributed errors.")
+
+kw = dict(bins=100, histtype='step', alpha=0.8, density=True)
+ax.hist(chi2s_data/nu, ec="C0", **kw)
+ax.hist(chi2s_gumbel/nu, ec="C1", **kw)
+ax.legend();
+```
+
+```{code-cell} ipython3
+fig, ax = plt.subplots()
+random = rng.gumbel
+for Ns in [500, 1000]:
+    chi2s_data = np.array([nu*get_chi2_r(random=random) for n in range(Ns)])
+    cdf_data, ppf_data = get_cdf_ppf(chi2s_data)
+    cdf_gumbel, pdf_gumbel, chi2s_gumbel = get_chi2_cdf_ppf(nu=nu, random=random)
+    ax.plot(_chi2_r, cdf_data(nu*_chi2_r), '-', label=f"data {Ns}")
+ax.plot(_chi2_r, cdf_gumbel(nu*_chi2_r), ':', label="gumbel")
+ax.legend()
+```
+
+```{code-cell} ipython3
+:tags: [hide-input]
+
+_chi2_r = np.linspace(0, 5, 500)
+_i = np.where(_chi2_r >= chi2_r)[0][0]
+fig, ax = plt.subplots()
+ax.plot(_chi2_r, nu*sp.stats.chi2.pdf(nu*_chi2_r, df=nu), "-C1", label=rf"$\nu={nu}$")
+ax.plot(_chi2_r, nu*sp.stats.chi2.pdf(nu*_chi2_r, df=nu-1), ":C1", label=rf"$\nu={nu}\pm 1$")
+ax.plot(_chi2_r, nu*sp.stats.chi2.pdf(nu*_chi2_r, df=nu+1), ":C1")
+
+ax.plot(_chi2_r, cdf_gumbel(nu*_chi2_r), "--C0", label=rf"CDF (Gumbel)")
+ax.plot(_chi2_r, sp.stats.chi2.cdf(nu*_chi2_r, df=nu), "--C1", label=rf"CDF $\nu={nu}$")
+
+# Make sure bins end on chi2_r
+bins = np.linspace(0, chi2_r, 20)
+_d = np.diff(bins).mean()
+bins = np.concatenate([bins, np.arange(chi2_r+_d, 4+_d, _d)])
+kw = dict(bins=bins, histtype='step', alpha=0.8, density=True)
+res = ax.hist(chi2s_gumbel/nu, ec="C0", label=f"{Ns} samples (Gumbel)", **kw)
+
+# Add filled region
+xy = res[2][0].xy[res[2][0].xy[:, 0] >= chi2_r, :]
+xy[0, 1] = 0
+ax.add_patch(plt.Polygon(xy, fc="C0"))
+ax.hist(chi2s_normal/nu, ls=":", ec="C1", label=fr"{Ns} samples ($\chi^2_{{\nu=3}}$)", **kw)
+
+ax.axvline([chi2_r], ls=":", c="y")
+ax.axhline([1-Q], ls=":", c="y")
+ax.set(xlim=(0, 5),
+       xlabel=r"$\chi^2_r=\chi^2/\nu$", 
+       title=fr"Distribution of $\chi^2_r$ for $\nu={nu}$ gumbel errors; Q={Q:.2g}")
+ax.legend();
+```
 
 [covariance matrix]: <https://en.wikipedia.org/wiki/Covariance_matrix>
 [uncertainties]: <https://pythonhosted.org/uncertainties/>
@@ -499,6 +722,7 @@ ax.set(xlabel="$\omega$", ylabel="$t_0$");
 [one-sided $p$-value]: <https://en.wikipedia.org/wiki/P-value>
 [test statistic]: <https://en.wikipedia.org/wiki/Test_statistic>
 [automatic differentiation]: <https://en.wikipedia.org/wiki/Automatic_differentiation>
+[Gumbel distribution]: <https://en.wikipedia.org/wiki/Gumbel_distribution>
 
 ## References
 

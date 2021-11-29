@@ -463,21 +463,14 @@ There are several important caveats here:
 
 
 (geometry-of-fitting)=
-# The Geometry of Data Fitting
+## The Geometry of Data Fitting
 
 Data fitting can be visualized geometrically as follows.  Consider $N$ data points
 $\vect{y} = (y_{0}, y_{1}, \dots, y_{N-1})$ as a vector $\vect{y} \in \mathbb{R}^{N}$.
 A model with $M$ parameters $\vect{a}$ can now be though of as an $M$-dimensional
-surface in $\mathbb{R}^{N}$ as defined by the set of points $\vect{f}(\vect{a})$.  In
-the curve-fitting problem, for example:
-s
-\begin{gather*}
-  [\vect{f}(\vect{a})]_{n} = f(x_n, \vect{a}).
-\end{gather*}
+surface in $\mathbb{R}^{N}$ as defined by the set of points $\vect{f}(\vect{a})$.
 
-The geometry of data fitting is 
-
-## Example: Three Points
+### Example: Three Points
 
 The geometry of fitting a two-parameter curve $y_n = f(x_n, \vect{a})$ to three data points
 $\vect{y}$ can be visualized in 3D.  Here we demonstrate two models, one linear, and

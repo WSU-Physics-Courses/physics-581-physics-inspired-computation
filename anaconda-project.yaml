@@ -116,6 +116,7 @@ dependencies:
   # Data analysis
   - pandas
   - statsmodels
+  #- conda-forge::emcee>=3.1.1  # MCMC  - Some conflicts...
   
   # Plotting and visualization tools
   - matplotlib
@@ -143,10 +144,12 @@ dependencies:
   # Pip-only dependencies
   - pip
   - pip:
+    - emcee>=3.1.1  # MCMC
     - sphinxcontrib-zopeext
     - sphinxcontrib-bibtex>=2.4.0
     - sphobjinv  # Helps looking up intersphinx references
     - mmf-setup
+    
     - genbadge[all]
 channels:
   - defaults
