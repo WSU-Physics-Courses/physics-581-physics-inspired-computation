@@ -6,6 +6,7 @@ import scipy.stats
 from matplotlib import pyplot as plt
 
 import uncertainties
+from uncertainties import unumpy as unp
 
 sp = scipy
 
@@ -53,6 +54,8 @@ def corner_plot(
         C = np.asarray(uncertainties.covariance_matrix(a))
     if labels is None:
         labels = getattr(a, "_fields", [f"$a_{_n}$" for _n in range(Na)])
+
+    a = unp.nominal_values(a)
 
     sigmas = np.asarray(sigmas)
     sigma_max = 1.5 * max(sigmas)
