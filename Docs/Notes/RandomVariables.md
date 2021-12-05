@@ -269,7 +269,7 @@ ax.set(xlim=(-1, 30), xlabel="$z=x^2$", ylabel="$P_Z(z)$");
 ```
 
 (chi-squared-distribution)=
-## Chi-Square Distribution
+## [Chi-Squared Distribution]
 
 As an extended example, consider the $\chi^2$ distribution for a linear model with normally
 distributed errors $e_n$, each with mean $0$ and variance $\sigma_n^2$.  Then, we have:
@@ -288,7 +288,7 @@ Let $\tilde{e}_n = e_n/\sigma_n$.  We have the following PDFs:
                       = \sigma_n P_{e_n}(\sigma_n x) 
                       = \frac{e^{-x^2/2}}{\sqrt{2\pi}}\\
   P_{\tilde{e}_n^2}(x) &= \Theta(x) \frac{e^{-x/2}}{\sqrt{2\pi x}}\\
-  P_{\nu, \chi^2}(x) &= P_{\text{poisson}}(k;x/2) = \Theta(x) \frac{(x/2)^k e^{-x/2}}{k!}
+  P_{\chi^2, \nu}(x) &= P_{\text{poisson}}(k;x/2) = \Theta(x) \frac{(x/2)^k e^{-x/2}}{k!}
                   \qquad k = \frac{\nu}{2} - 1\\
                 &= \Theta(x)\frac{x^{\nu/2-1} e^{-x/2}}{2^{\nu/2-1}\Gamma(\nu/2)}.
 \end{align*}
@@ -300,12 +300,40 @@ mean $\nu$ and variance $2\nu$.  From this, we can also compute the distribution
 $\chi^2_r$:
 
 \begin{align*}
-  P_{\nu, \chi^2}(\chi^2) &= \Theta(\chi^2)\frac{(\chi^2)^{\nu/2-1}
+  P_{\chi^2, \nu}(\chi^2) &= \Theta(\chi^2)\frac{(\chi^2)^{\nu/2-1}
   e^{-\chi^2/2}}{2^{\nu/2-1}\Gamma(\nu/2)}, 
   & \mu &= \nu, & \sigma &= \sqrt{2\nu}\\
-  P_{\nu, \chi^2_r}(\chi^2_r) &= \nu P_{\nu}(\chi^2) = \nu P_{\nu, \chi^2}(\nu\chi^2_r),
+  P_{\chi^2_r, \nu}(\chi^2_r) &= \nu P_{\nu}(\chi^2) = \nu P_{\chi^2, \nu}(\nu\chi^2_r),
   & \mu &= 1, & \sigma &= \sqrt{2/\nu}.
 \end{align*}
+
+:::{margin}
+The proof is simple: first transform to variables $\vect{x} = \mat{L}(\vect{a} -
+\bar{\vect{a}})$ by factoring $\mat{C} = \mat{L}\mat{L}^T$, then note that
+$\chi^2(\vect{a}) = \norm{\vect{x}}^2$ is just a sum of $\nu$ independently distributed
+normal variables with zero mean and unit variance.
+:::
+The [chi-squared distribution] also arises when determining confidence regions of a
+[multivariate normal distribution] of $\nu$ parameters $\vect{a}$ with mean
+$\bar{\vect{a}}$ and covariance matrix $\mat{C}$:
+
+\begin{gather*}
+  P(\vect{a}) =
+  \frac{
+    \exp\Bigl(
+      -\frac{1}{2}
+      \overbrace{
+        (\vect{a} - \bar{\vect{a}})^T
+        \cdot\mat{C}^{-1}
+        \cdot(\vect{a} - \bar{\vect{a}})
+      }^{\chi^2(\vect{a})}
+    \Bigr)
+  }{
+    \sqrt{\det{(2\pi\mat{C})}}
+  }
+  = P_{\chi^2, \nu}\bigl(\chi^2(\vect{a})\bigr).
+\end{gather*}
+
 
 ```{code-cell} ipython3
 from scipy.stats import chi2, norm
@@ -324,9 +352,9 @@ for nu in [1, 2, 3, 4, 20, 50, 100]:
     mean_chi2, var_chi2 = chi2.stats(df=nu, moments='mv')
     print(f"𝜈={nu}, χ² mean={mean_chi2}, var={var_chi2}")
 
-axs[0].set(xlabel=r"$\chi^2$", ylabel=r"$P_{\nu, \chi^2}(\chi^2)$", 
+axs[0].set(xlabel=r"$\chi^2$", ylabel=r"$P_{\chi^2, \nu}(\chi^2)$", 
            xlim=(-0.1, 20), ylim=(0, 0.6))
-axs[1].set(xlabel=r"$\chi^2_r$", ylabel=r"$P_{\nu, \chi^2_r}(\chi^2_r)$")
+axs[1].set(xlabel=r"$\chi^2_r$", ylabel=r"$P_{\chi^2_r, \nu}(\chi^2_r)$")
 for ax in axs:
     ax.legend();
 ```
@@ -337,12 +365,13 @@ peaked with $\sigma = \sqrt{2/\nu}$ about the mean value of $1$ (dotted lines):
 
 \begin{gather*}
   \lim_{\nu \rightarrow \infty}
-  P_{\nu, \chi^2_r}(\chi^2_r) \rightarrow 
+  P_{\chi^2_r, \nu}(\chi^2_r) \rightarrow 
   \frac{e^{-(\chi^2_r - 1)^2/(4/\nu)}}{\sqrt{4\pi/\nu}}.
 \end{gather*}
 
 But, if you have limited data, then the distribution has some significant deviations and
-you should use the CDF of the actual $\chi^2$ distribution to compute your confidence intervals.
+you should use the CDF of the actual $\chi^2$ distribution to compute your confidence
+intervals.
 
 ### Why $\nu = N - M$?
 
@@ -350,11 +379,11 @@ you should use the CDF of the actual $\chi^2$ distribution to compute your confi
 Try proving this yourself.  The geometry discussed in {ref}`geometry-of-fitting` might
 help.  The basic idea is that, for any realization, $M$ of the errors can be eliminated
 by adjusting the parameters for the best fit, leaving $\nu = N-M$ independent errors
-which must be combined to get $P_{\nu, \chi^2}(\chi^2)$.
+which must be combined to get $P_{\chi^2, \nu}(\chi^2)$.
 :::
 
 When performing an actual maximum likelihood analysis, the distribution of $\chi^2$
-after minimizing is a chi-square distribution with $\nu = N-M$ where there are $N$ data
+after minimizing is a [chi-square distribution] with $\nu = N-M$ where there are $N$ data
 points and $M$ parameters in the model.  This comes from the fact that we don't compute
 $f(x_n, \vect{a})$ with $\vect{a}$ being the physical parameters as assumed in the model
 $y_n = f(x_n, \vect{a}) + e_n$, but rather, we compute $f(x_n, \bar{\vect{a}})$ where
@@ -386,7 +415,7 @@ transform to $\chi^2$ which is distributed as above, solving the problem:
 
 \begin{gather*}
   \int_{\rlap{P(\vect{a}) < P_p}}\d^{\nu}\vect{a}\; P(\vect{a}) = 
-  \int_0^{\chi^2_p}\d{\chi^2}P_{\nu, \chi^2}(\chi^2)
+  \int_0^{\chi^2_p}\d{\chi^2}P_{\chi^2, \nu}(\chi^2)
   = p(\chi^2_p).
 \end{gather*}
 
@@ -444,7 +473,7 @@ where we first transform to a new set of variables $\vect{x}$ such that $\vect{a
 \mat{L}\vect{x}$ where $\mat{C} = \mat{L}\mat{L}^T$.  Here each components of
 $\vect{x}$ is independently distributed with a zero-mean, $\sigma=1$ normal
 distribution.  We then transform to $\chi^2$ which is the sum of $\nu$ squares of such
-distributions, giving $P_{\nu, \chi^2}(\chi^2)$ as computed above.
+distributions, giving $P_{\chi^2, \nu}(\chi^2)$ as computed above.
 
 The normalization factor changes with a determinant of the Jacobian $\det\mat{L} =
 \sqrt{\det\mat{C}}$ so we have:
@@ -474,3 +503,4 @@ The normalization factor changes with a determinant of the Jacobian $\det\mat{L}
 [cumulative distribution function]: <https://en.wikipedia.org/wiki/Cumulative_distribution_function>
 [Cholesky decomposition]: <https://en.wikipedia.org/wiki/Cholesky_decomposition>
 [HDR]: <https://stats.stackexchange.com/questions/148439/what-is-a-highest-density-region-hdr>
+[chi-squared distribution]: <https://en.wikipedia.org/wiki/Chi-squared_distribution>

@@ -57,8 +57,8 @@ extensions = [
     # From jupyterbook
     # "jupyter_book",
     # "sphinx_thebe",
-    # "sphinx_comments",
     # "sphinx_external_toc",
+    "sphinx_comments",  # Hypothes.is comments and annotations
     "sphinx_panels",
     "sphinx_book_theme",
     # "recommonmark",
@@ -199,6 +199,9 @@ mathjax3_config = {
     "loader": {"load": ["[tex]/mathtools"]},
     "tex": {"packages": {"[+]": ["mathtools"]}},
 }
+
+# Hypothes.is comments and annotations
+comments_config = {"hypothesis": True}
 
 
 def config_inited_handler(app, config):

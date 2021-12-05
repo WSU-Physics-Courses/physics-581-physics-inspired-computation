@@ -140,6 +140,7 @@ dependencies:
   - conda-forge::sphinx-panels
   - conda-forge::sphinx-book-theme
   - conda-forge::sphinx-autobuild
+  - conda-forge::sphinx-comments # Hypothes.is comments and annotations
 
   # Pip-only dependencies
   - pip
