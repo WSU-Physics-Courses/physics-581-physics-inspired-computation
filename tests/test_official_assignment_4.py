@@ -53,7 +53,7 @@ class TestLyapunov:
             assignment_4.compute_lyapunov(ode.compute_dy_dt, y0=y0, Nsamples=Nsamples)
         )
 
-        assert np.allclose(res.mean(), max_exp, rtol=0.02)
+        assert np.allclose(res.mean(), max_exp, rtol=0.05)
         assert np.allclose(res.mean(), max_exp, rtol=res.std())
 
     def test_lorenz2(self, sol):
@@ -66,5 +66,5 @@ class TestLyapunov:
             assignment_4.compute_lyapunov(ode.compute_dy_dt, y0=y0, Nsamples=Nsamples)
         )
 
-        assert np.allclose(res.mean(), max_exp, rtol=0.02)
+        assert np.allclose(res.mean(), max_exp, rtol=0.05)
         assert np.allclose(res.mean(), max_exp, rtol=res.std())
