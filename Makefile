@@ -122,6 +122,8 @@ test:
 	$(ANACONDA_PROJECT) run test
 	$(ANACONDA_PROJECT) run test-0
 	$(ANACONDA_PROJECT) run test-1
+	$(ANACONDA_PROJECT) run test-2
+	$(ANACONDA_PROJECT) run test-4
 
 doc-server:
 	$(ANACONDA_PROJECT) run sphinx-autobuild --re-ignore '_build|_generated' Docs Docs/_build/html

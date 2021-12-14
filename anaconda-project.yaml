@@ -63,6 +63,18 @@ commands:
       genbadge tests -i _artifacts/junit.xml -o _artifacts/test-1-badge.svg
     env_spec: phys-581-2021
 
+  test-2:
+    unix: |
+      pytest -k test_official_assignment_2 --no-cov
+      genbadge tests -i _artifacts/junit.xml -o _artifacts/test-1-badge.svg
+    env_spec: phys-581-2021
+
+  test-4:
+    unix: |
+      pytest -k test_official_assignment_4 --no-cov
+      genbadge tests -i _artifacts/junit.xml -o _artifacts/test-1-badge.svg
+    env_spec: phys-581-2021
+    
 #
 # In the variables section, list any environment variables your code depends on.
 # Use `anaconda-project add-variable` to add variables.
