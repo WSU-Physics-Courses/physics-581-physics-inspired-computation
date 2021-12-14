@@ -8,6 +8,10 @@
 ```{include} README.md
 ```
 
+<!-- We use a hack here to get a relative link in the TOC.  
+     This will fail with LaTeX etc.
+     https://stackoverflow.com/a/31820846/1088938 
+     https://github.com/sphinx-doc/sphinx/issues/701 -->
 ```{toctree}
 ---
 maxdepth: 2
