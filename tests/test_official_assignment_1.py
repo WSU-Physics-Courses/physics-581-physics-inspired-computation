@@ -38,6 +38,27 @@ def test_lambertw():
         assert np.allclose(ws * np.exp(ws), zs)
 
 
+def test_zeta():
+    """Basic test of zeta function to make sure it works with arrays."""
+    vals = [(100.0, 1.0),
+            (10.0, 1.0009945751278180854),
+            (3.0, 1.2020569031595942854),
+            (2.0, 1.6449340668482264365)]
+
+    for s, exact in vals:
+        assert np.allclose(assignment_1.zeta(s), exact)
+
+
+def test_zeta_hard():
+    """Hard test of zeta function to make sure it works with arrays."""
+    vals = [(1.5, 2.6123753486854883433),
+            (1.1, 10.584448464950809826),
+            (1.01, 100.57794333849687249)]
+    
+    for s, exact in vals:
+        assert np.allclose(assignment_1.zeta(s), exact)
+        
+
 def test_derivative():
     """Test the derivative code."""
 

@@ -15,6 +15,7 @@ caption: "Contents:"
 titlesonly:
 hidden:
 ---
+GettingStarted
 Syllabus
 Syllabus_Prerequisites
 Reading
