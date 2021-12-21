@@ -38,38 +38,56 @@ def test_lambertw():
         assert np.allclose(ws * np.exp(ws), zs)
 
 
-def test_zeta():
+@pytest.fixture(
+    params=[
+        (100.0, 1.0),
+        (10.0, 1.0009945751278180854),
+        (3.0, 1.2020569031595942854),
+        (2.0, 1.6449340668482264365),
+    ]
+)
+def zeta_vals(request):
+    yield request.param
+
+
+def test_zeta(zeta_vals):
     """Basic test of zeta function to make sure it works with arrays."""
-    vals = [(100.0, 1.0),
-            (10.0, 1.0009945751278180854),
-            (3.0, 1.2020569031595942854),
-            (2.0, 1.6449340668482264365)]
-
-    for s, exact in vals:
-        assert np.allclose(assignment_1.zeta(s), exact)
+    s, exact = zeta_vals
+    assert np.allclose(assignment_1.zeta(s), exact)
 
 
-def test_zeta_hard():
+@pytest.fixture(
+    params=[
+        (1.5, 2.6123753486854883433),
+        (1.1, 10.584448464950809826),
+        (1.01, 100.57794333849687249),
+    ]
+)
+def hard_zeta_vals(request):
+    yield request.param
+
+
+def test_zeta_hard(hard_zeta_vals):
     """Hard test of zeta function to make sure it works with arrays."""
-    vals = [(1.5, 2.6123753486854883433),
-            (1.1, 10.584448464950809826),
-            (1.01, 100.57794333849687249)]
-    
-    for s, exact in vals:
-        assert np.allclose(assignment_1.zeta(s), exact)
-        
+    s, exact = hard_zeta_vals
+    assert np.allclose(assignment_1.zeta(s), exact)
 
-def test_derivative():
+
+@pytest.fixture(params=[0, 1, 2, 3])
+def der(request):
+    yield request.param
+
+
+def test_derivative(der):
     """Test the derivative code."""
 
     xs = [0, 1.0, 10.0]
-    rtol = 1e-12
+
+    # Make it easy by having increasingly reduced tolerances
+    rtol = [1e-7, 1e-6, 1e-5, 0.1]
     f = np.sin
     for x in xs:
-        dfx = np.cos(x)
-        ddfx = -np.sin(x)
-        dddfx = -np.cos(x)
-        assert np.allclose(assignment_1.derivative(f, x=x, d=0), f(x), rtol=rtol)
-        assert np.allclose(assignment_1.derivative(f, x=x, d=1), dfx, rtol=rtol)
-        assert np.allclose(assignment_1.derivative(f, x=x, d=2), ddfx, rtol=rtol)
-        assert np.allclose(assignment_1.derivative(f, x=x, d=3), dddfx, rtol=rtol)
+        exact = [f(x), np.cos(x), -np.sin(x), -np.cos(x)]
+        assert np.allclose(
+            assignment_1.derivative(f, x=x, d=der), exact[der], rtol=rtol[der]
+        )
