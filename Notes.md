@@ -293,7 +293,6 @@ combination of {py:mod}`sphinx.ext.autodoc`, {py:mod}`sphinx.ext.autosummary`, a
       phys_581_2021
    ```
 
-
 See also:
 
 * See: [Use `sphinx.ext.autodoc` in Markdown
@@ -301,7 +300,19 @@ files](https://myst-parser.readthedocs.io/en/latest/sphinx/use.html#use-sphinx-e
   Unfortunately, one currently still needs to write docstrings in reStructuredText.  See
   [GitHub issue #228](https://github.com/executablebooks/MyST-Parser/issues/228). 
 * [Unfortunate issues with autosummary in code blocks.](https://github.com/sphinx-doc/sphinx/issues/7552)
-  
+
+#### Gotchas
+
+* I was getting an error `WARNING: Unexpected section title.` for the `Arguments`
+  section containing the parameters for a class constructor.  [Napoleon] should be able
+  to parse this, but the issue is how   The has to do with a subtle issue related to how
+  the documentation for the constructor is inserted into the class documentation.  (This
+  can be controlled by setting the [`autoclass_content`] flag in your Sphinx `conf.py`
+  file.)  The solution is to document the constructor parameters in the class
+  documentation and use `autoclass_content = "class"` (the default).
+
+[`autoclass_content`]: <https://www.sphinx-doc.org/en/1.0/ext/autodoc.html#confval-autoclass_content>
+
 ### Read The Docs
 
 The documents are hosted at [Read the
@@ -720,4 +731,5 @@ details.
 [Shared CoCalc Project - Physics 581 Fall 2021]: <https://cocalc.com/projects/74852aba-2484-4210-9cf0-e7902e5838f4/> "581-2021 Shared CoCalc Project"
 [Shared CoCalc Project]: <https://cocalc.com/projects/74852aba-2484-4210-9cf0-e7902e5838f4/> "581-2021 Shared CoCalc Project"
 [file an issue]: <https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation/-/issues> "Issues on the class GitLab project."
+[napoleon]: <https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html>
 <!-- End Links -->

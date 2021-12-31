@@ -40,12 +40,26 @@ CoCalc
 ClassLog
 ```
 
-```{toctree}
----
-maxdepth: 0
-caption: "Includes (for autobuild):"
-titlesonly:
-hidden:
----
-README
+<!-- This includes another README.md rendering that will get updated if the file is
+     changed so that we can see updates when using make doc-sever.  The reason is that,
+     because we generate the main page using a literal include ({include} README.md...),
+     the main page will only get updated if we change this index.md file.
+     
+     We do not include this extra link when we build on RTD.  We do this using the
+     sphinx.ext.ifconfig extension:
+     
+     https://www.sphinx-doc.org/en/master/usage/extensions/ifconfig.html
+-->
+
+```{eval-rst}
+.. ifconfig:: not on_rtd
+
+   .. toctree::
+      :maxdepth: 0
+      :caption: "Includes (for autobuild):"
+      :titlesonly:
+      :hidden:
+
+      README
+   
 ```

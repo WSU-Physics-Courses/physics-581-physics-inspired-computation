@@ -395,6 +395,19 @@ hg add local.bib _static/ _templates/
 
   This will create a Conda environment as specified in `anaconda-project.yml` in `envs/default`.
 
+# Funding
+
+<a href="https://www.nsf.gov"><img width="10%"
+src="https://www.nsf.gov/images/logos/NSF_4-Color_bitmap_Logo.png" />
+</a>
+<br>
+
+Some of the material presented here is based upon work supported by the National Science
+Foundation under Grant Number 1707691. Any opinions, findings, and conclusions or
+recommendations expressed in this material are those of the author(s) and do not
+necessarily reflect the views of the National Science Foundation.
+
+
 <!-- Links -->
 [CoCalc]: <https://cocalc.com> "CoCalc: Collaborative Calculation and Data Science"
 [Conda]: <https://docs.conda.io/en/latest/> "Conda: Package, dependency and environment management for any language—Python, R, Ruby, Lua, Scala, Java, JavaScript, C/ C++, FORTRAN, and more."

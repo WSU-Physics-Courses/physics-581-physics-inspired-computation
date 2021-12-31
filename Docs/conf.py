@@ -43,24 +43,23 @@ extensions = [
     "myst_nb",
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
-    "sphinx.ext.napoleon",
-    "sphinx.ext.viewcode",
-    "sphinx.ext.doctest",
-    "sphinx.ext.intersphinx",
     "sphinx.ext.coverage",
-    "sphinx.ext.mathjax",
+    "sphinx.ext.doctest",
     "sphinx.ext.ifconfig",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.mathjax",
+    "sphinx.ext.napoleon",
     "sphinx.ext.todo",
+    "sphinx.ext.viewcode",
+    "sphinxcontrib.bibtex",
     "sphinxcontrib.zopeext.autointerface",
     "matplotlib.sphinxext.plot_directive",
-    "sphinxcontrib.bibtex",
     # From jupyterbook
     # "jupyter_book",
     # "sphinx_thebe",
     # "sphinx_external_toc",
     "sphinx_comments",  # Hypothes.is comments and annotations
     "sphinx_panels",
-    "sphinx_book_theme",
     # "recommonmark",
 ]
 
@@ -130,7 +129,7 @@ nbsphinx_timeout = 300  # Time in seconds; use -1 for no timeout
 #
 html_theme = "alabaster"  # Default Sphinx theme
 html_theme = "sphinx_book_theme"  # Theme for JupyterBook
-html_logo = "_static/wsu-logo.svg"  # Needed for sidebars
+html_logo = "_static/wsu-logo.svg"
 
 html_theme_options = {
     "repository_url": "https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation",
@@ -187,6 +186,7 @@ myst_substitutions = {
     "zoom_info": "Zoom Meeting: [957 9571 0263](https://wsu.zoom.us/j/95795710263.). "
     + "(Please use the Canvas link or as the instructor for the password.)",
     "Canvas": "[Canvas](https://wsu.instructure.com/courses/1488567)",
+    "on_rtd": on_rtd,
 }
 
 math_defs_filename = "_static/math_defs.tex"
@@ -254,4 +254,5 @@ def setup(app):
     app.connect("config-inited", config_inited_handler)
     # Ignore .ipynb files
     app.registry.source_suffix.pop(".ipynb", None)
+    app.add_config_value("on_rtd", on_rtd, "env")
     my_init()

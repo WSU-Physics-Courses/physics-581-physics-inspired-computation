@@ -6,7 +6,7 @@ authors = ["Michael McNeil Forbes <m.forbes+phys_581_2021@wsu.edu>"]
 license = "BSD-3"
 readme = "README.rst"
 repository = "https://gitlab.com/wsu-courses/physics-581-physics-inspired-computation"
-documentation = "http://phys_581_2021.readthedocs.org"
+documentation = "https://phys_581_2021.readthedocs.org"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
