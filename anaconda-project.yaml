@@ -150,7 +150,7 @@ dependencies:
   - conda-forge::myst-nb
   - conda-forge::myst-parser
   - conda-forge::sphinx-panels
-  - conda-forge::sphinx-book-theme
+  - conda-forge::sphinx-book-theme>=0.1.9
   - conda-forge::sphinx-autobuild
   - conda-forge::sphinx-comments # Hypothes.is comments and annotations
 
@@ -162,6 +162,7 @@ dependencies:
     - sphinxcontrib-bibtex>=2.4.0
     - sphobjinv  # Helps looking up intersphinx references
     - mmf-setup
+    #- git+https://github.com/executablebooks/sphinx-book-theme@master#egg=sphinx-book-theme
     
     - genbadge[all]
 channels:
