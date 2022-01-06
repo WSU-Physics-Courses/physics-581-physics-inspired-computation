@@ -21,6 +21,7 @@ import mmf_setup;mmf_setup.nbinit()
 import logging;logging.getLogger('matplotlib').setLevel(logging.CRITICAL)
 ```
 
+(assignment2)=
 # Assignment 2: IVPs and ODEs
 
 This assignment deals with numerically solving initial value problems (IVPs) for
