@@ -316,7 +316,7 @@ files](https://myst-parser.readthedocs.io/en/latest/sphinx/use.html#use-sphinx-e
 ### Read The Docs
 
 The documents are hosted at [Read the
-Docs](https://readthedocs.org/projects/wsu-phys-581-fall-2021/) (RtD)
+Docs](https://readthedocs.org/projects/wsu-phys-581-computation/) (RtD)
 where they should be build automatically whenever the main branch is pushed.  To get
 this working, one needs to tell RtD which packages to install, and they [recommend using
 a configuration file](https://docs.readthedocs.io/en/stable/config-file/v2.html) for
@@ -325,7 +325,7 @@ this called `.readthedocs.yaml`.
 ```{warning}
 Make sure that the slug is not too long, or you might run into trouble.  The slug is
 determined by the project name, so to get this working, when creating the project, I had
-to rename the project `wsu-phys-581-fall-2021` to get this as a slug.  After the project
+to rename the project `wsu-phys-581-computation` to get this as a slug.  After the project
 was assigned, I renamed it.  The previous slug was
 `physics-581-physics-inspired-computational-techniques` which was so long that I was
 getting errors when trying to execute code.
