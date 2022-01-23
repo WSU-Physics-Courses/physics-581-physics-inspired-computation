@@ -19,6 +19,7 @@ def play_monty_hall(switch=False):
     return win
 
 
+@np.vectorize
 def lambertw(z, k=-1):
     r"""Return :math:`w` from the `k`'th branch of the LambertW function.
 
@@ -57,6 +58,7 @@ def lambertw(z, k=-1):
     return w
 
 
+@np.vectorize
 def zeta(s):
     r"""Return the Riemann zeta function at `s`.
 
@@ -93,7 +95,7 @@ def derivative(f, x, d=0):
     if d == 1:
         # Estimate the third derivative so we can estimate the optimal step size
         xs = np.linspace(x - 0.01, x + 0.01, 5)
-        fs = list(map(f, xs))  #  Don't assume f is vectorized.
+        fs = list(map(f, xs))  # Don't assume f is vectorized.
         d3fxs = 6 * np.polyfit(xs, fs, deg=3)[0]
         h = (3 * eps * abs(fx) / (abs(d3fxs) + 0.01)) ** (1 / 3)
         x1 = x - h
