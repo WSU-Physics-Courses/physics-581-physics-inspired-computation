@@ -112,7 +112,7 @@ clean:
 	-$(ACTIVATE) root && conda clean --all -y
 
 
-reallyclean:
+realclean:
 	$(ANACONDA_PROJECT) run clean || true  # Custom command: see anaconda-project.yaml
 	$(ANACONDA_PROJECT) clean || true
 	$(RM) -r envs
@@ -175,7 +175,7 @@ Testing:
 
 Maintenance:
    make clean        Call conda clean --all: saves disk space.
-   make reallyclean  delete the environments and kernel as well.
+   make realclean    delete the environments and kernel as well.
 
 Documentation:
    make doc-server   Build the html documentation server on http://localhost:8000

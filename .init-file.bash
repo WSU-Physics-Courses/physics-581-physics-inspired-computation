@@ -1,6 +1,7 @@
 export PS1="\h:\W \u\$ "
 source $(conda info --base)/etc/profile.d/conda.sh
 conda deactivate
+conda activate base
 conda activate envs/phys-581-2021
 alias ap="anaconda-project"
 alias apr="anaconda-project run"

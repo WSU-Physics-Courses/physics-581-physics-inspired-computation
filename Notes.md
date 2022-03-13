@@ -8,7 +8,7 @@ To Do
 -----
 * Fix `{{ course_package }}` replacement in `Syllabus.md`.
 * Add test for anaconda-package version and issue warning.
-* Clean `~/.bash_aliases` with `make reallyclean`.
+* Clean `~/.bash_aliases` with `make realclean`.
 * Try to activate the environment only once on CoCalc in Makefile.
 * Deal with memory issues (`mamba` everywhere, or `--override-channels` on CoCalc).
 
