@@ -596,7 +596,16 @@ with the [`anybadge`] project.
   [GitLab] will show in the diffs as discussed in [GitLab test coverage
   visualization].
 
-## GitHub Mirror
+## Repository Mirrors
+
+It can be useful to mirror your repo to [GitHub] or [GitLab], either to take advantage
+of different CI tools, or as a backup.
+
+* [Repository mirroring (from GitLab)](https://docs.gitlab.com/ee/user/project/repository/mirror/).
+* [Push mirroring from GitLab or Heptapod to GitLab](https://docs.gitlab.com/ee/user/project/repository/mirror/push.html#set-up-a-push-mirror-to-another-gitlab-instance-with-2fa-activated). 
+* [Push mirroring from GitLab or Heptapod to GitHub](https://docs.gitlab.com/ee/user/project/repository/mirror/push.html#set-up-a-push-mirror-from-gitlab-to-github).
+
+### GitHub
 
 [GitHub] has a different set of tools, so it is useful to mirror the repo there so we
 can take advantage of these:
@@ -635,6 +644,47 @@ tokens**](https://github.com/settings/tokens) with `repo` access, `admin:repo_ho
 Now whenever you push changes to GitLab, they will be mirrored on GitHub, allowing you
 to use GitHub features like their CI, Notebook viewer etc.
 
+### GitLab
+
+One can also mirror to [GitLab]. In this case there is little point, but one might like
+to mirror from a private instance of [GitLab CE] or [Heptapod] to the [GitLab].  The
+procedure is similar.  We will use the [mmfutils] repo. as an example:
+
+* [Heptapod Main Repo](https://alum.mit.edu/www/mforbes/hg/forbes-group/mmfutils)
+  *(Permalink that will forward to the [current main repo](https://hg.iscimath.org/forbes-group/mmfutils).)*
+* [GitHub Mirror](https://github.com/forbes-group/mmfutils)
+* [GitLab Mirror](https://gitlab.com/coldatoms/utilities/mmfutils)
+
+To do this:
+
+
+1. Create an empty [GitLab project](https://gitlab.com/coldatoms/utilities/mmfutils).
+   Disable [project features](https://gitlab.com/coldatoms/utilities/mmfutils/edit)
+   like `Wikis`, `Issues`, `Projects`, etc. which are not desired for a mirror.
+2. Get a personal token from [GitLab] as [described
+   here](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html#create-a-personal-access-token).
+   Create a token here [**Avatar > Edit Profile > Access Tokens > Personal Access
+   Tokens**](https://gitlab.com/-/profile/personal_access_tokens) with
+   `write_repository` access.  Copy the key. 
+3. Go to your [**Settings > Repository > Mirroring
+   respositories**](https://hg.iscimath.org/forbes-group/mmfutils/-/settings/repository)
+   in you GitLab repo and use the URL to your other GitLab repo using the following format:
+   `https://oath2@<destination host>/<your_gitlab_group_or_name>/<your_gitlab_project>.git`.
+   
+   I.e.:
+   
+   ```
+   https://oath2@gitlab.com/coldatoms/utilities/mmfutils.git
+   ```
+   
+   Choose the appropriate **Mirror type** (`Git push`) and enter the access token you copied
+   above as the Password.
+
+Now whenever you push changes to GitLab, they will be mirrored on your other GitLab
+repo.
+
+
+
 # General Course Preparation
 
 Here are the general steps needed to prepare for the course: see above for further
@@ -663,7 +713,6 @@ details.
 
      * [GitLab Resources Project - Physics 581 Fall 2021]
      
-
    GitLab Group for the course
    : To give students access to the course, I add them to a [GitLab] group, then I give
      the group access to the various projects above.  This makes it easy to switch
@@ -688,6 +737,7 @@ details.
 [GitHub CI]: <https://docs.github.com/en/actions/guides/about-continuous-integration> "GitHub CI"
 [GitHub]: <https://github.com> "GitHub"
 [GitLab]: <https://gitlab.com> "GitLab"
+[GitLab CE]: <https://about.gitlab.com/install/?version=ce> "GitLab Community Edition"
 [Git]: <https://git-scm.com> "Git"
 [Heptapod]: <https://heptapod.net> "Heptapod: is a community driven effort to bring Mercurial SCM support to GitLab"
 [Hypermodern Python]: <https://cjolowicz.github.io/posts/hypermodern-python-01-setup/> "Hypermodern Python"

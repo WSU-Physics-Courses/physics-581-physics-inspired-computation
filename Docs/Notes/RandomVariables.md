@@ -45,8 +45,6 @@ A [multivariate normal distribution] of $N$ variables with mean $\vect{\mu}$ and
 covariance matrix $\mat{C}$ has the following PDF:
 
 \begin{gather*}
-  \newcommand{\mat}[1]{\boldsymbol{#1}}
-  \newcommand{\vect}[1]{\boldsymbol{#1}}
   P_X(\vect{x}) = \frac{1}{\sqrt{\det(2\pi\mat{C})}} 
   \exp\Bigl(
     -\frac{1}{2}
