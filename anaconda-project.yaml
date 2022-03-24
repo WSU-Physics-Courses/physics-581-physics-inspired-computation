@@ -162,6 +162,7 @@ dependencies:
     - sphinxcontrib-zopeext
     - sphinxcontrib-bibtex>=2.4.0
     - sphobjinv  # Helps looking up intersphinx references
+    - sphinx-proof # Proofs, theorems etc.
     - mmf-setup
     #- git+https://github.com/executablebooks/sphinx-book-theme@master#egg=sphinx-book-theme
     

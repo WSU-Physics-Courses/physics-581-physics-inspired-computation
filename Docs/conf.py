@@ -60,6 +60,7 @@ extensions = [
     # "sphinx_external_toc",
     "sphinx_comments",  # Hypothes.is comments and annotations
     "sphinx_panels",
+    "sphinx_proof",
     # "recommonmark",
 ]
 
